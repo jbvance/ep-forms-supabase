@@ -13,6 +13,7 @@ import { FormContext } from '../../context/formContext';
 import TextInput from 'components/forms/TextInput';
 import SelectField from 'components/forms/SelectField';
 import FormAlert from 'components/FormAlert';
+import { useAuth } from 'util/auth';
 
 import { updateClientInfo } from '../../store/clientInfoSlice';
 
@@ -83,8 +84,8 @@ function ClientContactInfo(props) {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      //const x = await supabase.auth.getSession();
-      //console.log('X', x);
+      const { data, error } = await supabase.auth.getSession();
+      console.log('SESSION', data);
       const { data: userData, error: userError } =
         await supabase.auth.getUser();
       if (userError) {
