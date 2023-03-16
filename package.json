@@ -1,0 +1,33 @@
+{
+  "name": "my-divjoy-project",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "divjoy"
+  ],
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
+    "@stripe/stripe-js": "1.11.0",
+    "@supabase/supabase-js": "2.7.1",
+    "bootstrap": "4.4.1",
+    "formik": "^2.2.9",
+    "next": "12.2.5",
+    "query-string": "6.13.8",
+    "raw-body": "2.4.1",
+    "react": "17.0.2",
+    "react-bootstrap": "1.6.1",
+    "react-dom": "17.0.2",
+    "react-hook-form": "6.15.1",
+    "react-query": "3.32.1",
+    "react-redux": "^8.0.5",
+    "sass": "1.32.13",
+    "stripe": "8.132.0",
+    "yup": "^1.0.2"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "stripe-webhook": "stripe listen --forward-to localhost:3000/api/stripe-webhook"
+  }
+}

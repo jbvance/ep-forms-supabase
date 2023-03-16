@@ -1,0 +1,120 @@
+import { createSlice } from '@reduxjs/toolkit';
+
+// export const initialClientInfo = {
+//   firstName: '',
+//   middleName: '',
+//   lastName: '',
+//   address: '',
+//   city: '',
+//   state: '',
+//   zip: '',
+//   county: '',
+//   phone: '',
+//   occupation: '',
+//   email: '',
+//   employer: '',
+//   married: '',
+//   spouseFirstName: '',
+//   spouseMiddleName: '',
+//   spouseLastName: '',
+//   spouseEmail: '',
+//   spouseOccupation: '',
+//   spouseEmployer: '',
+// };
+
+export const initialClientInfo = {
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  suffix: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  county: '',
+  dob: '',
+  //phone: '(713) 555-1234',
+  email: '',
+  maritalStatus: '',
+  spouseFirstName: '',
+  spouseMiddleName: '',
+  spouseLastName: '',
+  spouseEmail: '',
+  spouseDob: '',
+};
+
+const initialState = { ...initialClientInfo };
+
+const clientInfoSlice = createSlice({
+  name: 'clientInfo',
+  initialState,
+  reducers: {
+    updateClientInfo(state, action) {
+      const newState = { ...action.payload };
+      if (newState.maritalStatus !== 'married') {
+        newState.spouseFirstName = '';
+        newState.spouseMiddleName = '';
+        newState.spouseLastName = '';
+        newState.spouseSuffix = '';
+        newState.spouseEmail = '';
+        newState.spouseDob = '';
+      }
+      //console.log(newState);
+      Object.assign(state, newState);
+    },
+    // addFavorite(state, action) {
+    //   const newRecipe = action.payload;
+    //   const existingFavorite = state.recipes.find(
+    //     (recipe: any) => recipe.id === newRecipe.shareAs
+    //   );
+    //   const favoriteToAdd = {
+    //     _id: newRecipe._id,
+    //     id: newRecipe.shareAs,
+    //     ...newRecipe,
+    //   };
+    //   if (!existingFavorite) {
+    //     state.recipes.push(favoriteToAdd);
+    //   }
+    // },
+    // deleteFavorite(state, action) {
+    //   const id: string = action.payload;
+    //   const index = state.recipes.findIndex((rec) => rec.id);
+    //   if (index > -1) {
+    //     state.recipes = state.recipes.filter((rec) => rec.id !== id);
+    //   }
+    // },
+    // setFavorites(state, action) {
+    //   state.recipes = action.payload;
+    // },
+  },
+});
+
+export const updateClientInfo = (clientInfo) => {
+  return async (dispatch) => {
+    // TODO: call api to update client info before dispatching
+    // to redux
+    dispatch(clientInfoActions.updateClientInfo(clientInfo));
+  };
+};
+
+// export const getFavorites = (token: string) => {
+//   const axiosParams = {
+//     method: 'get',
+//     url: `${process.env.REACT_APP_API_BASE_URL}/favorites`,
+//     headers: {
+//       accept: '*/*',
+//       authorization: `Bearer ${token}`,
+//     },
+//   };
+//   return async (dispatch: Dispatch) => {
+//     try {
+//       const result: any = await axios(axiosParams);
+//       dispatch(favoritesActions.setFavorites(result.data.favorites));
+//     } catch (error) {
+//       console.log('ERROR', error);
+//     }
+//   };
+// };
+
+export const clientInfoActions = clientInfoSlice.actions;
+export default clientInfoSlice;
