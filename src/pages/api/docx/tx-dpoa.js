@@ -9,7 +9,7 @@ const createDpoaFromTemplate = (req, res) => {
     const dirRelativeToPublicFolder = 'docx-templates';
 
     const dir = path.resolve('./public', dirRelativeToPublicFolder);
-    console.log('DIR', dir);
+    //console.log('DIR', dir);
     const userId = req.user.id;
     //console.log(req.body);
 
