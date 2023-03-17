@@ -1,8 +1,9 @@
 const requireAuth = require('../_require-auth');
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
+const { uploadFromBuffer } = require('../../../util/uploadToS3');
 
-const handler = (req, res) => {
+const handler = async (req, res) => {
   try {
     const userId = req.user.id;
     const fs = require('fs');
@@ -10,7 +11,13 @@ const handler = (req, res) => {
     //console.log(req.body);
 
     // Check for required fields
-    const requiredFields = ['clientName', 'clientCity', 'clientCounty'];
+    const requiredFields = [
+      'firstName',
+      'lastName',
+      'middleName',
+      'city',
+      'county',
+    ];
     const missingField = requiredFields.find((field) => !(field in req.body));
     if (missingField) {
       return res.status(422).json({
@@ -23,13 +30,13 @@ const handler = (req, res) => {
     }
 
     // store values passed in variables
-    const { clientName, clientCity, clientCounty } = req.body;
+    const { firstName, middleName, lastName, city, county } = req.body;
     const notaryCounty =
       req.body['notaryCounty'] && req.body['notaryCounty'].trim().length > 0
         ? req.body['notaryCounty'].toUpperCase()
         : '___________________';
 
-    const stringFields = ['clientName', 'clientCity', 'clientCounty'];
+    const stringFields = ['firstName', 'lastName', 'city', 'county'];
     const nonStringField = stringFields.find(
       (field) => field in req.body && typeof req.body[field] !== 'string'
     );
@@ -62,10 +69,14 @@ const handler = (req, res) => {
       linebreaks: true,
     });
 
+    const clientName = `${firstName.trim()}${
+      middleName ? ' ' + middleName.trim() : ''
+    } ${lastName.trim()}`;
+
     const docVars = {
       clientName,
-      clientCity,
-      clientCounty,
+      city,
+      county,
       notaryCounty,
     };
 
@@ -81,13 +92,17 @@ const handler = (req, res) => {
 
     // buf is a nodejs Buffer, you can either write it to a
     // file or res.send it with express for example.
-    fs.writeFileSync(
-      path.resolve(
-        __dirname,
-        `../../../../../src/output-files/${userId}__directive_output.docx`
-      ),
-      buf
-    );
+    // fs.writeFileSync(
+    //   path.resolve(
+    //     __dirname,
+    //     `../../../../../src/output-files/${userId}__directive_output.docx`
+    //   ),
+    //   buf
+    // );
+
+    // save to S3 Bucket rather than save to local file system (as commented out above)
+    await uploadFromBuffer(buf, `${userId}__tx-directive_output.docx`);
+
     return res.status(201).json({
       code: 201,
       status: 'success',

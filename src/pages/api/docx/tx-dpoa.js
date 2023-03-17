@@ -3,8 +3,9 @@ const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
 const fs = require('fs');
 const path = require('path');
+const { uploadFromBuffer } = require('../../../util/uploadToS3');
 
-const createDpoaFromTemplate = (req, res) => {
+const createDpoaFromTemplate = async (req, res) => {
   try {
     const dirRelativeToPublicFolder = 'docx-templates';
 
@@ -143,10 +144,14 @@ const createDpoaFromTemplate = (req, res) => {
     //   ),
     //   buf
     // );
-    fs.writeFileSync(
-      path.resolve(dir, '..', 'docx-output', `${userId}__tx-dpoa_output.docx`),
-      buf
-    );
+    // fs.writeFileSync(
+    //   path.resolve(dir, '..', 'docx-output', `${userId}__tx-dpoa_output.docx`),
+    //   buf
+    // );
+
+    // save to S3 Bucket rather than save to local file system (as commented out above)
+    await uploadFromBuffer(buf, `${userId}__tx-dpoa_output.docx`);
+
     return res.status(201).json({
       code: 201,
       status: 'success',

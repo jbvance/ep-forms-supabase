@@ -5,9 +5,11 @@ import { apiRequestFile } from 'util/util';
 const TestDocx = () => {
   const callApi = () => {
     apiRequestFile('/docx/tx-directive', 'POST', {
-      clientName: 'Jason Vance',
-      clientCity: 'Katy',
-      clientCounty: 'Harris',
+      firstName: 'Jason',
+      middleName: '',
+      lastName: 'Vance',
+      city: 'Katy',
+      county: 'Harris',
     });
   };
   return <Button onClick={() => callApi()}>Test</Button>;

@@ -2,8 +2,9 @@ const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
 const expressionParser = require('docxtemplater/expressions.js');
+const { uploadFromBuffer } = require('../../../util/uploadToS3');
 
-const createMpoaFromTemplate = (req, res) => {
+const createMpoaFromTemplate = async (req, res) => {
   try {
     const userId = req.user.id;
     const fs = require('fs');
@@ -137,13 +138,17 @@ const createMpoaFromTemplate = (req, res) => {
 
     // buf is a nodejs Buffer, you can either write it to a
     // file or res.send it with express for example.
-    fs.writeFileSync(
-      path.resolve(
-        __dirname,
-        `../../../../../src/output-files/${userId}__tx-mpoa_output.docx`
-      ),
-      buf
-    );
+    // fs.writeFileSync(
+    //   path.resolve(
+    //     __dirname,
+    //     `../../../../../src/output-files/${userId}__tx-mpoa_output.docx`
+    //   ),
+    //   buf
+    // );
+
+    // save to S3 Bucket rather than save to local file system (as commented out above)
+    await uploadFromBuffer(buf, `${userId}__tx-mpoa_output.docx`);
+
     return res.status(201).json({
       code: 201,
       status: 'success',

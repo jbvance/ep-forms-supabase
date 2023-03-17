@@ -1,27 +1,32 @@
-const AWS = require('aws-sdk'),
-  fs = require('fs');
+import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
+import { s3Client as s3 } from './S3Client';
+
+const fs = require('fs');
 
 // The AWS config vars must be set up to use this module.
 // They are saved in environment variables as follows:
 // AWS_ACCESS_KEY_ID=<value>
 // AWS_SECRET_ACCESS_KEY=<value>
 
-const upload = (params, data) => {
-  const s3 = new AWS.S3();
-  s3.putObject(params, (err, data) => {
-    if (err) {
-      console.error(err);
-      throw err;
-    } else {
-      console.log('Succesfully uploaded data to bucket');
-    }
-  });
+const upload = async (params, data) => {
+  try {
+    await s3.send(new PutObjectCommand(params));
+  } catch (err) {
+    throw new Error('Error uploading file to Bucket', err);
+  }
+  // s3.putObject(params, (err, data) => {
+  //   if (err) {
+  //     console.error(err);
+  //     throw err;
+  //   } else {
+  //     console.log('Succesfully uploaded data to bucket');
+  //   }
+  // });
 };
 
 module.exports = {
   // return a list of all the files in a bucket
   listFiles: () => {
-    const s3 = new AWS.S3();
     // Create the parameters for calling createBucket
     var bucketParams = {
       Bucket: process.env.S3_BUCKET,
@@ -44,10 +49,9 @@ module.exports = {
       if (err) {
         throw err;
       }
+      const base64data = new Buffer(data, 'binary');
 
-      var base64data = new Buffer(data, 'binary');
-
-      var params = {
+      const params = {
         Bucket: process.env.S3_BUCKET,
         Key: fileName,
         Body: base64data,
@@ -57,13 +61,13 @@ module.exports = {
     });
   },
 
-  uploadFromBuffer: (data, fileName) => {
+  uploadFromBuffer: async (data, fileName) => {
     var params = {
       Bucket: process.env.S3_BUCKET,
       Key: fileName,
       Body: data,
     };
-    upload(params, data);
+    return await upload(params, data);
   },
 
   // NOT CURRENTLY USED, BUT LEFT IN FOR FUTURE REFERENCE
