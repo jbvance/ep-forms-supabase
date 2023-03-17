@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }) {
               bgImageOpacity={1}
               description="A short description of what you do here"
               copyright={`© ${new Date().getFullYear()} Company`}
-              logo="https://uploads.divjoy.com/logo.svg"
+              logo="/images/logo-main-1.jpg"
             />
           </>
         </AuthProvider>

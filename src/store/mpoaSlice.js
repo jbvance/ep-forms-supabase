@@ -13,7 +13,6 @@ const mpoaSlice = createSlice({
       state.agents = [...state.agents, action.payload];
     },
     setMpoaValues(state, action) {
-      console.log(action.payload);
       Object.assign(state, action.payload);
     },
     setMpoaStatus(state, action) {

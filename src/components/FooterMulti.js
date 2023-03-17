@@ -1,14 +1,32 @@
 import React, { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import Button from 'react-bootstrap/Button';
+import { products } from 'pages/wizard';
 
 const Footer = (props) => {
   const { steps, activeStepIndex, setActiveStepIndex } =
     useContext(FormContext);
   const isLast = activeStepIndex === steps.length - 1;
   const isFirst = activeStepIndex === 0;
+  const selectedProducts = useSelector(
+    (state) => state.selectedProducts.products
+  );
 
   //console.log(steps);
+  //console.log(steps[activeStepIndex]);
+
+  const goBack = () => {
+    // keep going back until we find a non-product form or
+    // a product that was selected
+    for (let i = activeStepIndex - 1; i > -1; i--) {
+      if (!products.includes(steps[i]) || selectedProducts.includes(steps[i])) {
+        setActiveStepIndex(i);
+        break;
+      }
+    }
+    // setActiveStepIndex(activeStepIndex - 1);
+  };
 
   return (
     <React.Fragment>
@@ -20,7 +38,7 @@ const Footer = (props) => {
             variant="outline-success"
             className="WizardNavigateButton"
             type="button"
-            onClick={() => setActiveStepIndex(activeStepIndex - 1)}
+            onClick={goBack}
           >
             {`<< Back`}
           </Button>

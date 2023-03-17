@@ -1,12 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import Footer from './FooterMulti';
+import SelectProducts from './ep/selectProducts';
 import ClientContactInfo from './ep/ClientContactInfo';
 import DpoaForm from './ep/DurablePoaForm';
 import MpoaForm from './ep/MedicalPoaForm';
 
+import { products } from 'pages/wizard';
+
 const MultiStepForm = () => {
-  const { activeStepIndex, steps } = useContext(FormContext);
+  const { setActiveStepIndex, activeStepIndex, steps } =
+    useContext(FormContext);
+  const selectedProducts = useSelector(
+    (state) => state.selectedProducts.products
+  );
+
+  useEffect(() => {
+    console.log('RUNNING');
+    window.scrollTo(0, 0);
+  });
+
+  useEffect(() => {
+    let includeStep = true;
+    const currentStepIsProduct = products.includes(steps[activeStepIndex]);
+    if (currentStepIsProduct) {
+      //this step contains information to complete a form for a product
+      includeStep = selectedProducts.includes(steps[activeStepIndex]);
+      if (!includeStep) {
+        setActiveStepIndex(activeStepIndex + 1);
+      }
+    }
+  });
 
   const props = {
     isFirst: activeStepIndex === 0,
@@ -14,9 +39,10 @@ const MultiStepForm = () => {
   };
 
   const stepComponents = [
-    <ClientContactInfo id={steps[0]} />,
-    <DpoaForm {...props} id={steps[1]} />,
-    <MpoaForm {...props} id={steps[2]} />,
+    <SelectProducts id={steps[0]} />,
+    <ClientContactInfo {...props} id={steps[1]} />,
+    <DpoaForm {...props} id={steps[2]} />,
+    <MpoaForm {...props} id={steps[3]} />,
   ];
 
   return (

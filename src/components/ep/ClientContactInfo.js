@@ -85,7 +85,7 @@ function ClientContactInfo(props) {
   useEffect(() => {
     const getUserInfo = async () => {
       const { data, error } = await supabase.auth.getSession();
-      console.log('SESSION', data);
+      //console.log('SESSION', data);
       const { data: userData, error: userError } =
         await supabase.auth.getUser();
       if (userError) {
@@ -146,12 +146,14 @@ function ClientContactInfo(props) {
         )
         .select();
       //console.log(formValues);
-      // Change wizard step
+
       if (error) {
         console.log(error);
         setUpdateError('Unable to update data. Please try again.');
         throw new Error('Unable to update data');
       }
+
+      // Change wizard step
       setActiveStepIndex(activeStepIndex + 1);
     } catch (err) {
       console.log(err);

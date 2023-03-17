@@ -1,34 +1,34 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import Card from "react-bootstrap/Card";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Image from "react-bootstrap/Image";
-import Section from "components/Section";
-import SectionHeader from "components/SectionHeader";
-import AspectRatio from "components/AspectRatio";
+import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import Section from 'components/Section';
+import SectionHeader from 'components/SectionHeader';
+import AspectRatio from 'components/AspectRatio';
 
 function FeaturesSection(props) {
   const items = [
     {
-      title: "Lorem Ipsum",
-      body: "Integer ornare neque mauris, ac vulputate lacus venenatis et. Pellentesque ut ultrices purus.",
-      image: "https://uploads.divjoy.com/undraw-fish_bowl_uu88.svg",
+      title: 'Financial Power of Attorney',
+      body: 'Appoint someone you trust to make financial decisions on your behalf.',
+      image: '/images/dpoa-card.jpg',
     },
     {
-      title: "Lorem Ipsum",
-      body: "Nunc nulla mauris, laoreet vel cursus lacinia, consectetur sit amet tellus.",
-      image: "https://uploads.divjoy.com/undraw-directions_x53j.svg",
+      title: 'Medical Power of Attorney',
+      body: "Appoint a friend or loved one to make healthcare decisions on your behalf if you can't",
+      image: '/images/mpoa-card.jpg',
     },
     {
-      title: "Lorem Ipsum",
-      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In lobortis, metus et mattis ullamcorper",
-      image: "https://uploads.divjoy.com/undraw-stability_ball_b4ia.svg",
+      title: 'Appointment of Guardian for Children',
+      body: 'Appoint someone to care for your children if you die or are unable to care for them',
+      image: '/images/guardian-card.jpg',
     },
     {
-      title: "Lorem Ipsum",
-      body: "Suspendisse ut tincidunt eros. In velit mi, rhoncus dictum neque a, tincidunt lobortis justo",
-      image: "https://uploads.divjoy.com/undraw-personal_settings_kihd.svg",
+      title: 'Living Will',
+      body: 'Make your last wishes known',
+      image: '/images/directive-card.jpg',
     },
   ];
 
@@ -54,10 +54,10 @@ function FeaturesSection(props) {
                 xs={12}
                 lg={6}
                 style={{
-                  display: "flex",
-                  alignItems: "stretch",
-                  justifyContent: "center",
-                  boxShadow: "1px 1px 0 0 #efefef",
+                  display: 'flex',
+                  alignItems: 'stretch',
+                  justifyContent: 'center',
+                  boxShadow: '1px 1px 0 0 #efefef',
                 }}
                 key={index}
               >

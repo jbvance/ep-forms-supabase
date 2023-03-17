@@ -36,10 +36,8 @@ const dpoaSlice = createSlice({
 });
 
 export const setDpoaValues = (values) => {
-  console.log('GOT HERE');
   return async (dispatch) => {
     // TODO: call database to update values - Currently done in component
-    console.log('UPDATING STATE', values);
     dispatch(dpoaActions.setDpoaValues(values));
   };
 };

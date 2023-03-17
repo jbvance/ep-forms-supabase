@@ -1,11 +1,11 @@
-import React from "react";
-import Meta from "components/Meta";
-import HeroSection from "components/HeroSection";
-import FeaturesSection from "components/FeaturesSection";
-import ClientsSection from "components/ClientsSection";
-import TestimonialsSection from "components/TestimonialsSection";
-import NewsletterSection from "components/NewsletterSection";
-import CtaSection from "components/CtaSection";
+import React from 'react';
+import Meta from 'components/Meta';
+import HeroSection from 'components/HeroSection';
+import FeaturesSection from 'components/FeaturesSection';
+import ClientsSection from 'components/ClientsSection';
+import TestimonialsSection from 'components/TestimonialsSection';
+import NewsletterSection from 'components/NewsletterSection';
+import CtaSection from 'components/CtaSection';
 
 function IndexPage(props) {
   return (
@@ -15,10 +15,10 @@ function IndexPage(props) {
         bg="primary"
         textColor="light"
         size="lg"
-        bgImage="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&h=800&q=80"
+        bgImage="/images/family-background.jpg"
         bgImageOpacity={0.3}
-        title="Your landing page title here"
-        subtitle="This landing page is perfect for showing off your awesome product and driving people to sign up for a paid plan."
+        title="Estate Dox"
+        subtitle="The easiest way to prepare your Texas Powers of Attorney"
         buttonText="Get Started"
         buttonColor="light"
         buttonPath="/pricing"
@@ -29,10 +29,10 @@ function IndexPage(props) {
         size="md"
         bgImage=""
         bgImageOpacity={1}
-        title="Features"
-        subtitle="All the features you need to move faster"
+        title="Prepare your Texas Power of Attorney Documents"
+        subtitle="Protect your family by preparing"
       />
-      <ClientsSection
+      {/*<ClientsSection
         bg="light"
         textColor="dark"
         size="sm"
@@ -49,7 +49,7 @@ function IndexPage(props) {
         bgImageOpacity={1}
         title="Here's what people are saying"
         subtitle=""
-      />
+  />
       <NewsletterSection
         bg="light"
         textColor="dark"
@@ -62,7 +62,7 @@ function IndexPage(props) {
         buttonColor="primary"
         inputPlaceholder="Enter your email"
         subscribedMessage="You are now subscribed!"
-      />
+  />*/}
       <CtaSection
         bg="primary"
         textColor="light"

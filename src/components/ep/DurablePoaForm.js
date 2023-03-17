@@ -53,9 +53,7 @@ const DpoaForm = (props) => {
           .from('dpoa')
           .select('json_value')
           .eq('user_id', userData.user.id);
-        console.log({ ...dpoaData[0] });
         if (dpoaData && dpoaData.length > 0) {
-          console.log('YES');
           dispatch(
             dpoaActions.setDpoaValues(JSON.parse(dpoaData[0].json_value))
           );
@@ -97,7 +95,6 @@ const DpoaForm = (props) => {
           { onConflict: 'user_id' }
         )
         .select();
-      console.log(values);
       if (error) {
         console.log(error);
         setUpdateError('Unable to update data. Please try again.');

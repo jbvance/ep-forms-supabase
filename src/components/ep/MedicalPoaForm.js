@@ -39,7 +39,6 @@ const MpoaForm = (props) => {
   useEffect(() => {
     const getUserInfo = async () => {
       try {
-        console.log('IN USEEFFECT');
         dispatch(mpoaActions.setMpoaStatus('loading'));
         const { data: userData, error: userError } =
           await supabase.auth.getUser();
@@ -52,7 +51,6 @@ const MpoaForm = (props) => {
           .from('mpoa')
           .select('json_value')
           .eq('user_id', userData.user.id);
-        //console.log(mpoaData);
         if (mpoaError) {
           console.log('MPOA ERROR', mpoaError);
         }
@@ -95,7 +93,6 @@ const MpoaForm = (props) => {
           { onConflict: 'user_id' }
         )
         .select();
-      console.log(values);
       if (error) {
         console.log(error);
         setUpdateError('Unable to update MPOA data. Please try again.');
@@ -142,7 +139,6 @@ const MpoaForm = (props) => {
           getFieldMeta,
           validateForm,
         }) => {
-          //if (errors) console.log(errors);
           return (
             <Form
               id={props.id}
