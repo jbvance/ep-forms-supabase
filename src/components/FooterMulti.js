@@ -52,7 +52,7 @@ const Footer = (props) => {
           type="formik-submit"
           form={props.id}
         >
-          {isFirst ? 'Next >>' : isLast ? 'Submit' : 'Next'}
+          {isFirst ? 'Next >>' : isLast ? 'Submit' : 'Next >>'}
         </Button>
         {/* </div> */}
       </div>

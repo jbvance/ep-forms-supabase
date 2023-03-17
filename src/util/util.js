@@ -7,7 +7,7 @@ export async function apiRequestFile(path, method = 'GET', data) {
     data: { session },
   } = await supabase.auth.getSession();
   const accessToken = session ? session.access_token : undefined;
-  console.log('DATA', JSON.stringify(data));
+  //console.log('DATA', JSON.stringify(data));
   return fetch(`/api/${path}`, {
     method: method,
     headers: {
@@ -15,9 +15,8 @@ export async function apiRequestFile(path, method = 'GET', data) {
       Authorization: `Bearer ${accessToken}`,
     },
     body: data ? JSON.stringify(data) : undefined,
-  })
-    .then((response) => response.json())
-    .then((response) => console.log(response));
+  }).then((response) => response.json());
+  //.then((response) => console.log(response));
 }
 
 // Make an API request to `/api/{path}`

@@ -1,0 +1,164 @@
+const PizZip = require('pizzip');
+const Docxtemplater = require('docxtemplater');
+const requireAuth = require('../_require-auth');
+const expressionParser = require('docxtemplater/expressions.js');
+
+const createMpoaFromTemplate = (req, res) => {
+  try {
+    const userId = req.user.id;
+    const fs = require('fs');
+    const path = require('path');
+    //console.log(req.body);
+
+    // Check for required fields
+    const requiredFields = [
+      'firstName',
+      'lastName',
+      'city',
+      'county',
+      'address',
+      'state',
+      'zip',
+      'agents',
+    ];
+    const missingField = requiredFields.find((field) => !(field in req.body));
+    if (missingField) {
+      return res.status(422).json({
+        code: 422,
+        status: 'error',
+        reason: 'ValidationError',
+        message: 'Missing field',
+        location: missingField,
+      });
+    }
+
+    // store values passed in variables
+    const {
+      firstName,
+      middleName,
+      suffix,
+      lastName,
+      address,
+      city,
+      county,
+      state,
+    } = req.body;
+    const zipCode = req.body['zip'];
+    const { agents } = req.body;
+    const notaryCounty =
+      req.body['notaryCounty'] && req.body['notaryCounty'].trim().length > 0
+        ? req.body['notaryCounty'].toUpperCase()
+        : '___________________';
+
+    const stringFields = [
+      'firstName',
+      'lastName',
+      'middleName',
+      'address',
+      'city',
+      'county',
+      'state',
+      'zip',
+    ];
+    const nonStringField = stringFields.find(
+      (field) => field in req.body && typeof req.body[field] !== 'string'
+    );
+
+    if (nonStringField) {
+      return res.status(422).json({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Incorrect field type: expected string',
+        location: nonStringField,
+      });
+    }
+
+    // Load the docx file as binary content
+    //console.log('PATH', path.resolve(__dirname, '../../../../..'));
+    const content = fs.readFileSync(
+      //path.resolve(__dirname, "../input.docx"),
+      path.resolve(
+        __dirname,
+        '../../../../../src/docx-templates/TX_MPOA_Template.docx'
+      ),
+      'binary'
+    );
+
+    const zip = new PizZip(content);
+
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+      parser: expressionParser,
+    });
+
+    const clientName = `${firstName.trim()}${
+      middleName ? ' ' + middleName.trim() : ''
+    } ${lastName.trim()}`;
+
+    const blankLine = '______________________________________';
+    const clientAddress = `${address}, ${city}, ${state} ${zipCode}`;
+    const primaryAgent = agents[0];
+    const mpoaPrimaryAgentName = primaryAgent.fullName;
+    const mpoaPrimaryAgentAddress =
+      primaryAgent.address.trim().length > 0 ? primaryAgent.address : blankLine;
+    const mpoaPrimaryAgentPhone =
+      primaryAgent.phone && primaryAgent.phone.trim().length > 0
+        ? primaryAgent.address
+        : blankLine;
+
+    const mpoaAgents = agents.slice(1).map((a) => {
+      return {
+        name: a.fullName,
+        address: a.address && a.address.length > 1 ? a.address : blankLine,
+        phone: a.phone && a.phone.length > 1 ? a.phone : blankLine,
+      };
+    });
+
+    const docVars = {
+      clientName,
+      notaryCounty,
+      mpoaPrimaryAgentName,
+      mpoaPrimaryAgentAddress,
+      mpoaPrimaryAgentPhone,
+      mpoaAgents, // successor agents
+      blankLine,
+    };
+
+    // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
+    doc.render(docVars);
+
+    const buf = doc.getZip().generate({
+      type: 'nodebuffer',
+      // compression: DEFLATE adds a compression step.
+      // For a 50MB output document, expect 500ms additional CPU time
+      compression: 'DEFLATE',
+    });
+
+    // buf is a nodejs Buffer, you can either write it to a
+    // file or res.send it with express for example.
+    fs.writeFileSync(
+      path.resolve(
+        __dirname,
+        `../../../../../src/output-files/${userId}__tx-mpoa_output.docx`
+      ),
+      buf
+    );
+    return res.status(201).json({
+      code: 201,
+      status: 'success',
+      message: `MPOA File Created`,
+    });
+  } catch (err) {
+    console.log('ERROR - MPOA', err.message);
+    return res.status(500).json({
+      code: 500,
+      status: 'error',
+      reason: err.message,
+      message: 'Unable to create Medical POA',
+      location: '/api/docx/tx-mpoa',
+    });
+  }
+};
+
+export default requireAuth(createMpoaFromTemplate);

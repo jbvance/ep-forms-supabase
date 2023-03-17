@@ -6,6 +6,7 @@ import SelectProducts from './ep/selectProducts';
 import ClientContactInfo from './ep/ClientContactInfo';
 import DpoaForm from './ep/DurablePoaForm';
 import MpoaForm from './ep/MedicalPoaForm';
+import FinalizeDocs from './ep/FinalizeDocs';
 
 import { products } from 'pages/wizard';
 
@@ -16,8 +17,8 @@ const MultiStepForm = () => {
     (state) => state.selectedProducts.products
   );
 
+  //Scroll to top of screen each time a step is rendered
   useEffect(() => {
-    console.log('RUNNING');
     window.scrollTo(0, 0);
   });
 
@@ -43,6 +44,7 @@ const MultiStepForm = () => {
     <ClientContactInfo {...props} id={steps[1]} />,
     <DpoaForm {...props} id={steps[2]} />,
     <MpoaForm {...props} id={steps[3]} />,
+    <FinalizeDocs {...props} id={steps[4]} />,
   ];
 
   return (

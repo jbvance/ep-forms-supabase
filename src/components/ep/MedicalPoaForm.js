@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from 'util/supabase';
 import Button from 'react-bootstrap/Button';
@@ -9,13 +9,10 @@ import { Formik, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import TextInput from 'components/forms/TextInput';
 import FormAlert from 'components/FormAlert';
-import {
-  setMpoaValues,
-  mpoaActions,
-  initialState,
-} from '../../store/mpoaSlice';
+import { setMpoaValues, mpoaActions } from '../../store/mpoaSlice';
 import PageLoader from 'components/PageLoader';
 import PoaHeader from './PoaHeader';
+import { FormContext } from 'context/formContext';
 
 const schema = Yup.object().shape({
   agents: Yup.array()
@@ -35,6 +32,7 @@ const MpoaForm = (props) => {
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
   const [showFormErrors, setShowFormErrors] = useState(false);
+  const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -99,6 +97,8 @@ const MpoaForm = (props) => {
       } else {
         // If no error, update state
         dispatch(setMpoaValues({ ...values }));
+        // Change wizard step
+        setActiveStepIndex(activeStepIndex + 1);
       }
     } catch (err) {
       console.log(err);
