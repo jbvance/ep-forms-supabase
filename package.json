@@ -10,6 +10,7 @@
     "@stripe/stripe-js": "1.11.0",
     "@supabase/supabase-js": "2.7.1",
     "angular-expressions": "^1.1.8",
+    "aws-sdk": "^2.1338.0",
     "bootstrap": "4.4.1",
     "docxtemplater": "^3.34.3",
     "formik": "^2.2.9",
