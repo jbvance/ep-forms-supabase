@@ -6,13 +6,12 @@ const path = require('path');
 
 const createDpoaFromTemplate = (req, res) => {
   try {
-    const userId = req.user.id;
-    //console.log(req.body);
-
     const dirRelativeToPublicFolder = 'docx-templates';
 
-    const templatesDir = path.resolve('./src', dirRelativeToPublicFolder);
-    console.log('TEMPLATES DIR', templatesDir);
+    const dir = path.resolve('./public', dirRelativeToPublicFolder);
+    console.log('DIR', dir);
+    const userId = req.user.id;
+    //console.log(req.body);
 
     // Check for required fields
     const requiredFields = [
@@ -86,10 +85,8 @@ const createDpoaFromTemplate = (req, res) => {
     //     '../../../../../src/docx-templates/TX_DPOA_Template.docx'
     //   ),
     //   'binary'
-    // );
-
     const content = fs.readFileSync(
-      path.resolve(templatesDir, 'TX_DPOA_Template.docx'),
+      path.resolve(dir, 'TX_DPOA_Template.docx'),
       'binary'
     );
 
@@ -146,12 +143,10 @@ const createDpoaFromTemplate = (req, res) => {
     //   ),
     //   buf
     // );
-
     fs.writeFileSync(
-      path.resolve(templatesDir, `${userId}__tx-dpoa_output.docx`),
+      path.resolve(dir, '..', 'docx-output', `${userId}__tx-dpoa_output.docx`),
       buf
     );
-
     return res.status(201).json({
       code: 201,
       status: 'success',
