@@ -1,13 +1,17 @@
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
+const fs = require('fs');
+const path = require('path');
 
 const createDpoaFromTemplate = (req, res) => {
   try {
+    const dirRelativeToPublicFolder = 'docx-templates';
+
+    const dir = path.resolve('./public', dirRelativeToPublicFolder);
+    console.log('DIR', dir);
     const userId = req.user.id;
-    const fs = require('fs');
-    const path = require('path');
-    console.log(req.body);
+    //console.log(req.body);
 
     // Check for required fields
     const requiredFields = [
@@ -75,12 +79,14 @@ const createDpoaFromTemplate = (req, res) => {
 
     // Load the docx file as binary content
     //console.log('PATH', path.resolve(__dirname, '../../../../..'));
+    // const content = fs.readFileSync(
+    //   path.resolve(
+    //     __dirname,
+    //     '../../../../../src/docx-templates/TX_DPOA_Template.docx'
+    //   ),
+    //   'binary'
     const content = fs.readFileSync(
-      //path.resolve(__dirname, "../input.docx"),
-      path.resolve(
-        __dirname,
-        '../../../../../src/docx-templates/TX_DPOA_Template.docx'
-      ),
+      path.resolve(dir, 'TX_DPOA_Template.docx'),
       'binary'
     );
 
@@ -130,11 +136,15 @@ const createDpoaFromTemplate = (req, res) => {
 
     // buf is a nodejs Buffer, you can either write it to a
     // file or res.send it with express for example.
+    // fs.writeFileSync(
+    //   path.resolve(
+    //     __dirname,
+    //     `../../../../../src/output-files/${userId}__tx-dpoa_output.docx`
+    //   ),
+    //   buf
+    // );
     fs.writeFileSync(
-      path.resolve(
-        __dirname,
-        `../../../../../src/output-files/${userId}__tx-dpoa_output.docx`
-      ),
+      path.resolve(dir, '..', 'docx-output', `${userId}__tx-dpoa_output.docx`),
       buf
     );
     return res.status(201).json({
