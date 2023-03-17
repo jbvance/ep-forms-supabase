@@ -11,6 +11,9 @@ const createMpoaFromTemplate = async (req, res) => {
     const path = require('path');
     //console.log(req.body);
 
+    const dirRelativeToPublicFolder = 'docx-templates';
+    const dir = path.resolve('./public', dirRelativeToPublicFolder);
+
     // Check for required fields
     const requiredFields = [
       'firstName',
@@ -76,12 +79,16 @@ const createMpoaFromTemplate = async (req, res) => {
 
     // Load the docx file as binary content
     //console.log('PATH', path.resolve(__dirname, '../../../../..'));
+    // const content = fs.readFileSync(
+    //   //path.resolve(__dirname, "../input.docx"),
+    //   path.resolve(
+    //     __dirname,
+    //     '../../../../../src/docx-templates/TX_MPOA_Template.docx'
+    //   ),
+    //   'binary'
+    // );
     const content = fs.readFileSync(
-      //path.resolve(__dirname, "../input.docx"),
-      path.resolve(
-        __dirname,
-        '../../../../../src/docx-templates/TX_MPOA_Template.docx'
-      ),
+      path.resolve(dir, 'TX_MPOA_Template.docx'),
       'binary'
     );
 
