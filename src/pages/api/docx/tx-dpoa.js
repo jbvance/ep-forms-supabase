@@ -4,6 +4,7 @@ const requireAuth = require('../_require-auth');
 const fs = require('fs');
 const path = require('path');
 const { uploadFromBuffer } = require('../../../util/uploadToS3');
+const { checkUserS3FolderExists } = require('../../../util/s3BucketsFiles');
 
 const createDpoaFromTemplate = async (req, res) => {
   try {
@@ -149,8 +150,18 @@ const createDpoaFromTemplate = async (req, res) => {
     //   buf
     // );
 
+    // Check if user already has a bucket titled with his/her id.
+    // If not, create one
+    // const folderExists = checkUserS3FolderExists(req.user.id);
+    // if (!folderExists) {
+
+    // }
+
     // save to S3 Bucket rather than save to local file system (as commented out above)
-    await uploadFromBuffer(buf, `${userId}__tx-dpoa_output.docx`);
+    await uploadFromBuffer(
+      buf,
+      `user-docs/${userId}/${userId}__tx-dpoa_output.docx`
+    );
 
     return res.status(201).json({
       code: 201,

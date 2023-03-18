@@ -108,7 +108,10 @@ const handler = async (req, res) => {
     // );
 
     // save to S3 Bucket rather than save to local file system (as commented out above)
-    await uploadFromBuffer(buf, `${userId}__tx-directive_output.docx`);
+    await uploadFromBuffer(
+      buf,
+      `user-docs/${userId}/${userId}__tx-directive_output.docx`
+    );
 
     return res.status(201).json({
       code: 201,
