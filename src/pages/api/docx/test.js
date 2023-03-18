@@ -3,8 +3,13 @@ import {
   checkBucketExists,
   checkUserS3FolderExists,
 } from 'util/s3BucketsFiles';
+import requireAuth from '../_require-auth';
 
 const handler = async (req, res) => {
+  return res.status(200).json({ message: 'DONE' });
+};
+
+const handler_CHECK_S3_FOLDER_FOR_USER = async (req, res) => {
   try {
     const sfExists = await checkUserS3FolderExists('test');
     console.log(sfExists);
@@ -38,4 +43,4 @@ const handler_OLD = async (req, res) => {
   }
 };
 
-export default handler;
+export default requireAuth(handler);
