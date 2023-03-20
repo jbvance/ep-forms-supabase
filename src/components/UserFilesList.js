@@ -9,19 +9,19 @@ import { Spinner } from 'react-bootstrap';
 const UserFilesList = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [files, setFiles] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
 
   const filesAreEmpty = !files || files.length === 0;
 
   useEffect(() => {
-    console.log('USE EFFECT');
     const getUserFiles = async () => {
       try {
+        setFetchError(null);
         const data = await apiRequest('get-user-files');
         console.log(data);
-        const testDate = new Date(data[0].lastModified).toDateString();
-        console.log(testDate);
         setFiles(data);
       } catch (err) {
+        setFetchError('Unable to retrieve your files at this time.');
         console.log('ERROR', err);
       } finally {
         setIsLoading(false);
@@ -49,7 +49,7 @@ const UserFilesList = (props) => {
                 </Spinner>
               )}
 
-              {!isLoading && filesAreEmpty && (
+              {!isLoading && filesAreEmpty && !fetchError && (
                 <>
                   <div>You haven't created any files yet</div>
                   <div>
@@ -61,6 +61,8 @@ const UserFilesList = (props) => {
               )}
             </div>
           )}
+
+          {!isLoading && fetchError && <p>{fetchError}</p>}
 
           {!isLoading && files && files.length > 0 && (
             <ListGroup variant="flush">

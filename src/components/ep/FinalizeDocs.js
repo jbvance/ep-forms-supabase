@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -10,19 +10,31 @@ import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import FormAlert from 'components/FormAlert';
 import { useSelector, useDispatch } from 'react-redux';
+import supabase from 'util/supabase';
 import { apiRequestFile } from 'util/util';
-import { productsInfo } from './selectProducts';
 import { selectedProductsActions } from 'store/productsSlice';
 
 const FinalizeDocs = (props) => {
   const [responseError, setResponseError] = useState(null);
   const [isSaving, setIsSaving] = useState(null);
   const [createStatus, setCreateStatus] = useState(null);
+  const [productsInfo, setProductsInfo] = useState([]);
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
   const dispatch = useDispatch();
   console.log('CREATING', docsToCreate);
 
-  console.log('CREATE STATUS', createStatus, isSaving);
+  useEffect(() => {
+    const getProducts = async () => {
+      const { data: products, error } = await supabase
+        .from('document_types')
+        .select();
+      if (products) {
+        setProductsInfo(products);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   const callApi = async (values, type) => {
     try {
@@ -72,6 +84,12 @@ const FinalizeDocs = (props) => {
       setIsSaving(false);
     }
   };
+
+  if (!productsInfo || productsInfo.length === 0) {
+    return <Spinner />;
+  }
+
+  console.log(productsInfo);
 
   return (
     <Fragment>

@@ -1,34 +1,31 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import ProductCard from './ProductCard';
 import { selectedProductsActions } from 'store/productsSlice';
 import FormAlert from 'components/FormAlert';
-
-export const productsInfo = [
-  {
-    type: 'dpoa',
-    title: 'Durable Power of Attorney',
-    text: 'Used to name who will make your financial decisions for you.',
-  },
-  {
-    type: 'mpoa',
-    title: 'Medical Power of Attorney',
-    text: "Appoint someone to make healthcare decisions on your behalf if you can't",
-  },
-  {
-    type: 'directive',
-    title: 'Directive to Physicians',
-    text: 'Make your wishes known regarding end of life care, such as whether you would like to be kept on life support indefinitely if you have an irreversible condition or a terminal disease.',
-  },
-];
+import supabase from 'util/supabase';
 
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
   const selectedProducts = useSelector((state) => state.selectedProducts);
   const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const [products, setProducts] = useState([]);
   const [formError, setFormError] = useState(null);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const { data: products, error } = await supabase
+        .from('document_types')
+        .select();
+      if (products) {
+        setProducts(products);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   const prodSelected = (prod) => {
     const found = selectedProducts.products.find((p) => p === prod);
@@ -54,6 +51,10 @@ const SelectProducts = (props) => {
     setActiveStepIndex(activeStepIndex + 1);
   };
 
+  if (!products) {
+    return <Spinner />;
+  }
+
   return (
     <Fragment>
       <h1 className="Header">Select the documents you would like to create</h1>
@@ -65,7 +66,7 @@ const SelectProducts = (props) => {
         versions.
       </p>
       <Row className="no-gutters overflow-hidden">
-        {productsInfo.map((product) => {
+        {products.map((product) => {
           return (
             <Col xs={12} lg={6} key={product.type}>
               <ProductCard

@@ -124,7 +124,7 @@ const handler = async (req, res) => {
       `user-docs/${userId}/${fileNameForSaving}.docx`,
       90
     );
-    console.log('SIGNED URL', signedUrl);
+    //console.log('SIGNED URL', signedUrl);
     if (!signedUrl) {
       throw new Error('No signed url was created');
     }

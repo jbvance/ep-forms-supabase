@@ -33,6 +33,9 @@ function NavbarCustom(props) {
                     Your Documents
                   </NavDropdown.Item>
                 </Link>
+                <Link href="/wizard" passHref={true}>
+                  <NavDropdown.Item active={false}>Wizard</NavDropdown.Item>
+                </Link>
                 <Link href="/dashboard" passHref={true}>
                   <NavDropdown.Item active={false}>Dashboard</NavDropdown.Item>
                 </Link>
