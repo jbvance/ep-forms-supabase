@@ -51,6 +51,7 @@ const SelectProducts = (props) => {
 
   return (
     <Fragment>
+      <h1 className="Header">Select the documents you would like to create</h1>
       <Row className="no-gutters overflow-hidden">
         {productsInfo.map((product) => {
           return (

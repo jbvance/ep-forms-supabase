@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import Link from 'next/Link';
+import Link from 'next/link';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
