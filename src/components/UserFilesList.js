@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Link from 'next/link';
 import { apiRequest } from 'util/util';
@@ -30,14 +31,14 @@ const UserFilesList = (props) => {
 
   return (
     <React.Fragment>
-      <div className="DashboardItems__card-items-wrapper">
-        <Card className="card-items">
-          <Card.Header
-            as="h5"
-            className="d-flex justify-content-between align-items-center"
-          >
-            Your Files
-          </Card.Header>
+      <Card>
+        <Card.Header
+          as="h5"
+          className="d-flex justify-content-between align-items-center"
+        >
+          Your Files
+        </Card.Header>
+        <Card.Body>
           {(isLoading || filesAreEmpty) && (
             <div className="py-5 px-3 align-self-center">
               {isLoading && (
@@ -74,8 +75,8 @@ const UserFilesList = (props) => {
               ))}
             </ListGroup>
           )}
-        </Card>
-      </div>
+        </Card.Body>
+      </Card>
     </React.Fragment>
   );
 };

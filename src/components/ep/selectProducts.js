@@ -1,16 +1,29 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext, useState, useEffect } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import ProductCard from './ProductCard';
 import { selectedProductsActions } from 'store/productsSlice';
-import { apiRequest } from 'util/util';
+import FormAlert from 'components/FormAlert';
+
+export const productsInfo = [
+  {
+    type: 'dpoa',
+    title: 'Durable Power of Attorney',
+    text: 'Used to name who will make your financial decisions for you.',
+  },
+  {
+    type: 'mpoa',
+    title: 'Medical Power of Attorney',
+    text: "Appoint someone to make healthcare decisions on your behalf if you can't",
+  },
+];
 
 const SelectProducts = (props) => {
-  console.log('PROPS', props);
   const dispatch = useDispatch();
   const selectedProducts = useSelector((state) => state.selectedProducts);
   const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const [formError, setFormError] = useState(null);
 
   const prodSelected = (prod) => {
     const found = selectedProducts.products.find((p) => p === prod);
@@ -26,28 +39,15 @@ const SelectProducts = (props) => {
     }
   };
 
-  const productsInfo = [
-    {
-      type: 'dpoa',
-      title: 'Durable Power of Attorney',
-      text: 'Used to name who will make your financial decisions for you.',
-    },
-    {
-      type: 'mpoa',
-      title: 'Medical Power of Attorney',
-      text: "Appoint someone to make healthcare decisions on your behalf if you can't",
-    },
-  ];
-
-  useEffect(() => {
-    const callApi = async () => {
-      const data = await apiRequest('list-files');
-      console.log('DATA', data);
-    };
-    callApi();
-  }, []);
-
-  console.log('ENV', process.env);
+  const moveNext = (e) => {
+    e.preventDefault();
+    setFormError(null);
+    if (!selectedProducts.products || selectedProducts.products.length < 1) {
+      setFormError('Please select at least one form to continue');
+      return;
+    }
+    setActiveStepIndex(activeStepIndex + 1);
+  };
 
   return (
     <Fragment>
@@ -65,11 +65,15 @@ const SelectProducts = (props) => {
           );
         })}
       </Row>
+      {formError && selectedProducts.products.length === 0 && (
+        <Row>
+          <Col>
+            <FormAlert type="error" message={formError} />
+          </Col>
+        </Row>
+      )}
 
-      <Form
-        id={props.id}
-        onSubmit={() => setActiveStepIndex(activeStepIndex + 1)}
-      ></Form>
+      <Form id={props.id} onSubmit={moveNext}></Form>
     </Fragment>
   );
 };

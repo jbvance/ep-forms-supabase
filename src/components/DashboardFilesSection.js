@@ -1,9 +1,8 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Section from 'components/Section';
@@ -33,8 +32,15 @@ function DashboardSection(props) {
         />
 
         <Row>
-          <Col lg={6}>
+          <Col lg={12}>
             <UserFilesList />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: '20px' }}>
+          <Col>
+            <Button onClick={() => router.push('/wizard')}>
+              Click here to create new documents
+            </Button>
           </Col>
         </Row>
       </Container>

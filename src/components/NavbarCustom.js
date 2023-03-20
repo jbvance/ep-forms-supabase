@@ -1,11 +1,11 @@
-import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Link from "next/link";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Dropdown from "react-bootstrap/Dropdown";
-import { useAuth } from "util/auth";
+import React from 'react';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import Link from 'next/link';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { useAuth } from 'util/auth';
 
 function NavbarCustom(props) {
   const auth = useAuth();
@@ -28,6 +28,11 @@ function NavbarCustom(props) {
           <Nav>
             {auth.user && (
               <NavDropdown id="dropdown" title="Account" alignRight={true}>
+                <Link href="/dashboard-files" passHref={true}>
+                  <NavDropdown.Item active={false}>
+                    Your Documents
+                  </NavDropdown.Item>
+                </Link>
                 <Link href="/dashboard" passHref={true}>
                   <NavDropdown.Item active={false}>Dashboard</NavDropdown.Item>
                 </Link>
