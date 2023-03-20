@@ -54,6 +54,7 @@ const FinalizeDocs = (props) => {
       setIsSaving(true);
       await callApi(wizardState, 'mpoa');
       await callApi(wizardState, 'dpoa');
+      await callApi(wizardState, 'directive');
       setCreateStatus('success');
     } catch (err) {
       console.log('ERROR', err);

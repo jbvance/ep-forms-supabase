@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
-import Link from 'Next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import ProductCard from './ProductCard';
@@ -17,6 +16,11 @@ export const productsInfo = [
     type: 'mpoa',
     title: 'Medical Power of Attorney',
     text: "Appoint someone to make healthcare decisions on your behalf if you can't",
+  },
+  {
+    type: 'directive',
+    title: 'Directive to Physicians',
+    text: 'Make your wishes known regarding end of life care, such as whether you would like to be kept on life support indefinitely if you have an irreversible condition or a terminal disease.',
   },
 ];
 

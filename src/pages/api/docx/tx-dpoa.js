@@ -3,12 +3,8 @@ const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
 const fs = require('fs');
 const path = require('path');
-const { uploadFromBuffer, uploadFromUrl } = require('../../../util/uploadToS3');
-const {
-  checkUserS3FolderExists,
-  getSignedUrlForFile,
-} = require('../../../util/s3BucketsFiles');
-const { convertDocxToPdf } = require('../../../util/api2Pdf');
+const { uploadFromBuffer } = require('../../../util/uploadToS3');
+const { getSignedUrlForFile } = require('../../../util/s3BucketsFiles');
 const { createAndUploadPdf } = require('../../../util/pdf');
 
 const createDpoaFromTemplate = async (req, res) => {

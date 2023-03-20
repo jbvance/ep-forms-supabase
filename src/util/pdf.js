@@ -10,7 +10,7 @@ const createAndUploadPdf = async (
 ) => {
   try {
     const pdfResult = await convertDocxToPdf(fileUrl);
-    //console.log('PDF RESULT', pdfResult);
+    console.log('PDF RESULT', pdfResult);
     if (pdfResult.Error || !pdfResult.Success) {
       throw new Error(`Unable to create PDF for ${fileType}`);
     }
