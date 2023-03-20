@@ -1,5 +1,6 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+import Link from 'Next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import ProductCard from './ProductCard';
@@ -52,6 +53,13 @@ const SelectProducts = (props) => {
   return (
     <Fragment>
       <h1 className="Header">Select the documents you would like to create</h1>
+      <p className="Informational">
+        Note: If you select a document that you have created previously,
+        creating the same document again will replace any existing documents
+        that have been saved. Before completing a new version, you may want to{' '}
+        <a href="/dashboard-files">click here</a> to download any existing
+        versions.
+      </p>
       <Row className="no-gutters overflow-hidden">
         {productsInfo.map((product) => {
           return (

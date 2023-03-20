@@ -15,18 +15,19 @@ const handler = async (req, res) => {
         location: 'get-user-files',
       });
     }
-    //console.log('DATA', data);
     // get signed url for each file, filtering only for PDF files
+    //console.log(data.Contents);
     const files = data.Contents.filter((f) => f.Key.includes('.pdf'));
     const signedFilesPromises = files.map(async (f) => {
       return await getSignedUrlForFile(process.env.S3_BUCKET, f.Key);
     });
 
     const signedFileUrls = await Promise.all(signedFilesPromises);
-    const signedFiles = signedFileUrls.map((url) => {
+    const signedFiles = signedFileUrls.map((url, index) => {
       return {
         url,
         fileName: url.split('?')[0].split('/').pop(),
+        lastModified: files[index].LastModified,
       };
     });
 

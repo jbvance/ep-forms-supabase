@@ -18,6 +18,8 @@ const UserFilesList = (props) => {
       try {
         const data = await apiRequest('get-user-files');
         console.log(data);
+        const testDate = new Date(data[0].lastModified).toDateString();
+        console.log(testDate);
         setFiles(data);
       } catch (err) {
         console.log('ERROR', err);
@@ -70,7 +72,7 @@ const UserFilesList = (props) => {
                   <a href={file.url} target="_blank" rel="noopener noreferrer">
                     {file.fileName.replace(/_/g, ' ')}
                   </a>
-                  <div></div>
+                  (created {new Date(file.lastModified).toDateString()})
                 </ListGroup.Item>
               ))}
             </ListGroup>
