@@ -15,7 +15,7 @@ const handler = async (req, res) => {
         location: 'get-user-files',
       });
     }
-    console.log('DATA', data);
+    //console.log('DATA', data);
     // get signed url for each file, filtering only for PDF files
     const files = data.Contents.filter((f) => f.Key.includes('.pdf'));
     const signedFilesPromises = files.map(async (f) => {
