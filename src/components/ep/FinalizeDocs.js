@@ -19,6 +19,8 @@ const FinalizeDocs = (props) => {
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
   console.log('CREATING', docsToCreate);
 
+  console.log('CREATE STATUS', createStatus, isSaving);
+
   const callApi = async (values, type) => {
     try {
       let response;
@@ -63,69 +65,48 @@ const FinalizeDocs = (props) => {
     }
   };
 
-  if (isSaving) {
-    return (
-      <Row>
-        <Col>
-          <Alert variant="warning">
-            Creating your documents. Please do not navigate away from this page
-            until the process is complete.
-          </Alert>
-        </Col>
-      </Row>
-    );
-  }
-
-  if (createStatus === 'success') {
-    return (
-      <Fragment>
-        <Row>
-          <Col>
-            <FormAlert
-              variant="success"
-              message="Your document(s) have been created successfully!"
-            ></FormAlert>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Link href="/dashboard-files" passHref={true}>
-              <Button variant="success">
-                Click here to view/download your documents.
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </Fragment>
-    );
-  }
-
   return (
     <Fragment>
       <Container>
-        <Row>
-          <Col>
-            <h4>
-              You are almost done. Click 'Submit' to create your documents!
-            </h4>
-          </Col>
-        </Row>
-        <Row>
-          <Col style={{ fontWeight: 800, marginBottom: '10px' }}>
-            The following document(s) will be created:
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={12}>
-            <ListGroup>
-              {docsToCreate.map((doc, i) => (
-                <ListGroup.Item key={doc}>
-                  {productsInfo.find((prod) => prod.type === doc)['title']}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Col>
-        </Row>
+        <h2 className="Header">Finalize Your Documents</h2>
+        {!isSaving && createStatus !== 'success' && (
+          <Fragment>
+            <Row>
+              <Col>
+                <h4>
+                  You are almost done. Click 'Submit' to create your documents!
+                </h4>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ fontWeight: 800, marginBottom: '10px' }}>
+                The following document(s) will be created:
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={12}>
+                <ListGroup>
+                  {docsToCreate.map((doc, i) => (
+                    <ListGroup.Item key={doc}>
+                      {productsInfo.find((prod) => prod.type === doc)['title']}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Col>
+            </Row>
+          </Fragment>
+        )}
+
+        {isSaving && (
+          <Row>
+            <Col>
+              <Alert variant="warning">
+                Creating your documents. Please do not navigate away from this
+                page until the process is complete.
+              </Alert>
+            </Col>
+          </Row>
+        )}
 
         {!isSaving && responseError && (
           <Row>
@@ -133,6 +114,28 @@ const FinalizeDocs = (props) => {
               <FormAlert type="error" message={responseError} />
             )}
           </Row>
+        )}
+
+        {createStatus === 'success' && (
+          <Fragment>
+            <Row>
+              <Col>
+                <FormAlert
+                  variant="success"
+                  message="Your document(s) have been created successfully!"
+                ></FormAlert>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Link href="/dashboard-files" passHref={true}>
+                  <Button variant="success">
+                    Click here to view/download your documents.
+                  </Button>
+                </Link>
+              </Col>
+            </Row>
+          </Fragment>
         )}
       </Container>
 
