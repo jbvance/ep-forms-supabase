@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
+import Spinner from 'react-bootstrap/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
@@ -99,14 +100,26 @@ const FinalizeDocs = (props) => {
         )}
 
         {isSaving && (
-          <Row>
-            <Col>
-              <Alert variant="warning">
-                Creating your documents. Please do not navigate away from this
-                page until the process is complete.
-              </Alert>
-            </Col>
-          </Row>
+          <Fragment>
+            <Row>
+              <Col>
+                <Alert variant="warning">
+                  <Spinner
+                    animation="border"
+                    role="status"
+                    aria-hidden={true}
+                    className="ml-2"
+                    style={{ marginRight: '15px' }}
+                  >
+                    <span className="sr-only">Loading...</span>
+                  </Spinner>
+                  Creating your documents. Please do not navigate away from this
+                  page until the process is complete.
+                </Alert>
+              </Col>
+            </Row>
+            <Row></Row>
+          </Fragment>
         )}
 
         {!isSaving && responseError && (
