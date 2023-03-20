@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Link from 'next/link';
 import { apiRequest } from 'util/util';
 import { Spinner } from 'react-bootstrap';
 
@@ -46,7 +47,14 @@ const UserFilesList = (props) => {
               )}
 
               {!isLoading && filesAreEmpty && (
-                <>You haven't created any files yet</>
+                <>
+                  <div>You haven't created any files yet</div>
+                  <div>
+                    <Link href="/wizard">
+                      <a>Click here to get started</a>
+                    </Link>
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -59,7 +67,7 @@ const UserFilesList = (props) => {
                   className={`d-flex justify-content-between align-items-center`}
                 >
                   <a href={file.url} target="_blank" rel="noopener noreferrer">
-                    {file.fileName}
+                    {file.fileName.replace(/_/g, ' ')}
                   </a>
                   <div></div>
                 </ListGroup.Item>

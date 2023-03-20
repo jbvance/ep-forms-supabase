@@ -13,7 +13,7 @@ function DashboardFilesPage(props) {
         size="md"
         bgImage=""
         bgImageOpacity={1}
-        title="Your Files"
+        title="View/Download Your Files"
         subtitle=""
       />
     </>

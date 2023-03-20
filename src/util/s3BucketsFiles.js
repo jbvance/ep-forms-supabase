@@ -8,20 +8,19 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client as s3 } from './S3Client';
 
-export const getSignedUrlForFile = async (bucket, key) => {
+export const getSignedUrlForFile = async (bucket, key, expiresIn = 604800) => {
   const command = new GetObjectCommand({
     Bucket: bucket,
     Key: key,
   });
 
-  return await getSignedUrl(s3, command, { expiresIn: 604800 });
+  return await getSignedUrl(s3, command, { expiresIn });
 };
 
 export const createBucket = async (BUCKET_NAME) => {
   const bucketParams = { Bucket: BUCKET_NAME };
   try {
     const data = await s3.send(new CreateBucketCommand(bucketParams));
-    console.log('Success', data.Location);
     return data;
   } catch (err) {
     console.log('Error', err);
@@ -37,7 +36,6 @@ export const checkBucketExists = async (BUCKET_NAME) => {
   const command = new HeadBucketCommand(input);
   try {
     response = await s3.send(command);
-    console.log('CHECK BUCKET RESPONSE', response);
     statusCode = response['$metadata']['httpStatusCode'];
   } catch (err) {
     console.log(err);

@@ -3,17 +3,23 @@ const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
 const fs = require('fs');
 const path = require('path');
-const { uploadFromBuffer } = require('../../../util/uploadToS3');
-const { checkUserS3FolderExists } = require('../../../util/s3BucketsFiles');
+const { uploadFromBuffer, uploadFromUrl } = require('../../../util/uploadToS3');
+const {
+  checkUserS3FolderExists,
+  getSignedUrlForFile,
+} = require('../../../util/s3BucketsFiles');
+const { convertDocxToPdf } = require('../../../util/api2Pdf');
+const { createAndUploadPdf } = require('../../../util/pdf');
 
 const createDpoaFromTemplate = async (req, res) => {
   try {
     const dirRelativeToPublicFolder = 'docx-templates';
 
+    // file name to use for saving to AWS, both .docx and .pdf
+    const fileNameForSaving = 'Durable_Power_of_Attorney';
+
     const dir = path.resolve('./public', dirRelativeToPublicFolder);
-    //console.log('DIR', dir);
     const userId = req.user.id;
-    //console.log(req.body);
 
     // Check for required fields
     const requiredFields = [
@@ -160,9 +166,37 @@ const createDpoaFromTemplate = async (req, res) => {
     // save to S3 Bucket rather than save to local file system (as commented out above)
     await uploadFromBuffer(
       buf,
-      `user-docs/${userId}/${userId}__tx-dpoa_output.docx`
+      `user-docs/${userId}/${fileNameForSaving}.docx`
     );
 
+    //Get the signed url to create PDF file
+    const signedUrl = await getSignedUrlForFile(
+      process.env.S3_BUCKET,
+      `user-docs/${userId}/${fileNameForSaving}.docx`,
+      90
+    );
+    //console.log('SIGNED URL', signedUrl);
+    if (!signedUrl) {
+      throw new Error('No signed url was created');
+    }
+
+    // Create and upload PDF file to AWS
+    const pdfUploadResult = await createAndUploadPdf(
+      signedUrl,
+      'Durable Power of Attorney',
+      fileNameForSaving,
+      userId
+    );
+    if (
+      !pdfUploadResult ||
+      pdfUploadResult['$metadata']['httpStatusCode'] !== 200
+    ) {
+      throw new Error(
+        `Unable to create/upload PDF file for Durable Power of Attorney`
+      );
+    }
+
+    // return success
     return res.status(201).json({
       code: 201,
       status: 'success',

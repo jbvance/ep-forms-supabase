@@ -1,5 +1,6 @@
 import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
 import { s3Client as s3 } from './S3Client';
+const axios = require('axios');
 
 const fs = require('fs');
 
@@ -10,7 +11,10 @@ const fs = require('fs');
 
 const upload = async (params, data) => {
   try {
-    await s3.send(new PutObjectCommand(params));
+    //console.log('UPLOAD PARAMS******************', params);
+    const result = await s3.send(new PutObjectCommand(params));
+    return result;
+    //console.log('UPLOAD RESULT', result);
   } catch (err) {
     throw new Error('Error uploading file to Bucket', err);
   }
@@ -69,6 +73,23 @@ module.exports = {
       Body: data,
     };
     return await upload(params, data);
+  },
+
+  uploadFromUrl: (url, bucket, key) => {
+    //const s3 = new AWS.S3();
+    return axios
+      .get(url, { responseType: 'arraybuffer', responseEncoding: 'binary' })
+      .then((response) => {
+        const params = {
+          ContentType: response.headers['content-type'],
+          ContentLength: response.data.length.toString(), // or response.header["content-length"] if available for the type of file downloaded
+          Bucket: bucket,
+          Body: response.data,
+          Key: key,
+        };
+        //return s3.putObject(params).promise();
+        return upload(params);
+      });
   },
 
   // NOT CURRENTLY USED, BUT LEFT IN FOR FUTURE REFERENCE

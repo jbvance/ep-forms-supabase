@@ -2,9 +2,14 @@ const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
 const expressionParser = require('docxtemplater/expressions.js');
-const { uploadFromBuffer } = require('../../../util/uploadToS3');
+const { uploadFromBuffer, uploadFromUrl } = require('../../../util/uploadToS3');
+const { getSignedUrlForFile } = require('../../../util/s3BucketsFiles');
+const { createAndUploadPdf } = require('../../../util/pdf');
 
 const createMpoaFromTemplate = async (req, res) => {
+  // file name to use for saving to AWS, both .docx and .pdf
+  const fileNameForSaving = 'Medical_Power_of_Attorney';
+
   try {
     const userId = req.user.id;
     const fs = require('fs');
@@ -156,8 +161,35 @@ const createMpoaFromTemplate = async (req, res) => {
     // save to S3 Bucket rather than save to local file system (as commented out above)
     await uploadFromBuffer(
       buf,
-      `user-docs/${userId}/${userId}__tx-mpoa_output.docx`
+      `user-docs/${userId}/${fileNameForSaving}.docx`
     );
+
+    //Get the signed url to create PDF file
+    const signedUrl = await getSignedUrlForFile(
+      process.env.S3_BUCKET,
+      `user-docs/${userId}/${fileNameForSaving}.docx`,
+      90
+    );
+    //console.log('SIGNED URL', signedUrl);
+    if (!signedUrl) {
+      throw new Error('No signed url was created');
+    }
+
+    // Create and upload PDF file to AWS
+    const pdfUploadResult = await createAndUploadPdf(
+      signedUrl,
+      'Medical Power of Attorney',
+      fileNameForSaving,
+      userId
+    );
+    if (
+      !pdfUploadResult ||
+      pdfUploadResult['$metadata']['httpStatusCode'] !== 200
+    ) {
+      throw new Error(
+        `Unable to create/upload PDF file for Medical Power of Attorney`
+      );
+    }
 
     return res.status(201).json({
       code: 201,
