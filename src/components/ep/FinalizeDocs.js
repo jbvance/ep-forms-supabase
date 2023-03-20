@@ -9,15 +9,17 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import FormAlert from 'components/FormAlert';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { apiRequestFile } from 'util/util';
 import { productsInfo } from './selectProducts';
+import { selectedProductsActions } from 'store/productsSlice';
 
 const FinalizeDocs = (props) => {
   const [responseError, setResponseError] = useState(null);
   const [isSaving, setIsSaving] = useState(null);
   const [createStatus, setCreateStatus] = useState(null);
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
+  const dispatch = useDispatch();
   console.log('CREATING', docsToCreate);
 
   console.log('CREATE STATUS', createStatus, isSaving);
@@ -56,6 +58,10 @@ const FinalizeDocs = (props) => {
       await callApi(wizardState, 'mpoa');
       await callApi(wizardState, 'dpoa');
       await callApi(wizardState, 'directive');
+      // Remove all products from selected so if user goes to start wizard again, nothing is selected
+      docsToCreate.forEach((doc) =>
+        dispatch(selectedProductsActions.removeProduct(doc))
+      );
       setCreateStatus('success');
     } catch (err) {
       console.log('ERROR', err);
