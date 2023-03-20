@@ -13,13 +13,13 @@ const TestDocx = () => {
       console.log(accessToken);
     };
     getSession();
-    fetch('http://localhost:8080/api/docx/zipper')
-      .then((response) => {
-        response.blob().then((blob) => download(blob, 'TestZip.zip'));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // fetch('http://localhost:8080/api/docx/zipper')
+    //   .then((response) => {
+    //     response.blob().then((blob) => download(blob, 'TestZip.zip'));
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   }, []);
 
   function download(blob, filename) {

@@ -33,6 +33,7 @@ module.exports = {
     };
 
     // Call S3
+
     s3.listObjects(bucketParams, function (err, data) {
       if (err) {
         console.log('Error', err);

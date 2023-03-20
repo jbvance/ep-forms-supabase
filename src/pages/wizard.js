@@ -6,7 +6,7 @@ import { requireAuth } from 'util/auth';
 
 export const products = ['dpoa', 'mpoa'];
 
-const WizardPage = () => {
+const WizardPage = (props) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const products = useSelector((state) => state.selectedProducts.products);
   const steps = ['select-products', 'client-info', 'dpoa', 'mpoa', 'finalize'];

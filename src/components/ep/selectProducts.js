@@ -1,11 +1,13 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import ProductCard from './ProductCard';
 import { selectedProductsActions } from 'store/productsSlice';
+import { apiRequest } from 'util/util';
 
 const SelectProducts = (props) => {
+  console.log('PROPS', props);
   const dispatch = useDispatch();
   const selectedProducts = useSelector((state) => state.selectedProducts);
   const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
@@ -36,6 +38,16 @@ const SelectProducts = (props) => {
       text: "Appoint someone to make healthcare decisions on your behalf if you can't",
     },
   ];
+
+  useEffect(() => {
+    const callApi = async () => {
+      const data = await apiRequest('list-files');
+      console.log('DATA', data);
+    };
+    callApi();
+  }, []);
+
+  console.log('ENV', process.env);
 
   return (
     <Fragment>

@@ -8,6 +8,7 @@ const FinalizeDocs = (props) => {
   const [responseError, setResponseError] = useState(null);
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
   console.log('CREATING', docsToCreate);
+
   const callApi = async (values, type) => {
     try {
       let response;

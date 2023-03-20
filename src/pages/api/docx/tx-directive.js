@@ -90,6 +90,8 @@ const handler = async (req, res) => {
     // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
     doc.render(docVars);
 
+    // buf is a nodejs Buffer, you can either write it to a
+    // file or res.send it with express for example.
     const buf = doc.getZip().generate({
       type: 'nodebuffer',
       // compression: DEFLATE adds a compression step.

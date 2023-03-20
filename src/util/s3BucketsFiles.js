@@ -3,8 +3,19 @@ import {
   HeadObjectCommand,
   HeadBucketCommand,
   ListObjectsCommand,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client as s3 } from './S3Client';
+
+export const getSignedUrlForFile = async (bucket, key) => {
+  const command = new GetObjectCommand({
+    Bucket: bucket,
+    Key: key,
+  });
+
+  return await getSignedUrl(s3, command, { expiresIn: 604800 });
+};
 
 export const createBucket = async (BUCKET_NAME) => {
   const bucketParams = { Bucket: BUCKET_NAME };
