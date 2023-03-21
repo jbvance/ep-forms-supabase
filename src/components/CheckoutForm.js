@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  console.log('ELEMENTS', elements);
 
   const [email, setEmail] = React.useState('');
   const [message, setMessage] = React.useState(null);
@@ -64,7 +65,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: 'http://localhost:3000/wizard',
+        return_url: process.env.NEXT_PUBLIC_STRIPE_RETURN_URL,
       },
     });
 
@@ -84,6 +85,11 @@ export default function CheckoutForm() {
 
   const paymentElementOptions = {
     layout: 'tabs',
+    defaultValues: {
+      billingDetails: {
+        name: 'Jason',
+      },
+    },
   };
 
   return (

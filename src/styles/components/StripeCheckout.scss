@@ -16,3 +16,13 @@
 .StripeSubmitButton {
   margin: 10px 0;
 }
+
+.StripeConfirmLink {
+  a {
+    color: var(--white);
+    background-color: var(--green);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+}
