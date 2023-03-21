@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import { useAuth } from 'util/auth';
 
 function NavbarCustom(props) {
   const auth = useAuth();
+  const router = useRouter();
 
   return (
     <Navbar bg={props.bg} variant={props.variant} expand={props.expand}>
@@ -30,11 +32,13 @@ function NavbarCustom(props) {
               <NavDropdown id="dropdown" title="Account" alignRight={true}>
                 <Link href="/dashboard-files" passHref={true}>
                   <NavDropdown.Item active={false}>
-                    Your Documents
+                    View/Download Documents
                   </NavDropdown.Item>
                 </Link>
                 <Link href="/wizard" passHref={true}>
-                  <NavDropdown.Item active={false}>Wizard</NavDropdown.Item>
+                  <NavDropdown.Item active={false}>
+                    Create New Documents
+                  </NavDropdown.Item>
                 </Link>
                 <Link href="/dashboard" passHref={true}>
                   <NavDropdown.Item active={false}>Dashboard</NavDropdown.Item>

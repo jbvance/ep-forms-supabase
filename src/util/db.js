@@ -2,8 +2,8 @@ import {
   useQuery,
   QueryClient,
   QueryClientProvider as QueryClientProviderBase,
-} from "react-query";
-import supabase from "./supabase";
+} from 'react-query';
+import supabase from './supabase';
 
 // React Query client
 const client = new QueryClient();
@@ -16,13 +16,13 @@ export function useUser(uid) {
   // Manage data fetching with React Query: https://react-query.tanstack.com/overview
   return useQuery(
     // Unique query key: https://react-query.tanstack.com/guides/query-keys
-    ["user", { uid }],
+    ['user', { uid }],
     // Query function that fetches data
     () =>
       supabase
-        .from("users")
+        .from('users')
         .select(`*, customers ( * )`)
-        .eq("id", uid)
+        .eq('id', uid)
         .single()
         .then(handle),
     // Only call query function if we have a `uid`
@@ -34,9 +34,9 @@ export function useUser(uid) {
 // Useful if you need to fetch data from outside of a component
 export function getUser(uid) {
   return supabase
-    .from("users")
+    .from('users')
     .select(`*, customers ( * )`)
-    .eq("id", uid)
+    .eq('id', uid)
     .single()
     .then(handle);
 }
@@ -44,12 +44,12 @@ export function getUser(uid) {
 // Update an existing user
 export async function updateUser(uid, data) {
   const response = await supabase
-    .from("users")
+    .from('users')
     .update(data)
-    .eq("id", uid)
+    .eq('id', uid)
     .then(handle);
   // Invalidate and refetch queries that could have old data
-  await client.invalidateQueries(["user", { uid }]);
+  await client.invalidateQueries(['user', { uid }]);
   return response;
 }
 
@@ -59,8 +59,8 @@ export async function updateUser(uid, data) {
 // Fetch item data
 export function useItem(id) {
   return useQuery(
-    ["item", { id }],
-    () => supabase.from("items").select().eq("id", id).single().then(handle),
+    ['item', { id }],
+    () => supabase.from('items').select().eq('id', id).single().then(handle),
     { enabled: !!id }
   );
 }
@@ -68,13 +68,13 @@ export function useItem(id) {
 // Fetch all items by owner
 export function useItemsByOwner(owner) {
   return useQuery(
-    ["items", { owner }],
+    ['items', { owner }],
     () =>
       supabase
-        .from("items")
+        .from('items')
         .select()
-        .eq("owner", owner)
-        .order("createdAt", { ascending: false })
+        .eq('owner', owner)
+        .order('createdAt', { ascending: false })
         .then(handle),
     { enabled: !!owner }
   );
@@ -82,23 +82,23 @@ export function useItemsByOwner(owner) {
 
 // Create a new item
 export async function createItem(data) {
-  const response = await supabase.from("items").insert([data]).then(handle);
+  const response = await supabase.from('items').insert([data]).then(handle);
   // Invalidate and refetch queries that could have old data
-  await client.invalidateQueries(["items"]);
+  await client.invalidateQueries(['items']);
   return response;
 }
 
 // Update an item
 export async function updateItem(id, data) {
   const response = await supabase
-    .from("items")
+    .from('items')
     .update(data)
-    .eq("id", id)
+    .eq('id', id)
     .then(handle);
   // Invalidate and refetch queries that could have old data
   await Promise.all([
-    client.invalidateQueries(["item", { id }]),
-    client.invalidateQueries(["items"]),
+    client.invalidateQueries(['item', { id }]),
+    client.invalidateQueries(['items']),
   ]);
   return response;
 }
@@ -106,15 +106,28 @@ export async function updateItem(id, data) {
 // Delete an item
 export async function deleteItem(id) {
   const response = await supabase
-    .from("items")
+    .from('items')
     .delete()
-    .eq("id", id)
+    .eq('id', id)
     .then(handle);
   // Invalidate and refetch queries that could have old data
   await Promise.all([
-    client.invalidateQueries(["item", { id }]),
-    client.invalidateQueries(["items"]),
+    client.invalidateQueries(['item', { id }]),
+    client.invalidateQueries(['items']),
   ]);
+  return response;
+}
+
+export async function addOrUpdateUserDoc(userId, docTypeId) {
+  console.log('USERID', userId);
+  console.log('DOCTYPEID', docTypeId);
+  const response = await supabase
+    .from('user_docs')
+    .upsert({
+      user_id: userId,
+      doc_type_id: docTypeId.id,
+    })
+    .then(handle);
   return response;
 }
 

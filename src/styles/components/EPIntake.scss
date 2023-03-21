@@ -16,3 +16,11 @@
   font-weight: 600;
   padding: 5px 20px;
 }
+
+.DocSummaryList {
+  border: 1px solid var(--blue);
+  div {
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+}

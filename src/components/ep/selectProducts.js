@@ -19,6 +19,7 @@ const SelectProducts = (props) => {
       const { data: products, error } = await supabase
         .from('document_types')
         .select();
+      console.log(products);
       if (products) {
         setProducts(products);
       }

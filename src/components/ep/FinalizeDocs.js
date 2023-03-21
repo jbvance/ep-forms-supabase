@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import supabase from 'util/supabase';
 import { apiRequestFile } from 'util/util';
 import { selectedProductsActions } from 'store/productsSlice';
+import { useAuth } from 'util/auth';
+import { addOrUpdateUserDoc } from 'util/db';
 
 const FinalizeDocs = (props) => {
   const [responseError, setResponseError] = useState(null);
@@ -21,15 +23,20 @@ const FinalizeDocs = (props) => {
   const [productsInfo, setProductsInfo] = useState([]);
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
   const dispatch = useDispatch();
-  console.log('CREATING', docsToCreate);
+  const auth = useAuth();
+  //console.log('CREATING', docsToCreate);
 
   useEffect(() => {
     const getProducts = async () => {
-      const { data: products, error } = await supabase
-        .from('document_types')
-        .select();
-      if (products) {
-        setProductsInfo(products);
+      try {
+        const { data: products, error } = await supabase
+          .from('document_types')
+          .select();
+        if (products) {
+          setProductsInfo(products);
+        }
+      } catch (err) {
+        console.log('ERR', err);
       }
     };
 
@@ -48,10 +55,16 @@ const FinalizeDocs = (props) => {
           ...values[type],
         });
       }
-      console.log('RESPONSE', response);
+      console.log('CREATE DOC RESPONSE', response);
       if (response.status !== 'success') {
         throw new Error(`Unable to create ${type}`);
       }
+
+      const docTypeId = await handleAddOrUpdateUserDoc(
+        type,
+        auth.user.id,
+        productsInfo.find((prod) => prod.type === 'directive').id
+      );
     } catch (err) {
       console.log('ERROR CREATING DOCMENTS', err);
       throw new Error(err.message);
@@ -59,6 +72,20 @@ const FinalizeDocs = (props) => {
   };
   const wizardState = useSelector((state) => state);
   //console.log(wizardState);
+
+  const handleAddOrUpdateUserDoc = async (docType, userId, docTypeId) => {
+    const userDocData = await addOrUpdateUserDoc(
+      auth.user.id,
+      productsInfo.find((prod) => prod.type === docType)
+    )
+      .then((data) => {
+        console.log('USER DOC DATA', data);
+      })
+      .catch((err) => {
+        console.log('ERROR IN HAOUUD');
+        throw err;
+      });
+  };
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -71,9 +98,9 @@ const FinalizeDocs = (props) => {
       await callApi(wizardState, 'dpoa');
       await callApi(wizardState, 'directive');
       // Remove all products from selected so if user goes to start wizard again, nothing is selected
-      docsToCreate.forEach((doc) =>
-        dispatch(selectedProductsActions.removeProduct(doc))
-      );
+      // docsToCreate.forEach((doc) =>
+      //   dispatch(selectedProductsActions.removeProduct(doc))
+      // );
       setCreateStatus('success');
     } catch (err) {
       console.log('ERROR', err);
@@ -89,7 +116,7 @@ const FinalizeDocs = (props) => {
     return <Spinner />;
   }
 
-  console.log(productsInfo);
+  // console.log(productsInfo);
 
   return (
     <Fragment>
@@ -106,12 +133,13 @@ const FinalizeDocs = (props) => {
             </Row>
             <Row>
               <Col style={{ fontWeight: 800, marginBottom: '10px' }}>
-                The following document(s) will be created:
+                The following document{docsToCreate.length === 1 ? '' : 's'}{' '}
+                will be created:
               </Col>
             </Row>
             <Row>
               <Col lg={12}>
-                <ListGroup>
+                <ListGroup className="DocSummaryList">
                   {docsToCreate.map((doc, i) => (
                     <ListGroup.Item key={doc}>
                       {productsInfo.find((prod) => prod.type === doc)['title']}
