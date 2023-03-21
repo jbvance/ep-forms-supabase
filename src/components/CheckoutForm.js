@@ -5,6 +5,7 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
@@ -86,23 +87,41 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      {/*<LinkAuthenticationElement
-        id="link-authentication-element"
-        onChange={(e) => setEmail(e.target.value)}
+    <Container style={{ border: '1px solid gray' }}>
+      <Row>
+        <Col className="StripeFormHeader">
+          Enter your Payment Information below
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <form id="payment-form" onSubmit={handleSubmit}>
+            {/* <LinkAuthenticationElement
+          id="link-authentication-element"
+          onChange={(e) => setEmail(e.target.value)}
   />*/}
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <Button
-        type="submit"
-        disabled={isLoading || !stripe || !elements}
-        id="submit"
-      >
-        <span id="button-text">
-          {isLoading ? <div>Loading</div> : 'Pay now'}
-        </span>
-      </Button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+            <PaymentElement
+              id="payment-element"
+              options={paymentElementOptions}
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !stripe || !elements}
+              id="submit"
+            >
+              <span id="button-text">
+                {isLoading ? <Spinner /> : 'Pay now'}
+              </span>
+            </Button>
+            {/* Show any error or success messages */}
+            {message && (
+              <div className="CheckoutErrorMessage" id="payment-message">
+                {message}
+              </div>
+            )}
+          </form>
+        </Col>
+      </Row>
+    </Container>
   );
 }

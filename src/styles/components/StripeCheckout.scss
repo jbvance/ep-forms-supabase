@@ -1,0 +1,14 @@
+.StripeFormHeader {
+  background-color: var(--blue);
+  padding: 10px;
+  color: white;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.CheckoutErrorMessage {
+  color: var(--red);
+  background-color: #f3d5d5;
+  margin: 10px 0;
+  padding: 5px;
+}
