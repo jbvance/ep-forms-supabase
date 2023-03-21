@@ -106,6 +106,7 @@ export default function CheckoutForm() {
             />
             <Button
               type="submit"
+              className="StripeSubmitButton"
               disabled={isLoading || !stripe || !elements}
               id="submit"
             >
