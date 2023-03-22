@@ -142,7 +142,7 @@ const WizardSummary = (props) => {
               <h4 className="SummarySubheader">Agents</h4>
             </Col>
           </Row>
-          {wizState.dpoa.agents.map((agent) => {
+          {wizState.mpoa.agents.map((agent) => {
             return (
               <Row key={agent.fullName}>
                 <SummaryField spanCols="4" label="Name" text={agent.fullName} />
