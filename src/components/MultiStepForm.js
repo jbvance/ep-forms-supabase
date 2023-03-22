@@ -6,6 +6,7 @@ import SelectProducts from './ep/selectProducts';
 import ClientContactInfo from './ep/ClientContactInfo';
 import DpoaForm from './ep/DurablePoaForm';
 import MpoaForm from './ep/MedicalPoaForm';
+import WizardSummary from './ep/WizardSummary';
 import FinalizeDocs from './ep/FinalizeDocs';
 
 import { products } from 'pages/wizard';
@@ -20,16 +21,18 @@ const MultiStepForm = () => {
   //Scroll to top of screen each time a step is rendered
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, []);
 
   useEffect(() => {
     let includeStep = true;
-    const currentStepIsProduct = steps[activeStepIndex] in products;
-    //const currentStepIsProduct = products.includes(steps[activeStepIndex]);
+    const currentStepIsProduct = products.includes(steps[activeStepIndex]);
     if (currentStepIsProduct) {
       //this step contains information to complete a form for a product
-      includeStep = steps[activeStepIndex] in selectedProducts;
-      //includeStep = selectedProducts.includes(steps[activeStepIndex]);
+      //includeStep = steps[activeStepIndex] in selectedProducts;
+      const includedProducts = selectedProducts.map((sp) => {
+        return sp.type.includes('-') ? sp.type.split('-')[1] : sp.type;
+      });
+      includeStep = includedProducts.includes(steps[activeStepIndex]);
       if (!includeStep) {
         setActiveStepIndex(activeStepIndex + 1);
       }
@@ -46,7 +49,8 @@ const MultiStepForm = () => {
     <ClientContactInfo {...props} id={steps[1]} />,
     <DpoaForm {...props} id={steps[2]} />,
     <MpoaForm {...props} id={steps[3]} />,
-    <FinalizeDocs {...props} id={steps[4]} />,
+    <WizardSummary {...props} id={steps[4]} />,
+    <FinalizeDocs {...props} id={steps[5]} />,
   ];
 
   return (

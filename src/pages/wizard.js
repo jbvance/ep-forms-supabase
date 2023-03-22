@@ -9,7 +9,14 @@ export const products = ['dpoa', 'mpoa'];
 const WizardPage = (props) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const products = useSelector((state) => state.selectedProducts.products);
-  const steps = ['select-products', 'client-info', 'dpoa', 'mpoa', 'finalize'];
+  const steps = [
+    'select-products',
+    'client-info',
+    'dpoa',
+    'mpoa',
+    'summary',
+    'finalize',
+  ];
   return (
     <FormContext.Provider
       value={{ activeStepIndex, setActiveStepIndex, steps }}
