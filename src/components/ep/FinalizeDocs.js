@@ -44,16 +44,14 @@ const FinalizeDocs = (props) => {
   }, []);
 
   const callApi = async (values, type) => {
-    //console.log('TYPE', type);
+    console.log('TYPE', type);
+    console.log('VALUES', values);
+    const typeWithoutState = type.includes('-') ? type.split('-')[1] : type;
     try {
       let response;
-      // if (!docsToCreate.includes(type)) {
-      //   return;
-      // }
-      // if (docsToCreate.includes(type)) {
-      response = await apiRequestFile(`/docx/tx-${type}`, 'POST', {
+      response = await apiRequestFile(`/docx/${type}`, 'POST', {
         ...values.clientInfo,
-        ...values[type],
+        ...values[typeWithoutState],
       });
       //}
       console.log('CREATE DOC RESPONSE', response);
@@ -95,9 +93,6 @@ const FinalizeDocs = (props) => {
       setResponseError(null);
       setCreateStatus(null);
       setIsSaving(true);
-      // await callApi(wizardState, 'mpoa');
-      // await callApi(wizardState, 'dpoa');
-      // await callApi(wizardState, 'directive');
       const createDocPromises = docsToCreate.map(async (doc) => {
         return await callApi(wizardState, doc.type);
       });

@@ -14,7 +14,7 @@ const createMpoaFromTemplate = async (req, res) => {
     const userId = req.user.id;
     const fs = require('fs');
     const path = require('path');
-    //console.log(req.body);
+    //console.log('MEDICAL POA BODY***************', req.body);
 
     const dirRelativeToPublicFolder = 'docx-templates';
     const dir = path.resolve('./public', dirRelativeToPublicFolder);
