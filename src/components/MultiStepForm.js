@@ -26,6 +26,8 @@ const MultiStepForm = () => {
   useEffect(() => {
     let includeStep = true;
     const currentStepIsProduct = products.includes(steps[activeStepIndex]);
+    // console.log('CURRENT STEP', steps[activeStepIndex]);
+    // console.log('IS PRODUCT', currentStepIsProduct);
     if (currentStepIsProduct) {
       //this step contains information to complete a form for a product
       //includeStep = steps[activeStepIndex] in selectedProducts;

@@ -13,6 +13,10 @@ const Footer = (props) => {
     (state) => state.selectedProducts.products
   );
 
+  const includedProducts = selectedProducts.map((sp) => {
+    return sp.type.includes('-') ? sp.type.split('-')[1] : sp.type;
+  });
+
   //console.log(steps);
   //console.log(steps[activeStepIndex]);
 
@@ -20,7 +24,7 @@ const Footer = (props) => {
     // keep going back until we find a non-product form or
     // a product that was selected
     for (let i = activeStepIndex - 1; i > -1; i--) {
-      if (!products.includes(steps[i]) || selectedProducts.includes(steps[i])) {
+      if (!products.includes(steps[i]) || includedProducts.includes(steps[i])) {
         setActiveStepIndex(i);
         break;
       }
