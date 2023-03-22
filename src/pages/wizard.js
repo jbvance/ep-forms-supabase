@@ -5,21 +5,49 @@ import MultiStepForm from '../components/MultiStepForm';
 import { requireAuth } from 'util/auth';
 
 export const products = ['dpoa', 'mpoa'];
+const steps = [
+  'select-products',
+  'client-info',
+  'dpoa',
+  'mpoa',
+  'summary',
+  'finalize',
+];
 
 const WizardPage = (props) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
-  const products = useSelector((state) => state.selectedProducts.products);
-  const steps = [
-    'select-products',
-    'client-info',
-    'dpoa',
-    'mpoa',
-    'summary',
-    'finalize',
-  ];
+  const [returnToStep, setReturnToStep] = useState('');
+
+  const setStepIndex = (index) => {
+    if (returnToStep !== '') {
+      setReturnToStep('');
+      return setActiveStepIndex(
+        steps.findIndex((step) => step === returnToStep)
+      );
+    }
+    setActiveStepIndex(index);
+  };
+  //const products = useSelector((state) => state.selectedProducts.products);
+
+  const gotoStep = (stepName, returnToStepName = '') => {
+    const stepIndex = steps.findIndex((s) => s === stepName);
+    if (returnToStepName) {
+      setReturnToStep(returnToStepName);
+    }
+    if (stepIndex) {
+      setActiveStepIndex(stepIndex);
+      //setStepIndex(stepIndex);
+    }
+  };
   return (
     <FormContext.Provider
-      value={{ activeStepIndex, setActiveStepIndex, steps }}
+      value={{
+        activeStepIndex,
+        setActiveStepIndex,
+        steps,
+        gotoStep,
+        setStepIndex,
+      }}
     >
       <MultiStepForm />
     </FormContext.Provider>

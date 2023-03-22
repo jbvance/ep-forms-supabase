@@ -10,7 +10,7 @@ import supabase from 'util/supabase';
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
   const selectedProducts = useSelector((state) => state.selectedProducts);
-  const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [products, setProducts] = useState([]);
   const [formError, setFormError] = useState(null);
 
@@ -50,7 +50,7 @@ const SelectProducts = (props) => {
       setFormError('Please select at least one form to continue');
       return;
     }
-    setActiveStepIndex(activeStepIndex + 1);
+    setStepIndex(activeStepIndex + 1);
   };
 
   if (!products) {

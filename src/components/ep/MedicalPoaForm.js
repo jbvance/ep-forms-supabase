@@ -32,7 +32,7 @@ const MpoaForm = (props) => {
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
   const [showFormErrors, setShowFormErrors] = useState(false);
-  const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -98,7 +98,7 @@ const MpoaForm = (props) => {
         // If no error, update state
         dispatch(setMpoaValues({ ...values }));
         // Change wizard step
-        setActiveStepIndex(activeStepIndex + 1);
+        setStepIndex(activeStepIndex + 1);
       }
     } catch (err) {
       console.log(err);

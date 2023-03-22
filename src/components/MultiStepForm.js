@@ -12,7 +12,7 @@ import FinalizeDocs from './ep/FinalizeDocs';
 import { products } from 'pages/wizard';
 
 const MultiStepForm = () => {
-  const { setActiveStepIndex, activeStepIndex, steps } =
+  const { activeStepIndex, steps, returnToStep, setStepIndex } =
     useContext(FormContext);
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
@@ -36,7 +36,7 @@ const MultiStepForm = () => {
       });
       includeStep = includedProducts.includes(steps[activeStepIndex]);
       if (!includeStep) {
-        setActiveStepIndex(activeStepIndex + 1);
+        setStepIndex(activeStepIndex + 1);
       }
     }
   });

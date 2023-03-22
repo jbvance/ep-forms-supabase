@@ -35,7 +35,7 @@ const DpoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const [showFormErrors, setShowFormErrors] = useState(false);
   // Form context info
-  const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -101,7 +101,7 @@ const DpoaForm = (props) => {
         throw new Error('Unable to update MPOA Data');
       }
       // Change wizard step
-      setActiveStepIndex(activeStepIndex + 1);
+      setStepIndex(activeStepIndex + 1);
     } catch (err) {
       console.log(err);
       setUpdateError(

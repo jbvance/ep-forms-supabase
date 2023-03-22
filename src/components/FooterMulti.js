@@ -5,8 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { products } from 'pages/wizard';
 
 const Footer = (props) => {
-  const { steps, activeStepIndex, setActiveStepIndex } =
-    useContext(FormContext);
+  const { steps, activeStepIndex, setStepIndex } = useContext(FormContext);
   const isLast = activeStepIndex === steps.length - 1;
   const isFirst = activeStepIndex === 0;
   const selectedProducts = useSelector(
@@ -18,18 +17,19 @@ const Footer = (props) => {
   });
 
   //console.log(steps);
-  //console.log(steps[activeStepIndex]);
+  console.log(steps[activeStepIndex]);
 
   const goBack = () => {
+    console.log('GOING BACK', activeStepIndex);
     // keep going back until we find a non-product form or
     // a product that was selected
     for (let i = activeStepIndex - 1; i > -1; i--) {
       if (!products.includes(steps[i]) || includedProducts.includes(steps[i])) {
-        setActiveStepIndex(i);
+        setStepIndex(i);
         break;
       }
     }
-    // setActiveStepIndex(activeStepIndex - 1);
+    // setStepIndex(activeStepIndex - 1);
   };
 
   return (

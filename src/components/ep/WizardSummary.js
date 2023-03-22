@@ -1,19 +1,21 @@
 import React, { Fragment, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import { FormContext } from 'context/formContext';
 import SummaryField from 'components/summary/SummaryField';
 import SummaryHeader from 'components/summary/SummaryHeader';
 
 const WizardSummary = (props) => {
-  const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, steps, gotoStep } =
+    useContext(FormContext);
   const dispatch = useDispatch();
   const wizState = useSelector((state) => state);
-  console.log('WIZ STATE IN SUMMARY', wizState);
+  //console.log('WIZ STATE IN SUMMARY', wizState);
+  //console.log('STEPS IN WIZ', steps);
 
   const submitForm = (e) => {
     e.preventDefault();
-    setActiveStepIndex(activeStepIndex + 1);
+    setStepIndex(activeStepIndex + 1);
   };
   const clientInfo = { ...wizState.clientInfo };
   const selectedProducts = wizState.selectedProducts.products.map((p) => {
@@ -22,7 +24,7 @@ const WizardSummary = (props) => {
       title: p.title,
     };
   });
-  console.log('SELECTED PRODUCTS', selectedProducts);
+  //console.log('SELECTED PRODUCTS', selectedProducts);
 
   const isProductTypeSelected = (type) => {
     return selectedProducts.find((p) => p.type === type);
@@ -77,6 +79,17 @@ const WizardSummary = (props) => {
       <Row>
         <SummaryField spanCols="12" label="County" text={clientInfo.county} />
       </Row>
+      <Row>
+        <Col xs={12}>
+          <Button
+            variant="warning"
+            className="EditButton"
+            onClick={() => gotoStep('client-info', 'summary')}
+          >
+            Click here to edit information
+          </Button>
+        </Col>
+      </Row>
       {/* TODO - ADD MARITAL SPOUSE INFO IF MARRIED */}
 
       {isProductTypeSelected('dpoa') && (
@@ -103,6 +116,55 @@ const WizardSummary = (props) => {
               </Row>
             );
           })}
+          <Row>
+            <Col xs={12}>
+              <Button
+                variant="warning"
+                className="EditButton"
+                onClick={() => gotoStep('dpoa', 'summary')}
+              >
+                Click here to edit information
+              </Button>
+            </Col>
+          </Row>
+        </React.Fragment>
+      )}
+
+      {isProductTypeSelected('mpoa') && (
+        <React.Fragment>
+          <Row>
+            <Col>
+              <SummaryHeader text={getSelectedProductTitle('mpoa')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <h4 className="SummarySubheader">Agents</h4>
+            </Col>
+          </Row>
+          {wizState.dpoa.agents.map((agent) => {
+            return (
+              <Row key={agent.fullName}>
+                <SummaryField spanCols="4" label="Name" text={agent.fullName} />
+                <SummaryField
+                  spanCols="8"
+                  label="Address"
+                  text={agent.address}
+                />
+              </Row>
+            );
+          })}
+          <Row>
+            <Col xs={12}>
+              <Button
+                variant="warning"
+                className="EditButton"
+                onClick={() => gotoStep('mpoa', 'summary')}
+              >
+                Click here to edit information
+              </Button>
+            </Col>
+          </Row>
         </React.Fragment>
       )}
 

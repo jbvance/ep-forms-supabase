@@ -3,7 +3,7 @@ import React from 'react';
 const SummaryHeader = ({ text }) => {
   return (
     <React.Fragment>
-      <h1 className="SummaryHeader">{text}</h1>
+      <h4 className="SummaryHeader">{text}</h4>
     </React.Fragment>
   );
 };

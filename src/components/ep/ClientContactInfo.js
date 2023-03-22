@@ -80,7 +80,7 @@ function ClientContactInfo(props) {
   const dispatch = useDispatch();
 
   // Form context info
-  const { activeStepIndex, setActiveStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -154,7 +154,7 @@ function ClientContactInfo(props) {
       }
 
       // Change wizard step
-      setActiveStepIndex(activeStepIndex + 1);
+      setStepIndex(activeStepIndex + 1);
     } catch (err) {
       console.log(err);
       setUpdateError(
