@@ -119,14 +119,28 @@ export async function deleteItem(id) {
 }
 
 export async function addOrUpdateUserDoc(userId, docTypeId) {
-  console.log('USERID', userId);
-  console.log('DOCTYPEID', docTypeId);
+  // console.log('USERID', userId);
+  // console.log('DOCTYPEID', docTypeId);
   const response = await supabase
     .from('user_docs')
     .upsert({
       user_id: userId,
       doc_type_id: docTypeId.id,
     })
+    .then(handle);
+  return response;
+}
+
+export async function getProducts() {
+  const response = await supabase.from('document_types').select().then(handle);
+  return response;
+}
+
+export async function getProductsByState(state) {
+  const response = await supabase
+    .from('document_types')
+    .select()
+    .equal(state)
     .then(handle);
   return response;
 }

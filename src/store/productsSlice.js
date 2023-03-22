@@ -1,15 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getProducts } from 'util/db';
 
 export const initialState = {
   products: [],
 };
+
+const fetchProducts = createAsyncThunk(
+  'products/fetchProducts',
+  async (undefined, thunkAPI) => {
+    const response = await getProducts();
+    return response;
+  }
+);
 
 const selectedProductsSlice = createSlice({
   name: 'selectedProducts',
   initialState,
   reducers: {
     addProduct(state, action) {
-      const existingProduct = state.products.find((p) => p === action.payload);
+      const existingProduct = state.products.find(
+        (p) => p.type === action.payload.type
+      );
       if (!existingProduct) {
         state.products.push(action.payload);
       }
@@ -17,8 +28,15 @@ const selectedProductsSlice = createSlice({
     },
 
     removeProduct(state, action) {
-      state.products = state.products.filter((p) => p !== action.payload);
+      state.products = state.products.filter(
+        (p) => p.type !== action.payload.type
+      );
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      state.products.push(action.payload);
+    });
   },
 });
 

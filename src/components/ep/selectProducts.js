@@ -23,18 +23,19 @@ const SelectProducts = (props) => {
       if (products) {
         setProducts(products);
       }
+      console.log('PRODUCTS', products);
     };
 
     getProducts();
   }, []);
 
   const prodSelected = (prod) => {
-    const found = selectedProducts.products.find((p) => p === prod);
+    const found = selectedProducts.products.find((p) => p.type === prod.type);
     return found ? true : false;
   };
 
   const toggleProduct = (prod) => {
-    const found = selectedProducts.products.find((p) => p === prod);
+    const found = selectedProducts.products.find((p) => p.type === prod.type);
     if (!found) {
       dispatch(selectedProductsActions.addProduct(prod));
     } else {
@@ -73,8 +74,8 @@ const SelectProducts = (props) => {
               <ProductCard
                 title={product.title}
                 text={product.text}
-                selected={prodSelected(product.type)}
-                onToggle={() => toggleProduct(product.type)}
+                selected={prodSelected(product)}
+                onToggle={() => toggleProduct(product)}
               />
             </Col>
           );

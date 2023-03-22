@@ -24,10 +24,12 @@ const MultiStepForm = () => {
 
   useEffect(() => {
     let includeStep = true;
-    const currentStepIsProduct = products.includes(steps[activeStepIndex]);
+    const currentStepIsProduct = steps[activeStepIndex] in products;
+    //const currentStepIsProduct = products.includes(steps[activeStepIndex]);
     if (currentStepIsProduct) {
       //this step contains information to complete a form for a product
-      includeStep = selectedProducts.includes(steps[activeStepIndex]);
+      includeStep = steps[activeStepIndex] in selectedProducts;
+      //includeStep = selectedProducts.includes(steps[activeStepIndex]);
       if (!includeStep) {
         setActiveStepIndex(activeStepIndex + 1);
       }

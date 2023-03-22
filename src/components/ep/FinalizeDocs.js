@@ -44,17 +44,18 @@ const FinalizeDocs = (props) => {
   }, []);
 
   const callApi = async (values, type) => {
+    //console.log('TYPE', type);
     try {
       let response;
-      if (!docsToCreate.includes(type)) {
-        return;
-      }
-      if (docsToCreate.includes(type)) {
-        response = await apiRequestFile(`/docx/tx-${type}`, 'POST', {
-          ...values.clientInfo,
-          ...values[type],
-        });
-      }
+      // if (!docsToCreate.includes(type)) {
+      //   return;
+      // }
+      // if (docsToCreate.includes(type)) {
+      response = await apiRequestFile(`/docx/tx-${type}`, 'POST', {
+        ...values.clientInfo,
+        ...values[type],
+      });
+      //}
       console.log('CREATE DOC RESPONSE', response);
       if (response.status !== 'success') {
         throw new Error(`Unable to create ${type}`);
@@ -63,7 +64,7 @@ const FinalizeDocs = (props) => {
       const docTypeId = await handleAddOrUpdateUserDoc(
         type,
         auth.user.id,
-        productsInfo.find((prod) => prod.type === 'directive').id
+        productsInfo.find((prod) => prod.type === type).id
       );
     } catch (err) {
       console.log('ERROR CREATING DOCMENTS', err);
@@ -79,7 +80,7 @@ const FinalizeDocs = (props) => {
       productsInfo.find((prod) => prod.type === docType)
     )
       .then((data) => {
-        console.log('USER DOC DATA', data);
+        //console.log('USER DOC DATA', data);
       })
       .catch((err) => {
         console.log('ERROR IN HAOUUD');
@@ -89,14 +90,19 @@ const FinalizeDocs = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    console.log(wizardState);
+    //console.log(wizardState);
     try {
       setResponseError(null);
       setCreateStatus(null);
       setIsSaving(true);
-      await callApi(wizardState, 'mpoa');
-      await callApi(wizardState, 'dpoa');
-      await callApi(wizardState, 'directive');
+      // await callApi(wizardState, 'mpoa');
+      // await callApi(wizardState, 'dpoa');
+      // await callApi(wizardState, 'directive');
+      const createDocPromises = docsToCreate.map(async (doc) => {
+        return await callApi(wizardState, doc.type);
+      });
+
+      await Promise.all(createDocPromises);
       // Remove all products from selected so if user goes to start wizard again, nothing is selected
       // docsToCreate.forEach((doc) =>
       //   dispatch(selectedProductsActions.removeProduct(doc))
@@ -115,8 +121,6 @@ const FinalizeDocs = (props) => {
   if (!productsInfo || productsInfo.length === 0) {
     return <Spinner />;
   }
-
-  // console.log(productsInfo);
 
   return (
     <Fragment>
@@ -141,8 +145,12 @@ const FinalizeDocs = (props) => {
               <Col lg={12}>
                 <ListGroup className="DocSummaryList">
                   {docsToCreate.map((doc, i) => (
-                    <ListGroup.Item key={doc}>
-                      {productsInfo.find((prod) => prod.type === doc)['title']}
+                    <ListGroup.Item key={doc.type}>
+                      {
+                        productsInfo.find((prod) => prod.type === doc.type)[
+                          'title'
+                        ]
+                      }
                     </ListGroup.Item>
                   ))}
                 </ListGroup>
