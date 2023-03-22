@@ -9,15 +9,25 @@ const calculateOrderAmount = (items) => {
 };
 
 const handler = async (req, res) => {
-  const { items } = req.body;
+  const { items, amount } = req.body;
   console.log('BODY', req.body);
-  console.log('ITEMS', items);
-  console.log('USER', req.user);
+  //console.log('ITEMS', items);
+  //console.log('USER', req.user);
   const { user } = req;
+  const metadataItems = items.map((item) => {
+    return {
+      id: item.id,
+      type: item.type,
+      price: item.price,
+      fileName: item.file_name,
+    };
+  });
+  let itemsMetadataString = '';
+  items.map((item) => (itemsMetadataString += item.type + ', '));
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: 995,
+    amount,
     //amount: calculateOrderAmount(items),
     currency: 'usd',
     automatic_payment_methods: {
@@ -26,6 +36,7 @@ const handler = async (req, res) => {
     metadata: {
       user_id: user.id,
       user_email: user.email,
+      items: itemsMetadataString,
     },
   });
 

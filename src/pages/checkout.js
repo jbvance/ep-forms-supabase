@@ -25,6 +25,7 @@ const CheckoutPage = (props) => {
   console.log('TOTAL PRICE', totalPriceInCents);
 
   useEffect(() => {
+    console.log('TOTAL PRICE IN CENTS', totalPriceInCents);
     const itemsToPurchase = selectedProducts.map((product) => ({
       price: product.stripe_price_id,
       quantity: 1,
@@ -41,7 +42,10 @@ const CheckoutPage = (props) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ items: [...selectedProducts] }),
+        body: JSON.stringify({
+          items: [...selectedProducts],
+          amount: totalPriceInCents,
+        }),
         //body: JSON.stringify({ items: [{ id: 'xl-tshirt' }] }),
       })
         .then((res) => res.json())
