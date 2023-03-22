@@ -18,7 +18,7 @@ const upload = async (params, data) => {
     //console.log('UPLOAD PARAMS******************', params);
 
     const result = await s3.send(new PutObjectCommand(params));
-    console.log('UPLOAD RESULT', result);
+    //console.log('UPLOAD RESULT', result);
     return result;
   } catch (err) {
     throw new Error('Error uploading file to Bucket', err);
@@ -53,7 +53,7 @@ module.exports = {
     const files = await s3.send(
       new ListObjectsCommand({ Bucket: process.env.S3_BUCKET })
     );
-    console.log('FILES******************', files);
+    //console.log('FILES******************', files);
     // s3.listObjects(bucketParams, function (err, data) {
     //   if (err) {
     //     console.log('Error', err);
