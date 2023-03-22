@@ -14,8 +14,8 @@ export default async function handler(req, res) {
           { price: 'price_1MoCoiEe6HsjpSHTn1eypz4h', quantity: 1 },
         ],
         mode: 'payment',
-        success_url: `${req.headers.origin}/?success=true`,
-        cancel_url: `${req.headers.origin}/?canceled=true`,
+        success_url: `${req.headers.origin}/files-dashboard?success=true`,
+        cancel_url: `${req.headers.origin}/files-dashboard?canceled=true`,
       });
       res.redirect(303, session.url);
     } catch (err) {

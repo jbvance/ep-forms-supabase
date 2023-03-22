@@ -1,4 +1,8 @@
-import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
+import {
+  PutObjectCommand,
+  CreateBucketCommand,
+  ListObjectsCommand,
+} from '@aws-sdk/client-s3';
 import { s3Client as s3 } from './S3Client';
 const axios = require('axios');
 
@@ -12,9 +16,10 @@ const fs = require('fs');
 const upload = async (params, data) => {
   try {
     //console.log('UPLOAD PARAMS******************', params);
+
     const result = await s3.send(new PutObjectCommand(params));
+    console.log('UPLOAD RESULT', result);
     return result;
-    //console.log('UPLOAD RESULT', result);
   } catch (err) {
     throw new Error('Error uploading file to Bucket', err);
   }
@@ -29,23 +34,34 @@ const upload = async (params, data) => {
 };
 
 module.exports = {
+  getUrlFromBucket: (s3Bucket, fileName) => {
+    const {
+      config: { params, region },
+    } = s3Bucket;
+    const regionString = region.includes('us-east-2') ? '' : '-' + region;
+    return `https://${params.Bucket}.s3${regionString}.amazonaws.com/${fileName}`;
+  },
+
   // return a list of all the files in a bucket
-  listFiles: () => {
+  listFiles: async () => {
     // Create the parameters for calling createBucket
     var bucketParams = {
       Bucket: process.env.S3_BUCKET,
     };
 
     // Call S3
-
-    s3.listObjects(bucketParams, function (err, data) {
-      if (err) {
-        console.log('Error', err);
-        throw err;
-      } else {
-        return data.Contents;
-      }
-    });
+    const files = await s3.send(
+      new ListObjectsCommand({ Bucket: process.env.S3_BUCKET })
+    );
+    console.log('FILES******************', files);
+    // s3.listObjects(bucketParams, function (err, data) {
+    //   if (err) {
+    //     console.log('Error', err);
+    //     throw err;
+    //   } else {
+    //     return data.Contents;
+    //   }
+    // });
   },
 
   uploadFromFile: (fileName) => {

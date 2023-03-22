@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -23,6 +24,7 @@ const FinalizeDocs = (props) => {
   const [productsInfo, setProductsInfo] = useState([]);
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
   const dispatch = useDispatch();
+  const router = useRouter();
   const auth = useAuth();
   //console.log('CREATING', docsToCreate);
 
@@ -103,6 +105,7 @@ const FinalizeDocs = (props) => {
       //   dispatch(selectedProductsActions.removeProduct(doc))
       // );
       setCreateStatus('success');
+      router.push('/checkout');
     } catch (err) {
       console.log('ERROR', err);
       setResponseError(

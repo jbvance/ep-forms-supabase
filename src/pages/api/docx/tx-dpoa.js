@@ -3,7 +3,7 @@ const Docxtemplater = require('docxtemplater');
 const requireAuth = require('../_require-auth');
 const fs = require('fs');
 const path = require('path');
-const { uploadFromBuffer } = require('../../../util/uploadToS3');
+const { uploadFromBuffer, listFiles } = require('../../../util/uploadToS3');
 const { getSignedUrlForFile } = require('../../../util/s3BucketsFiles');
 const { createAndUploadPdf } = require('../../../util/pdf');
 
@@ -16,6 +16,8 @@ const createDpoaFromTemplate = async (req, res) => {
 
     const dir = path.resolve('./public', dirRelativeToPublicFolder);
     const userId = req.user.id;
+
+    await listFiles();
 
     // Check for required fields
     const requiredFields = [
