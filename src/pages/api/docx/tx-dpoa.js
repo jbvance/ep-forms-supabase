@@ -9,6 +9,8 @@ const { createAndUploadPdf } = require('../../../util/pdf');
 
 const createDpoaFromTemplate = async (req, res) => {
   try {
+    // Filler for blank addresses
+    const blankLine = '_____________________________________';
     const dirRelativeToPublicFolder = 'docx-templates';
 
     // file name to use for saving to AWS, both .docx and .pdf
@@ -111,12 +113,16 @@ const createDpoaFromTemplate = async (req, res) => {
     const primaryAgent = agents[0];
     const dpoaPrimaryAgentName = primaryAgent.fullName;
     const dpoaPrimaryAgentAddress =
-      primaryAgent.address.trim().length > 0
-        ? primaryAgent.address
-        : '______________________';
+      primaryAgent.address.trim().length > 0 ? primaryAgent.address : blankLine;
 
     const altAgents = agents.slice(1).map((a) => {
-      return { fullName: a.fullName };
+      const addr =
+        a.address && a.address.trim().length > 1 ? a.address : blankLine;
+      const aFullName = a.fullName;
+      return {
+        fullName: aFullName,
+        address: addr,
+      };
     });
 
     //console.log('ALT AGENTS', altAgents);

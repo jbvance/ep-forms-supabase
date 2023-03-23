@@ -40,7 +40,7 @@ const handler = async (req, res) => {
     },
   });
 
-  console.log('PAYMENT INTENT', paymentIntent);
+  //console.log('PAYMENT INTENT', paymentIntent);
 
   res.send({
     id: paymentIntent.id,
