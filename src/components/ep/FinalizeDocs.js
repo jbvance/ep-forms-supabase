@@ -43,6 +43,8 @@ const FinalizeDocs = (props) => {
     };
 
     getProducts();
+    //Scroll to top of screen
+    window.scrollTo(0, 0);
   }, []);
 
   const callApi = async (values, type) => {

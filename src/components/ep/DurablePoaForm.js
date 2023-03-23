@@ -37,6 +37,11 @@ const DpoaForm = (props) => {
   // Form context info
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
+  //Scroll to top of screen
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {

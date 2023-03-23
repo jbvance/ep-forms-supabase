@@ -27,6 +27,7 @@ const SelectProducts = (props) => {
     };
 
     getProducts();
+    window.scrollTo(0, 0);
   }, []);
 
   const prodSelected = (prod) => {

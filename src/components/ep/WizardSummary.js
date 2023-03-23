@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Jumbotron, Container, Row, Col, Button } from 'react-bootstrap';
 import { FormContext } from 'context/formContext';
@@ -12,6 +12,11 @@ const WizardSummary = (props) => {
   const wizState = useSelector((state) => state);
   //console.log('WIZ STATE IN SUMMARY', wizState);
   //console.log('STEPS IN WIZ', steps);
+
+  //Scroll to top of screen
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const submitForm = (e) => {
     e.preventDefault();

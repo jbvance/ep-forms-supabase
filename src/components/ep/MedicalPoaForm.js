@@ -34,6 +34,11 @@ const MpoaForm = (props) => {
   const [showFormErrors, setShowFormErrors] = useState(false);
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
+  //Scroll to top of screen
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
