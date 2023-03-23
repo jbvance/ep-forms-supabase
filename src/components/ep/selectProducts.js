@@ -1,11 +1,21 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
-import { Form, Row, Col, Spinner } from 'react-bootstrap';
+import {
+  Container,
+  Card,
+  Form,
+  Row,
+  Col,
+  Spinner,
+  Button,
+} from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import ProductCard from './ProductCard';
+import SectionHeader from 'components/SectionHeader';
 import { selectedProductsActions } from 'store/productsSlice';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
+import AspectRatio from 'components/AspectRatio';
 
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
@@ -59,39 +69,54 @@ const SelectProducts = (props) => {
   }
 
   return (
-    <Fragment>
-      <h1 className="Header">Select the documents you would like to create</h1>
-      <p className="Informational">
-        Note: If you select a document that you have created previously,
-        creating the same document again will replace any existing documents
-        that have been saved. Before completing a new version, you may want to{' '}
-        <a href="/dashboard-files">click here</a> to download any existing
-        versions.
-      </p>
-      <Row className="no-gutters overflow-hidden">
-        {products.map((product) => {
-          return (
-            <Col xs={12} lg={6} key={product.type}>
-              <ProductCard
-                title={product.title}
-                text={product.text}
-                selected={prodSelected(product)}
-                onToggle={() => toggleProduct(product)}
-              />
+    <Container className="text-center">
+      <SectionHeader
+        title="Select your Documents"
+        subtitle="Choose which documents you want to create"
+        size={2}
+        spaced={true}
+      />
+      <Card>
+        <Row className="no-gutters overflow-hidden">
+          {products.map((product, index) => (
+            <Col
+              xs={12}
+              lg={6}
+              style={{
+                display: 'flex',
+                alignItems: 'stretch',
+                justifyContent: 'center',
+                boxShadow: '1px 1px 0 0 #efefef',
+              }}
+              key={index}
+            >
+              <div className="FeaturesSection__item has-text-centered">
+                {/* <div className="FeaturesSection__image-container">
+                  <AspectRatio ratio={4 / 3}></AspectRatio>
+            </div>*/}
+                <h4>{product.title}</h4>
+                <p>{product.text}</p>
+                <Button
+                  variant={prodSelected(product) ? 'danger' : 'primary'}
+                  onClick={() => toggleProduct(product)}
+                >
+                  {prodSelected(product) ? 'Remove' : 'Select'}
+                </Button>
+              </div>
             </Col>
-          );
-        })}
-      </Row>
-      {formError && selectedProducts.products.length === 0 && (
-        <Row>
-          <Col>
-            <FormAlert type="error" message={formError} />
-          </Col>
+          ))}
         </Row>
-      )}
+        {formError && selectedProducts.products.length === 0 && (
+          <Row>
+            <Col>
+              <FormAlert type="error" message={formError} />
+            </Col>
+          </Row>
+        )}
 
-      <Form id={props.id} onSubmit={moveNext}></Form>
-    </Fragment>
+        <Form id={props.id} onSubmit={moveNext}></Form>
+      </Card>
+    </Container>
   );
 };
 

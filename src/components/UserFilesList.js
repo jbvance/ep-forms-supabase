@@ -103,6 +103,7 @@ const UserFilesList = (props) => {
           {!isLoading && files && files.length > 0 && (
             <ListGroup variant="flush">
               {files.map((file, index) => {
+                const fileDate = new Date(file.lastModified);
                 if (isFilePaidFor(file.fileName)) {
                   return (
                     <ListGroup.Item
@@ -116,7 +117,8 @@ const UserFilesList = (props) => {
                       >
                         {file.fileName.replace(/_/g, ' ')}
                       </a>
-                      (created {new Date(file.lastModified).toDateString()})
+                      (created {fileDate.toDateString()} at{' '}
+                      {fileDate.getHours() + ':' + fileDate.getMinutes()})
                     </ListGroup.Item>
                   );
                 } else {

@@ -106,7 +106,7 @@ const FinalizeDocs = (props) => {
       //   dispatch(selectedProductsActions.removeProduct(doc))
       // );
       setCreateStatus('success');
-      router.push('/checkout');
+      router.push('/checkout?status=success');
     } catch (err) {
       console.log('ERROR', err);
       setResponseError(

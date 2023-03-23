@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import FormAlert from 'components/FormAlert';
 import { Elements, AddressElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -18,10 +19,12 @@ const stripePromise = loadStripe(
 const CheckoutPage = (props) => {
   const [checkoutError, setCheckoutError] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
+  const router = useRouter();
   const auth = useAuth();
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
   );
+  const docStatus = router.query.status;
   console.log('SELECTED PRODUCTS', selectedProducts);
   let totalPriceInCents = 0;
   selectedProducts.forEach((p) => (totalPriceInCents += p.price));
@@ -87,6 +90,12 @@ const CheckoutPage = (props) => {
 
   return (
     <div className="App">
+      {docStatus === 'success' && (
+        <FormAlert
+          type="success"
+          message="Your document(s) were successfully created. Review your order below and pay to receive your comleted documents."
+        />
+      )}
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm totalPriceInCents={totalPriceInCents} />
