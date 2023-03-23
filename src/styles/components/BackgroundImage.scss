@@ -4,7 +4,9 @@
   background-image: var(--image);
   opacity: var(--opacity);
   // Fill parent container
-  background-position: center center;
+  // ****** 2023-03-23 - JV removed background-position class to get image
+  // to show up properly on home screen
+  //background-position: center center;
   background-size: cover;
   top: 0;
   left: 0;
