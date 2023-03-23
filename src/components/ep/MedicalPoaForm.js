@@ -209,13 +209,15 @@ const MpoaForm = (props) => {
                           </div>
                         </Row>
                       ))}
-                    <Button
-                      variant="outline-primary"
-                      onClick={() => push({ fullName: '', address: '' })}
-                      className="mb-3"
-                    >
-                      Add Agent
-                    </Button>{' '}
+                    {values.agents.length < 10 && (
+                      <Button
+                        variant="outline-primary"
+                        onClick={() => push({ fullName: '', address: '' })}
+                        className="mb-3"
+                      >
+                        Add Agent
+                      </Button>
+                    )}
                   </>
                 )}
               </FieldArray>
