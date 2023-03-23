@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Jumbotron, Container, Row, Col, Button } from 'react-bootstrap';
 import { FormContext } from 'context/formContext';
 import SummaryField from 'components/summary/SummaryField';
 import SummaryHeader from 'components/summary/SummaryHeader';
@@ -41,72 +41,124 @@ const WizardSummary = (props) => {
 
   return (
     <Fragment>
-      <Row>
-        <Col>
+      <Jumbotron>
+        <h2>Review your Information</h2>
+        <p>
+          You are almost ready to prepare your documents. First, take a moment
+          to review the infomrmation below to make sure everything is correct.
+          Be sure to make any necessary changes before continuing.
+        </p>
+      </Jumbotron>
+      <Container className="SummarySection">
+        <Row>
           <SummaryHeader text="Your Information" />
-        </Col>
-      </Row>
-      <Row>
-        <SummaryField
-          spanCols="3"
-          label="First Name"
-          text={clientInfo.firstName}
-        />
-        <SummaryField
-          spanCols="3"
-          label="Middle Name"
-          text={clientInfo.middleName}
-        />
-        <SummaryField
-          spanCols="3"
-          label="Last Name"
-          text={clientInfo.lastName}
-        />
-        <SummaryField
-          spanCols="3"
-          label="Suffix (Jr., III, etc.)"
-          text={clientInfo.suffix}
-        />
-      </Row>
-      <Row>
-        <SummaryField spanCols="12" label="Address" text={clientInfo.address} />
-      </Row>
-      <Row>
-        <SummaryField spanCols="6" label="City" text={clientInfo.city} />
-        <SummaryField spanCols="2" label="State" text={clientInfo.state} />
-        <SummaryField spanCols="4" label="Zip" text={clientInfo.zip} />
-      </Row>
-      <Row>
-        <SummaryField spanCols="12" label="County" text={clientInfo.county} />
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <Button
-            variant="warning"
-            className="EditButton"
-            onClick={() => gotoStep('client-info', 'summary')}
-          >
-            Click here to edit information
-          </Button>
-        </Col>
-      </Row>
-      {/* TODO - ADD MARITAL SPOUSE INFO IF MARRIED */}
+        </Row>
+        <Row>
+          <SummaryField
+            spanCols="3"
+            label="First Name"
+            text={clientInfo.firstName}
+          />
+          <SummaryField
+            spanCols="3"
+            label="Middle Name"
+            text={clientInfo.middleName}
+          />
+          <SummaryField
+            spanCols="3"
+            label="Last Name"
+            text={clientInfo.lastName}
+          />
+          <SummaryField
+            spanCols="3"
+            label="Suffix (Jr., III, etc.)"
+            text={clientInfo.suffix}
+          />
+        </Row>
+        <Row>
+          <SummaryField
+            spanCols="12"
+            label="Address"
+            text={clientInfo.address}
+          />
+        </Row>
+        <Row>
+          <SummaryField spanCols="6" label="City" text={clientInfo.city} />
+          <SummaryField spanCols="2" label="State" text={clientInfo.state} />
+          <SummaryField spanCols="4" label="Zip" text={clientInfo.zip} />
+        </Row>
+        <Row>
+          <SummaryField spanCols="12" label="County" text={clientInfo.county} />
+        </Row>
+
+        {clientInfo.maritalStatus === 'married' && (
+          <React.Fragment>
+            <Row>
+              <h4 className="SummarySubheader">Spouse Information</h4>
+            </Row>
+            <Row>
+              <SummaryField
+                spanCols="3"
+                label="First Name"
+                text={clientInfo.spouseFirstName}
+              />
+              <SummaryField
+                spanCols="3"
+                label="Middle Name"
+                text={clientInfo.spouseMiddleName}
+              />
+              <SummaryField
+                spanCols="3"
+                label="Last Name"
+                text={clientInfo.spouseLastName}
+              />
+              <SummaryField
+                spanCols="3"
+                label="Suffix (Jr., III, etc.)"
+                text={clientInfo.spouseSuffix}
+              />
+            </Row>
+            <Row>
+              <SummaryField
+                spanCols="3"
+                label="Email"
+                text={clientInfo.spouseEmail}
+              />
+              <SummaryField
+                spanCols="3"
+                label="Date of Birth"
+                text={clientInfo.spouseDob}
+              />
+            </Row>
+          </React.Fragment>
+        )}
+        <Row>
+          <Col xs={12}>
+            <Button
+              variant="warning"
+              className="EditButton"
+              onClick={() => gotoStep('client-info', 'summary')}
+            >
+              Click here to edit information
+            </Button>
+          </Col>
+        </Row>
+      </Container>
 
       {isProductTypeSelected('dpoa') && (
-        <React.Fragment>
+        <Container className="SummarySection">
           <Row>
-            <Col>
-              <SummaryHeader text={getSelectedProductTitle('dpoa')} />
-            </Col>
+            <SummaryHeader text={getSelectedProductTitle('dpoa')} />
           </Row>
           <Row>
-            <Col xs={12}>
-              <h4 className="SummarySubheader">Agents</h4>
-            </Col>
+            <h4 className="SummarySubheader">Agents</h4>
           </Row>
-          {wizState.dpoa.agents.map((agent) => {
+          {wizState.dpoa.agents.map((agent, index) => {
             return (
-              <Row key={agent.fullName}>
+              <Row
+                key={agent.fullName}
+                style={index % 2 === 0 ? { backgroundColor: '#f2f4f7' } : {}}
+              >
                 <SummaryField spanCols="4" label="Name" text={agent.fullName} />
                 <SummaryField
                   spanCols="8"
@@ -127,24 +179,23 @@ const WizardSummary = (props) => {
               </Button>
             </Col>
           </Row>
-        </React.Fragment>
+        </Container>
       )}
 
       {isProductTypeSelected('mpoa') && (
-        <React.Fragment>
+        <Container className="SummarySection">
           <Row>
-            <Col>
-              <SummaryHeader text={getSelectedProductTitle('mpoa')} />
-            </Col>
+            <SummaryHeader text={getSelectedProductTitle('mpoa')} />
           </Row>
           <Row>
-            <Col xs={12}>
-              <h4 className="SummarySubheader">Agents</h4>
-            </Col>
+            <h4 className="SummarySubheader">Agents</h4>
           </Row>
-          {wizState.mpoa.agents.map((agent) => {
+          {wizState.mpoa.agents.map((agent, index) => {
             return (
-              <Row key={agent.fullName}>
+              <Row
+                key={agent.fullName}
+                style={index % 2 === 0 ? { backgroundColor: '#f2f4f7' } : {}}
+              >
                 <SummaryField spanCols="4" label="Name" text={agent.fullName} />
                 <SummaryField
                   spanCols="8"
@@ -165,7 +216,7 @@ const WizardSummary = (props) => {
               </Button>
             </Col>
           </Row>
-        </React.Fragment>
+        </Container>
       )}
 
       <form onSubmit={submitForm} id={props.id}></form>

@@ -17,7 +17,7 @@ const Footer = (props) => {
   });
 
   //console.log(steps);
-  console.log(steps[activeStepIndex]);
+  //console.log(steps[activeStepIndex]);
 
   const goBack = () => {
     console.log('GOING BACK', activeStepIndex);

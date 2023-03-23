@@ -1,12 +1,17 @@
+.SummarySection {
+  border: 1px solid grey;
+  margin-bottom: 50px;
+}
+
 .SummaryHeader {
+  flex: 1;
   background-color: var(--blue);
   color: var(--white);
   padding: 10px;
-  border-radius: 5px;
-  margin-top: 30px;
 }
 
 .SummarySubheader {
+  flex: 1;
   background-color: var(--green);
   color: white;
   padding: 10px;
