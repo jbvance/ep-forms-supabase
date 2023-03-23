@@ -118,18 +118,50 @@ export async function deleteItem(id) {
   return response;
 }
 
-export async function addOrUpdateUserDoc(userId, docTypeId) {
+// Update payment status of user_docs
+export async function updateUserDocsPaidStatus(paymentIntentId, paid) {
+  const response = await supabase
+    .from('user_docs')
+    .update({
+      paid: paid,
+    })
+    .eq('payment_intent_id', paymentIntentId)
+    .select()
+    .then(handle);
+  return response;
+}
+
+export async function addUserDocPaymentIntent(
+  userId,
+  docTypeId,
+  paymentIntentId
+) {
   // console.log('USERID', userId);
   // console.log('DOCTYPEID', docTypeId);
   const response = await supabase
     .from('user_docs')
-    .upsert({
+    .insert({
       user_id: userId,
-      doc_type_id: docTypeId.id,
+      doc_type_id: docTypeId,
+      payment_intent_id: paymentIntentId,
     })
     .then(handle);
   return response;
 }
+
+/***** Not currently used - replaced by addUserDocPaymentIntent */
+// export async function addorUpdateUserDoc(userId, docTypeId) {
+//   // console.log('USERID', userId);
+//   // console.log('DOCTYPEID', docTypeId);
+//   const response = await supabase
+//     .from('user_docs')
+//     .upsert({
+//       user_id: userId,
+//       doc_type_id: docTypeId.id,
+//     })
+//     .then(handle);
+//   return response;
+// }
 
 export async function getProducts() {
   const response = await supabase.from('document_types').select().then(handle);

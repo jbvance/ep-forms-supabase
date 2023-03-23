@@ -34,7 +34,6 @@ const UserFilesList = (props) => {
       try {
         setFetchError(null);
         const data = await apiRequest('get-user-files');
-        console.log(data);
         setFiles(data);
       } catch (err) {
         setFetchError('Unable to retrieve your files at this time.');

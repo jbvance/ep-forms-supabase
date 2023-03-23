@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import FormAlert from 'components/FormAlert';
 import { Elements, AddressElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { useAuth } from 'util/auth';
 import CheckoutForm from 'components/CheckoutForm';
 import supabase from 'util/supabase';
+import { addUserDocPaymentIntent } from 'util/db';
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -16,13 +18,22 @@ const stripePromise = loadStripe(
 const CheckoutPage = (props) => {
   const [checkoutError, setCheckoutError] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
+  const auth = useAuth();
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
   );
   console.log('SELECTED PRODUCTS', selectedProducts);
   let totalPriceInCents = 0;
   selectedProducts.forEach((p) => (totalPriceInCents += p.price));
-  console.log('TOTAL PRICE', totalPriceInCents);
+  //console.log('TOTAL PRICE', totalPriceInCents);
+
+  const addUserDocs = async (paymentIntentId) => {
+    const userDocsPromises = selectedProducts.map(async (p) => {
+      console.log('PRODUCT ID', p.id);
+      return await addUserDocPaymentIntent(auth.user.id, p.id, paymentIntentId);
+    });
+    return await Promise.all(userDocsPromises);
+  };
 
   useEffect(() => {
     console.log('TOTAL PRICE IN CENTS', totalPriceInCents);
@@ -52,7 +63,11 @@ const CheckoutPage = (props) => {
         .then((data) => {
           console.log('data:', data);
           setClientSecret(data.clientSecret);
+          // Insert a row into user_documents with payment intent so we
+          // can update to paid once payment is complete
+          return addUserDocs(data.id);
         })
+        .then(() => console.log('DONE'))
         .catch((err) => {
           setCheckoutError('An error occurred. Please try again later');
           console.log('ERROR', err);

@@ -18,7 +18,7 @@ const MultiStepForm = () => {
     (state) => state.selectedProducts.products
   );
 
-  //Scroll to top of screen each time a step is rendered
+  //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

@@ -10,7 +10,7 @@ const calculateOrderAmount = (items) => {
 
 const handler = async (req, res) => {
   const { items, amount } = req.body;
-  console.log('BODY', req.body);
+  //console.log('BODY', req.body);
   //console.log('ITEMS', items);
   //console.log('USER', req.user);
   const { user } = req;
@@ -40,9 +40,10 @@ const handler = async (req, res) => {
     },
   });
 
-  //console.log('PAYMENT INTENT', paymentIntent);
+  console.log('PAYMENT INTENT', paymentIntent);
 
   res.send({
+    id: paymentIntent.id,
     clientSecret: paymentIntent.client_secret,
   });
 };

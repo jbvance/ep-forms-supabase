@@ -15,7 +15,6 @@ import supabase from 'util/supabase';
 import { apiRequestFile } from 'util/util';
 import { selectedProductsActions } from 'store/productsSlice';
 import { useAuth } from 'util/auth';
-import { addOrUpdateUserDoc } from 'util/db';
 
 const FinalizeDocs = (props) => {
   const [responseError, setResponseError] = useState(null);
@@ -63,11 +62,11 @@ const FinalizeDocs = (props) => {
         throw new Error(`Unable to create ${type}`);
       }
 
-      const docTypeId = await handleAddOrUpdateUserDoc(
-        type,
-        auth.user.id,
-        productsInfo.find((prod) => prod.type === type).id
-      );
+      // const docTypeId = await handleAddOrUpdateUserDoc(
+      //   type,
+      //   auth.user.id,
+      //   productsInfo.find((prod) => prod.type === type).id
+      // );
     } catch (err) {
       console.log('ERROR CREATING DOCMENTS', err);
       throw new Error(err.message);
@@ -76,19 +75,19 @@ const FinalizeDocs = (props) => {
   const wizardState = useSelector((state) => state);
   //console.log(wizardState);
 
-  const handleAddOrUpdateUserDoc = async (docType, userId, docTypeId) => {
-    const userDocData = await addOrUpdateUserDoc(
-      auth.user.id,
-      productsInfo.find((prod) => prod.type === docType)
-    )
-      .then((data) => {
-        //console.log('USER DOC DATA', data);
-      })
-      .catch((err) => {
-        console.log('ERROR IN HAOUUD');
-        throw err;
-      });
-  };
+  // const handleAddOrUpdateUserDoc = async (docType, userId, docTypeId) => {
+  //   const userDocData = await addOrUpdateUserDoc(
+  //     auth.user.id,
+  //     productsInfo.find((prod) => prod.type === docType)
+  //   )
+  //     .then((data) => {
+  //       //console.log('USER DOC DATA', data);
+  //     })
+  //     .catch((err) => {
+  //       console.log('ERROR IN HAOUUD');
+  //       throw err;
+  //     });
+  // };
 
   const submitForm = async (e) => {
     e.preventDefault();
