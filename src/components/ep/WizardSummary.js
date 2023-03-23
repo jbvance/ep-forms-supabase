@@ -201,12 +201,13 @@ const WizardSummary = (props) => {
                 key={agent.fullName}
                 style={index % 2 === 0 ? { backgroundColor: '#f2f4f7' } : {}}
               >
-                <SummaryField spanCols="4" label="Name" text={agent.fullName} />
+                <SummaryField spanCols="3" label="Name" text={agent.fullName} />
                 <SummaryField
-                  spanCols="8"
+                  spanCols="6"
                   label="Address"
                   text={agent.address}
                 />
+                <SummaryField spanCols="3" label="Phone" text={agent.phone} />
               </Row>
             );
           })}

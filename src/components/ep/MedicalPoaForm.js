@@ -20,6 +20,7 @@ const schema = Yup.object().shape({
       Yup.object().shape({
         fullName: Yup.string().required('Agent name is required'),
         address: Yup.string(),
+        phone: Yup.string(),
       })
     )
     .required('Please add at least one agent')
@@ -175,17 +176,24 @@ const MpoaForm = (props) => {
                     {values.agents.length > 0 &&
                       values.agents.map((agent, index) => (
                         <Row key={index} className="AgentBox">
-                          <Form.Group as={Col} md="4">
+                          <Form.Group as={Col} md="3">
                             <TextInput
                               label={`Full Name for Agent No. ${index + 1}`}
                               name={`agents.${index}.fullName`}
                               labelclass="PoaLabelText"
                             />
                           </Form.Group>
-                          <Form.Group as={Col} md="8">
+                          <Form.Group as={Col} md="6">
                             <TextInput
                               label={`Address`}
                               name={`agents.${index}.address`}
+                              labelclass="PoaLabelText"
+                            />
+                          </Form.Group>
+                          <Form.Group as={Col} md="3">
+                            <TextInput
+                              label={`Phone`}
+                              name={`agents.${index}.phone`}
                               labelclass="PoaLabelText"
                             />
                           </Form.Group>

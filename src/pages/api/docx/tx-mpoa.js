@@ -6,6 +6,23 @@ const { uploadFromBuffer, uploadFromUrl } = require('../../../util/uploadToS3');
 const { getSignedUrlForFile } = require('../../../util/s3BucketsFiles');
 const { createAndUploadPdf } = require('../../../util/pdf');
 
+const ordinalInWord = (cardinal) => {
+  var ordinals = [
+    'First',
+    'Second',
+    'Third',
+    'Fourth',
+    'Fifth',
+    'Sixth',
+    'Seventh',
+    'Eighth',
+    'Ninth',
+    'Tenth',
+  ];
+
+  return ordinals[cardinal];
+};
+
 const createMpoaFromTemplate = async (req, res) => {
   // file name to use for saving to AWS, both .docx and .pdf
   const fileNameForSaving = 'Medical_Power_of_Attorney';
@@ -117,14 +134,15 @@ const createMpoaFromTemplate = async (req, res) => {
       primaryAgent.address.trim().length > 0 ? primaryAgent.address : blankLine;
     const mpoaPrimaryAgentPhone =
       primaryAgent.phone && primaryAgent.phone.trim().length > 0
-        ? primaryAgent.address
+        ? primaryAgent.phone
         : blankLine;
 
-    const mpoaAgents = agents.slice(1).map((a) => {
+    const mpoaAgents = agents.slice(1).map((a, index) => {
       return {
         name: a.fullName,
         address: a.address && a.address.length > 1 ? a.address : blankLine,
         phone: a.phone && a.phone.length > 1 ? a.phone : blankLine,
+        ordinal: ordinalInWord(index),
       };
     });
 
