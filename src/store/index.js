@@ -4,6 +4,7 @@ import clientInfoSlice from './clientInfoSlice';
 import dpoaSlice from './dpoaSlice';
 import mpoaSlice from './mpoaSlice';
 import selectedProductsSlice from './productsSlice';
+import hipaaSlice from './hipaaSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     //children: childrenSlice.reducer,
     dpoa: dpoaSlice.reducer,
     mpoa: mpoaSlice.reducer,
+    hipaa: hipaaSlice.reducer,
     selectedProducts: selectedProductsSlice.reducer,
   },
 });

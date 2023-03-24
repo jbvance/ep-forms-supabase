@@ -30,7 +30,7 @@ export const initialClientInfo = {
   zip: '',
   county: '',
   dob: '',
-  //phone: '(713) 555-1234',
+  phone: '',
   email: '',
   maritalStatus: '',
   spouseFirstName: '',

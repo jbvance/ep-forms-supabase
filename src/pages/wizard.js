@@ -11,6 +11,7 @@ const steps = [
   'client-info',
   'dpoa',
   'mpoa',
+  'hipaa',
   'summary',
   'finalize',
 ];
