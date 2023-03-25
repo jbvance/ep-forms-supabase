@@ -5,7 +5,8 @@ import MultiStepForm from '../components/MultiStepForm';
 import { requireAuth } from 'util/auth';
 import supabase from 'util/supabase';
 
-export const products = ['dpoa', 'mpoa'];
+// products is a list of the documents that require user information to be filled out.
+export const products = ['dpoa', 'mpoa', 'hipaa'];
 const steps = [
   'select-products',
   'client-info',
@@ -19,16 +20,6 @@ const steps = [
 const WizardPage = (props) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [returnToStep, setReturnToStep] = useState('');
-
-  useEffect(() => {
-    const fn = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      console.log('DTA', session);
-    };
-    fn();
-  }, []);
 
   const setStepIndex = (index) => {
     if (returnToStep !== '') {

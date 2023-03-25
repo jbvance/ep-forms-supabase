@@ -4,6 +4,18 @@ import { Jumbotron, Container, Row, Col, Button } from 'react-bootstrap';
 import { FormContext } from 'context/formContext';
 import SummaryField from 'components/summary/SummaryField';
 import SummaryHeader from 'components/summary/SummaryHeader';
+import AgentsSummary from './AgentsSummary';
+
+export const getSelectedProductTitle = (type, productsToSearch) => {
+  console.log('TYPE', type);
+  console.log('PTS', productsToSearch);
+  const selectedProduct = productsToSearch.find((p) => p.type === type);
+  if (selectedProduct) {
+    return selectedProduct.title;
+  } else {
+    return 'Product Not Found';
+  }
+};
 
 const WizardSummary = (props) => {
   const { activeStepIndex, setStepIndex, steps, gotoStep } =
@@ -33,15 +45,6 @@ const WizardSummary = (props) => {
 
   const isProductTypeSelected = (type) => {
     return selectedProducts.find((p) => p.type === type);
-  };
-
-  const getSelectedProductTitle = (type) => {
-    const selectedProduct = selectedProducts.find((p) => p.type === type);
-    if (selectedProduct) {
-      return selectedProduct.title;
-    } else {
-      return 'Product Not Found';
-    }
   };
 
   return (
@@ -151,78 +154,30 @@ const WizardSummary = (props) => {
       </Container>
 
       {isProductTypeSelected('dpoa') && (
-        <Container className="SummarySection">
-          <Row>
-            <SummaryHeader text={getSelectedProductTitle('dpoa')} />
-          </Row>
-          <Row>
-            <h4 className="SummarySubheader">Agents</h4>
-          </Row>
-          {wizState.dpoa.agents.map((agent, index) => {
-            return (
-              <Row
-                key={agent.fullName}
-                style={index % 2 === 0 ? { backgroundColor: '#f2f4f7' } : {}}
-              >
-                <SummaryField spanCols="4" label="Name" text={agent.fullName} />
-                <SummaryField
-                  spanCols="8"
-                  label="Address"
-                  text={agent.address}
-                />
-              </Row>
-            );
-          })}
-          <Row>
-            <Col xs={12}>
-              <Button
-                variant="warning"
-                className="EditButton"
-                onClick={() => gotoStep('dpoa', 'summary')}
-              >
-                Click here to edit information
-              </Button>
-            </Col>
-          </Row>
-        </Container>
+        <AgentsSummary
+          agents={wizState.dpoa.agents}
+          docType="dpoa"
+          returnToStep="summary"
+          selectedProducts={selectedProducts}
+        />
       )}
 
       {isProductTypeSelected('mpoa') && (
-        <Container className="SummarySection">
-          <Row>
-            <SummaryHeader text={getSelectedProductTitle('mpoa')} />
-          </Row>
-          <Row>
-            <h4 className="SummarySubheader">Agents</h4>
-          </Row>
-          {wizState.mpoa.agents.map((agent, index) => {
-            return (
-              <Row
-                key={agent.fullName}
-                style={index % 2 === 0 ? { backgroundColor: '#f2f4f7' } : {}}
-              >
-                <SummaryField spanCols="3" label="Name" text={agent.fullName} />
-                <SummaryField
-                  spanCols="6"
-                  label="Address"
-                  text={agent.address}
-                />
-                <SummaryField spanCols="3" label="Phone" text={agent.phone} />
-              </Row>
-            );
-          })}
-          <Row>
-            <Col xs={12}>
-              <Button
-                variant="warning"
-                className="EditButton"
-                onClick={() => gotoStep('mpoa', 'summary')}
-              >
-                Click here to edit information
-              </Button>
-            </Col>
-          </Row>
-        </Container>
+        <AgentsSummary
+          agents={wizState.mpoa.agents}
+          docType="mpoa"
+          returnToStep="summary"
+          selectedProducts={selectedProducts}
+        />
+      )}
+
+      {isProductTypeSelected('hipaa') && (
+        <AgentsSummary
+          agents={wizState.hipaa.agents}
+          docType="hipaa"
+          returnToStep="summary"
+          selectedProducts={selectedProducts}
+        />
       )}
 
       <form onSubmit={submitForm} id={props.id}></form>
