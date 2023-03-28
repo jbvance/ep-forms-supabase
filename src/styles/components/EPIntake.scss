@@ -38,11 +38,20 @@
   padding: 20px;
 }
 
-.DeleteButton {
-  color: red;
+.DeleteIcon {
+  color: var(--red);
   cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
   margin: 5px;
+}
+
+.EditIcon {
+  color: var(--yellow);
+  cursor: pointer;
+  margin: 5px;
+}
+
+.CreateAgentLink {
+  color: var(--blue);
+  cursor: pointer;
+  font-size: 0.8rem;
 }

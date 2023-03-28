@@ -131,12 +131,80 @@ export async function updateUserDocsPaidStatus(paymentIntentId, paid) {
   return response;
 }
 
+/***********CONTACTS********** */
+
+// Fetch all contacts by owner
+export function useContactsByUser(userId) {
+  return useQuery(
+    ['user_contacts', { userId }],
+    () =>
+      supabase
+        .from('user_contacts')
+        .select()
+        .eq('user_id', userId)
+        //.order('createdAt', { ascending: false })
+        .then(handle),
+    { enabled: !!userId }
+  );
+}
+
+export function useContact(id) {
+  return useQuery(
+    ['user_contacts', { id }],
+    () =>
+      supabase
+        .from('user_contacts')
+        .select('*')
+        .eq('id', id)
+        .single()
+        .then(handle),
+    { enabled: !!id }
+  );
+}
+
+// Create a new user_contact
+export async function createContact(data) {
+  const response = await supabase
+    .from('user_contacts')
+    .insert([data])
+    .select()
+    .then(handle);
+  // Invalidate and refetch queries that could have old data
+  await client.invalidateQueries(['user_contacts']);
+  return response;
+}
+
+// Update a contact
+export async function updateContact(id, data) {
+  const response = await supabase
+    .from('user_contacts')
+    .update(data)
+    .eq('id', id)
+    .select()
+    .then(handle);
+  // Invalidate and refetch queries that could have old data
+  await Promise.all([
+    client.invalidateQueries(['user_contacts', { id }]),
+    client.invalidateQueries(['user_contacts']),
+  ]);
+  return response;
+}
+
 // Get contacts for a user by user's id
 export async function getContactsByUserId(userId) {
   const response = await supabase
     .from('user_contacts')
     .select()
     .eq('user_id', userId)
+    .then(handle);
+  return response;
+}
+
+export async function getContactById(id) {
+  const response = await supabase
+    .from('user_contacts')
+    .select()
+    .eq('id', id)
     .then(handle);
   return response;
 }
