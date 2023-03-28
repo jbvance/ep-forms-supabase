@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from 'util/supabase';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Select from 'react-select';
 import { Field, Formik, FieldArray, setIn } from 'formik';
 import * as Yup from 'yup';
 import TextInput from 'components/forms/TextInput';
@@ -15,8 +15,6 @@ import { setDpoaValues, dpoaActions } from '../../store/dpoaSlice';
 import PageLoader from 'components/PageLoader';
 import { FormContext } from 'context/formContext';
 import PoaHeader from './PoaHeader';
-import { useUserContacts } from 'hooks/useUserContacts';
-import ReactSelectField from 'components/forms/ReactSelectField';
 
 const schema = Yup.object().shape({
   agents: Yup.array()
@@ -40,21 +38,20 @@ const DpoaForm = (props) => {
   const [showFormErrors, setShowFormErrors] = useState(false);
   // Form context info
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
-  const { userContacts, userContactsError } = useUserContacts();
   //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    if (userContacts && userContacts.length > 0) {
-      setSelectUserContacts(
-        userContacts.map((c) => {
-          return { value: c.full_name, label: c.full_name, address: c.address };
-        })
-      );
-    }
-  }, [userContacts]);
+  // useEffect(() => {
+  //   if (userContacts && userContacts.length > 0) {
+  //     setSelectUserContacts(
+  //       userContacts.map((c) => {
+  //         return { value: c.full_name, label: c.full_name, address: c.address };
+  //       })
+  //     );
+  //   }
+  // }, [userContacts]);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -204,7 +201,7 @@ const DpoaForm = (props) => {
                   <>
                     {values.agents.length > 0 &&
                       values.agents.map((agent, index) => (
-                        <Row key={index} className="AgentBox">
+                        <Container key={index} className="AgentBox">
                           {/* <Form.Group as={Col} md="4">
                             <Field
                               name={`agents.${index}.fullName`}
@@ -214,31 +211,33 @@ const DpoaForm = (props) => {
                               label="Full Name"
                             />
                       </Form.Group> */}
-                          <Form.Group as={Col} md="4">
-                            <TextInput
-                              label={`Full Name for Agent #${index + 1}`}
-                              name={`agents.${index}.fullName`}
-                              labelclass="PoaLabelText"
-                            />
-                          </Form.Group>
-                          <Form.Group as={Col} md="8">
-                            <TextInput
-                              label={`Address`}
-                              name={`agents.${index}.address`}
-                              labelclass="PoaLabelText"
-                            />
-                          </Form.Group>
-                          <div>
-                            <Button
-                              variant="outline-danger"
-                              size="sm"
-                              className="AgentDeleteButton"
-                              onClick={() => remove(index)}
-                            >
-                              Delete
-                            </Button>{' '}
-                          </div>
-                        </Row>
+                          <Row>
+                            <Form.Group as={Col} md="4">
+                              <TextInput
+                                label={`Full Name for Agent #${index + 1}`}
+                                name={`agents.${index}.fullName`}
+                                labelclass="PoaLabelText"
+                              />
+                            </Form.Group>
+                            <Form.Group as={Col} md="8">
+                              <TextInput
+                                label={`Address`}
+                                name={`agents.${index}.address`}
+                                labelclass="PoaLabelText"
+                              />
+                            </Form.Group>
+                            <div>
+                              <Button
+                                variant="outline-danger"
+                                size="sm"
+                                className="AgentDeleteButton"
+                                onClick={() => remove(index)}
+                              >
+                                Delete
+                              </Button>{' '}
+                            </div>
+                          </Row>
+                        </Container>
                       ))}
                     <Button
                       variant="outline-primary"
