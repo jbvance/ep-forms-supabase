@@ -5,7 +5,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { Formik, FieldArray, setIn } from 'formik';
+import Select from 'react-select';
+import { Field, Formik, FieldArray, setIn } from 'formik';
 import * as Yup from 'yup';
 import TextInput from 'components/forms/TextInput';
 import SelectField from 'components/forms/SelectField';
@@ -14,6 +15,8 @@ import { setDpoaValues, dpoaActions } from '../../store/dpoaSlice';
 import PageLoader from 'components/PageLoader';
 import { FormContext } from 'context/formContext';
 import PoaHeader from './PoaHeader';
+import { useUserContacts } from 'hooks/useUserContacts';
+import ReactSelectField from 'components/forms/ReactSelectField';
 
 const schema = Yup.object().shape({
   agents: Yup.array()
@@ -33,14 +36,25 @@ const DpoaForm = (props) => {
   const dpoaState = useSelector((state) => state.dpoa);
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
+  const [selectUserContacts, setSelectUserContacts] = useState([]);
   const [showFormErrors, setShowFormErrors] = useState(false);
   // Form context info
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
-
+  const { userContacts, userContactsError } = useUserContacts();
   //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (userContacts && userContacts.length > 0) {
+      setSelectUserContacts(
+        userContacts.map((c) => {
+          return { value: c.full_name, label: c.full_name, address: c.address };
+        })
+      );
+    }
+  }, [userContacts]);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -191,6 +205,15 @@ const DpoaForm = (props) => {
                     {values.agents.length > 0 &&
                       values.agents.map((agent, index) => (
                         <Row key={index} className="AgentBox">
+                          {/* <Form.Group as={Col} md="4">
+                            <Field
+                              name={`agents.${index}.fullName`}
+                              component={ReactSelectField}
+                              options={selectUserContacts}
+                              labelClass="PoaLabelText"
+                              label="Full Name"
+                            />
+                      </Form.Group> */}
                           <Form.Group as={Col} md="4">
                             <TextInput
                               label={`Full Name for Agent #${index + 1}`}
