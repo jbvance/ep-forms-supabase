@@ -23,7 +23,18 @@ const dpoaSlice = createSlice({
   initialState,
   reducers: {
     addAgent(state, action) {
+      console.log('ACTION', action);
       state.agents = [...state.agents, action.payload];
+    },
+    removeAgent(state, action) {
+      const copyOfAgents = [...state.agents];
+      const indexToRemove = copyOfAgents.findIndex(
+        (a) => a.id == action.payload.id
+      );
+      if (indexToRemove > -1) {
+        copyOfAgents.splice(indexToRemove, 1);
+        state.agents = [...copyOfAgents];
+      }
     },
     setDpoaValues(state, action) {
       //console.log(action.payload);

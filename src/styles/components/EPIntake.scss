@@ -24,3 +24,25 @@
     font-weight: 400;
   }
 }
+
+.AgentHeader {
+  background-color: var(--blue);
+  color: var(--white);
+  font-weight: 600;
+  padding: 10px;
+  margin: 15px 0;
+}
+
+.AddAgentForm {
+  background-color: rgb(216, 221, 221);
+  padding: 20px;
+}
+
+.DeleteButton {
+  color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+}

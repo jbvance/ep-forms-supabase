@@ -131,6 +131,16 @@ export async function updateUserDocsPaidStatus(paymentIntentId, paid) {
   return response;
 }
 
+// Get contacts for a user by user's id
+export async function getContactsByUserId(userId) {
+  const response = await supabase
+    .from('user_contacts')
+    .select()
+    .eq('user_id', userId)
+    .then(handle);
+  return response;
+}
+
 export async function addUserDocPaymentIntent(
   userId,
   docTypeId,
