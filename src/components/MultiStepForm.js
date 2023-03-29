@@ -15,8 +15,7 @@ import { products } from 'pages/wizard';
 import BreadCrumbs from './BreadCrumbs';
 
 const MultiStepForm = () => {
-  const { activeStepIndex, steps, returnToStep, setStepIndex } =
-    useContext(FormContext);
+  const { activeStepIndex, steps, setStepIndex } = useContext(FormContext);
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
   );

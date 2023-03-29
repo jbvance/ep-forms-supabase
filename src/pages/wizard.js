@@ -80,7 +80,6 @@ const WizardPage = (props) => {
     }
     setActiveStepIndex(index);
   };
-  //const products = useSelector((state) => state.selectedProducts.products);
 
   const gotoStep = (stepName, returnToStepName = '') => {
     const stepIndex = steps.findIndex((s) => s === stepName);
