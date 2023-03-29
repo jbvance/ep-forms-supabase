@@ -4,13 +4,10 @@ import supabase from 'util/supabase';
 import { useAuth } from 'util/auth';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import PoaHeader from './PoaHeader';
-//import { useUserContacts } from 'hooks/useUserContacts';
-import { setDpoaValues, dpoaActions } from '../../store/dpoaSlice';
+import { dpoaActions as poaActions } from '../../store/dpoaSlice';
 import AgentCard from './AgentCard';
 import AddAgentForm from './AddAgentForm';
 import { FormContext } from 'context/formContext';
@@ -21,9 +18,9 @@ import FormAlert from 'components/FormAlert';
 const DurablePoaForm = (props) => {
   const dispatch = useDispatch();
   const [updateError, setUpdateError] = useState(null);
-  const dpoaState = useSelector((state) => state.dpoa);
-  const agents = dpoaState.agents;
-  const noAgents = !dpoaState.agents || dpoaState.agents.length === 0;
+  const state = useSelector((state) => state['dpoa']);
+  const agents = state['agents'];
+  const noAgents = !state.agents || state.agents.length === 0;
   const auth = useAuth();
   const userId = auth.user.id;
   //const { userContacts } = useUserContacts();
@@ -40,12 +37,10 @@ const DurablePoaForm = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    console.log('submitting');
-    console.log(dpoaState);
     try {
       // set initialDpoaState before submitting so if there is an error
       // the form won't reset to blank values if it has never been saved
-      dispatch(dpoaActions.setDpoaStatus('loading'));
+      dispatch(poaActions['setDpoaStatus']('loading'));
       setUpdateError(null);
       let userId = null;
       const { data: userData, error: userError } =
@@ -61,14 +56,14 @@ const DurablePoaForm = (props) => {
       const { error } = await supabase
         .from('dpoa')
         .upsert(
-          { user_id: userId, json_value: JSON.stringify(dpoaState) },
+          { user_id: userId, json_value: JSON.stringify(state) },
           { onConflict: 'user_id' }
         )
         .select();
       if (error) {
         console.log(error);
         setUpdateError('Unable to update data. Please try again.');
-        throw new Error('Unable to update MPOA Data');
+        throw new Error('Unable to update DPOA Data');
       }
       // Change wizard step
       setStepIndex(activeStepIndex + 1);
@@ -78,44 +73,36 @@ const DurablePoaForm = (props) => {
         'Unable to update data at the current time. Please try again.'
       );
     } finally {
-      dispatch(dpoaActions.setDpoaStatus('idle'));
+      dispatch(poaActions['setDpoaStatus']('idle'));
     }
   };
 
   useEffect(() => {
     const getUserInfo = async () => {
       try {
-        dispatch(dpoaActions.setDpoaStatus('loading'));
+        dispatch(poaActions['setDpoaStatus']('loading'));
         const { data: userData, error: userError } =
           await supabase.auth.getUser();
-        //console.log('USER', userData.user);
         // Set initial state if user found in database
-        const { data: dpoaData, error: dpoaError } = await supabase
+        const { data, error } = await supabase
           .from('dpoa')
           .select('json_value')
           .eq('user_id', userData.user.id);
-        if (dpoaData && dpoaData.length > 0) {
-          dispatch(
-            dpoaActions.setDpoaValues(JSON.parse(dpoaData[0].json_value))
-          );
+        if (data && data.length > 0) {
+          dispatch(poaActions['setDpoaValues'](JSON.parse(data[0].json_value)));
         }
-        if (dpoaError) {
-          console.log('DPOA ERROR', dpoaError);
+        if (error) {
+          console.log('DPOA ERROR', error);
         }
       } catch (err) {
         console.log(err);
       } finally {
-        dispatch(dpoaActions.setDpoaStatus('idle'));
+        dispatch(poaActions['setDpoaStatus']('idle'));
       }
     };
     getUserInfo();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   console.log('USER CONTACTS', userContacts);
-  // }, [userContacts]);
-
-  //console.log('DPOASTATE', dpoaState);
   return (
     <Container>
       <PoaHeader
@@ -146,7 +133,7 @@ const DurablePoaForm = (props) => {
               agent={a}
               onAgentChanged={() => console.log('INDEX', index)}
               onRemoveAgent={() => {
-                dispatch(dpoaActions.removeAgent(a));
+                dispatch(poaActions.removeAgent(a));
               }}
               onEditAgent={() => {
                 setContactIdToEdit(a.id);
@@ -159,15 +146,13 @@ const DurablePoaForm = (props) => {
         <AddAgentForm
           onCancelAdd={() => setAddAgentMode(false)}
           onAddAgent={(contact) => {
-            dispatch(dpoaActions.addAgent(contact));
+            dispatch(poaActions.addAgent(contact));
             setAddAgentMode(false);
           }}
           onAgentSelected={(e) => {
-            //console.log('CLICKED', e.target.value, userContacts);
             const contactToAdd = ucData.find((uc) => uc.id == e.target.value);
-            //console.log('CTA', contactToAdd);
             dispatch(
-              dpoaActions.addAgent({
+              poaActions.addAgent({
                 ...contactToAdd,
                 fullName: contactToAdd['full_name'],
               })
@@ -199,7 +184,7 @@ const DurablePoaForm = (props) => {
           onDone={(contact) => {
             console.log(contact);
             if (contact) {
-              dispatch(dpoaActions.updateAgent(contact));
+              dispatch(poaActions.updateAgent(contact));
             }
             setContactIdToEdit(null);
           }}

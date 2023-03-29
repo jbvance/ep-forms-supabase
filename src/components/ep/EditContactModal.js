@@ -90,6 +90,15 @@ function EditContactModal(props) {
               error={errors.address}
               inputRef={register()}
             />
+            <FormField
+              size="lg"
+              name="phone"
+              type="text"
+              placeholder="Phone"
+              defaultValue={contactData && contactData.phone}
+              error={errors.phone}
+              inputRef={register()}
+            />
           </Form.Group>
           <Button size="lg" variant="primary" type="submit" disabled={pending}>
             <span>Save</span>
