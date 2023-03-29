@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from 'util/supabase';
 import { useAuth } from 'util/auth';
@@ -30,6 +30,11 @@ const HipaaForm = (props) => {
   const [addAgentMode, setAddAgentMode] = useState(false);
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [contactIdToEdit, setContactIdToEdit] = useState(null);
+
+  //Scroll to top of screen
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const {
     data: ucData,

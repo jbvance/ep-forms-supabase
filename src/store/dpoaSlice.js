@@ -23,7 +23,6 @@ const dpoaSlice = createSlice({
   initialState,
   reducers: {
     addAgent(state, action) {
-      console.log('ACTION', action);
       state.agents = [...state.agents, action.payload];
     },
     removeAgent(state, action) {

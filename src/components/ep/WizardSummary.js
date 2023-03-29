@@ -7,8 +7,8 @@ import SummaryHeader from 'components/summary/SummaryHeader';
 import AgentsSummary from './AgentsSummary';
 
 export const getSelectedProductTitle = (type, productsToSearch) => {
-  console.log('TYPE', type);
-  console.log('PTS', productsToSearch);
+  //console.log('TYPE', type);
+  //console.log('PTS', productsToSearch);
   const selectedProduct = productsToSearch.find((p) => p.type === type);
   if (selectedProduct) {
     return selectedProduct.title;

@@ -14,6 +14,7 @@ const AgentCard = ({ agent, onAgentChanged, onRemoveAgent, onEditAgent }) => {
             <Card.Body>
               <Card.Title>{agent.fullName}</Card.Title>
               <Card.Text>{agent.address}</Card.Text>
+              <Card.Text>{agent.phone}</Card.Text>
               <Card.Text>
                 <Trash
                   width="24"
