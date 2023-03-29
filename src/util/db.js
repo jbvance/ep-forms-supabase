@@ -241,6 +241,7 @@ export async function addUserDocPaymentIntent(
 //   return response;
 // }
 
+/*************** PRODUCTS ******************/
 export async function getProducts() {
   const response = await supabase.from('document_types').select().then(handle);
   return response;
@@ -255,6 +256,15 @@ export async function getProductsByState(state) {
   return response;
 }
 
+/************* STATE FETCHING *******************/
+export async function fetchState(uid, type) {
+  const response = await supabase
+    .from(type)
+    .select('json_value')
+    .eq('user_id', uid)
+    .then(handle);
+  return response;
+}
 /**** HELPERS ****/
 
 // Get response data or throw error if there is one

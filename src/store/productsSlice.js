@@ -9,6 +9,7 @@ const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async (undefined, thunkAPI) => {
     const response = await getProducts();
+    console.log('PRODUCTS', response);
     return response;
   }
 );
@@ -35,6 +36,7 @@ const selectedProductsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.products.push(action.payload);
     });
   },

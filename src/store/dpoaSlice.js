@@ -37,7 +37,6 @@ const dpoaSlice = createSlice({
       }
     },
     updateAgent(state, action) {
-      console.log('AGENT TO UPDATE', action.payload);
       state.agents = state.agents.map((agent) => {
         if (agent.id === action.payload.id) {
           return action.payload;

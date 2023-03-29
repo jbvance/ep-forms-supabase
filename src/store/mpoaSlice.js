@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const initialState = {
   agents: [],
@@ -23,6 +23,7 @@ const mpoaSlice = createSlice({
       }
     },
     updateAgent(state, action) {
+      console.log('IN MPOA UPDATE AGENT');
       state.agents = state.agents.map((agent) => {
         if (agent.id === action.payload.id) {
           return action.payload;
@@ -44,6 +45,12 @@ export const setMpoaValues = (values) => {
   return async (dispatch) => {
     // TODO: call database to update values - Currently done in component
 
+    dispatch(mpoaActions.setMpoaValues(values));
+  };
+};
+
+export const fetchMpoaValues = (values) => {
+  return async (dispatch) => {
     dispatch(mpoaActions.setMpoaValues(values));
   };
 };

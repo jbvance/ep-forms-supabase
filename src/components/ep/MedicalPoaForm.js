@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from 'util/supabase';
 import { useAuth } from 'util/auth';
@@ -14,6 +14,9 @@ import { FormContext } from 'context/formContext';
 import { useContactsByUser } from 'util/db';
 import EditContactModal from './EditContactModal';
 import FormAlert from 'components/FormAlert';
+import { updateAllAgentsForContactChange } from 'store/util';
+import { dpoaActions } from 'store/dpoaSlice';
+import { hipaaActions } from 'store/hipaaSlice';
 
 const MedicalPoaForm = (props) => {
   const dispatch = useDispatch();
@@ -76,32 +79,6 @@ const MedicalPoaForm = (props) => {
       dispatch(poaActions.setMpoaStatus('idle'));
     }
   };
-
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        dispatch(poaActions.setMpoaStatus('loading'));
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-        // Set initial state if user found in database
-        const { data, error } = await supabase
-          .from('mpoa')
-          .select('json_value')
-          .eq('user_id', userData.user.id);
-        if (data && data.length > 0) {
-          dispatch(poaActions.setMpoaValues(JSON.parse(data[0].json_value)));
-        }
-        if (error) {
-          console.log('MPOA ERROR', error);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        dispatch(poaActions.setMpoaStatus('idle'));
-      }
-    };
-    getUserInfo();
-  }, [dispatch]);
 
   return (
     <Container>
@@ -184,7 +161,9 @@ const MedicalPoaForm = (props) => {
           onDone={(contact) => {
             console.log(contact);
             if (contact) {
-              dispatch(poaActions['updateAgent'](contact));
+              dispatch(poaActions.updateAgent(contact));
+              dispatch(dpoaActions.updateAgent(contact));
+              dispatch(hipaaActions.updateAgent(contact));
             }
             setContactIdToEdit(null);
           }}
