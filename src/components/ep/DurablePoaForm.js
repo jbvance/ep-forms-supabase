@@ -21,6 +21,7 @@ import { mpoaActions } from 'store/mpoaSlice';
 const DurablePoaForm = (props) => {
   const dispatch = useDispatch();
   const [updateError, setUpdateError] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
   const state = useSelector((state) => state['dpoa']);
   const agents = state['agents'];
   const noAgents = !state.agents || state.agents.length === 0;
@@ -45,6 +46,14 @@ const DurablePoaForm = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    setUpdateError(null);
+    if (!state.agents || state.agents.length < 1) {
+      setFormErrors({
+        ...formErrors,
+        agents: 'Please select at least one agent to continue',
+      });
+      return;
+    }
     try {
       // set initialDpoaState before submitting so if there is an error
       // the form won't reset to blank values if it has never been saved
@@ -157,6 +166,15 @@ const DurablePoaForm = (props) => {
         <Col>
           {' '}
           {updateError && <FormAlert type="error" message={updateError} />}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          {' '}
+          {formErrors.agents && (
+            <FormAlert type="error" message={formErrors.agents} />
+          )}
         </Col>
       </Row>
 

@@ -55,3 +55,13 @@
   cursor: pointer;
   font-size: 0.8rem;
 }
+
+/* Custom style for changing separator  */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '>';
+}
+
+.breadcrumb-item.active {
+  color: var(--blue);
+  font-weight: 600;
+}

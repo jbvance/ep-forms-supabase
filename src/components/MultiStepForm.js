@@ -12,6 +12,7 @@ import WizardSummary from './ep/WizardSummary';
 import FinalizeDocs from './ep/FinalizeDocs';
 
 import { products } from 'pages/wizard';
+import BreadCrumbs from './BreadCrumbs';
 
 const MultiStepForm = () => {
   const { activeStepIndex, steps, returnToStep, setStepIndex } =
@@ -60,6 +61,7 @@ const MultiStepForm = () => {
 
   return (
     <div className="container">
+      <BreadCrumbs />
       {stepComponents[activeStepIndex]}
       <Footer id={steps[activeStepIndex]} {...props} />
     </div>
