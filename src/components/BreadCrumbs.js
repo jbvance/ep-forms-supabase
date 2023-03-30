@@ -24,6 +24,7 @@ const BreadCrumbs = (props) => {
   const selectedProductsWithoutState = selectedProducts.map((sp) =>
     sp.type.includes('-') ? sp.type.split('-')[1] : sp.type
   );
+
   // Build a list of breadcrumbs based on what products are selected
   const showCrumbs = steps
     .map((step) => {
@@ -35,20 +36,26 @@ const BreadCrumbs = (props) => {
       }
     })
     .filter((step) => !!step);
+  console.log('SHOW CRUMBS', showCrumbs);
 
   const buildCrumbs = () => {
     let crumbsArr = [];
     for (let i = 0; i <= activeStepIndex; i++) {
       const item = steps[i];
-      crumbsArr.push(
-        <Breadcrumb.Item
-          key={item}
-          active={i === activeStepIndex}
-          onClick={() => setStepIndex(i)}
-        >
-          {CrumbMap[item]}
-        </Breadcrumb.Item>
-      );
+      if (
+        selectedProductsWithoutState.includes(item) ||
+        !products.includes(item)
+      ) {
+        crumbsArr.push(
+          <Breadcrumb.Item
+            key={item}
+            active={i === activeStepIndex}
+            onClick={() => setStepIndex(i)}
+          >
+            {CrumbMap[item]}
+          </Breadcrumb.Item>
+        );
+      }
     }
     return crumbsArr;
   };

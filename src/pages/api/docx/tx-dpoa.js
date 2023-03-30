@@ -133,7 +133,8 @@ const createDpoaFromTemplate = async (req, res) => {
       notaryCounty,
       dpoaPrimaryAgentName,
       dpoaPrimaryAgentAddress,
-      dpoaAgents: altAgents, // successor agents
+      dpoaAgents: altAgents, // successor agents,
+      blankLine,
     };
 
     // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
