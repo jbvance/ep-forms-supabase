@@ -17,6 +17,7 @@ import FormAlert from 'components/FormAlert';
 import { updateAllAgentsForContactChange } from 'store/util';
 import { dpoaActions } from 'store/dpoaSlice';
 import { hipaaActions } from 'store/hipaaSlice';
+import useFormErrors from '../../hooks/useFormErrors';
 
 const MedicalPoaForm = (props) => {
   const dispatch = useDispatch();
@@ -30,11 +31,33 @@ const MedicalPoaForm = (props) => {
   const [addAgentMode, setAddAgentMode] = useState(false);
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [contactIdToEdit, setContactIdToEdit] = useState(null);
+  const {
+    formErrors,
+    setFormErrors,
+    formTouched,
+    setFormTouched,
+    validateForm,
+    listErrors,
+  } = useFormErrors();
 
   //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    // If no agents selected yet, set error
+    if (!agents || agents.length === 0) {
+      setFormErrors({
+        ...formErrors,
+        agents: 'Please add at least one agent',
+      });
+    } else if ('agents' in formErrors) {
+      const newFormErrors = { ...formErrors };
+      delete newFormErrors.agents;
+      setFormErrors({ ...newFormErrors });
+    }
+  }, [agents]);
 
   const {
     data: ucData,
@@ -45,6 +68,10 @@ const MedicalPoaForm = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    setFormTouched(true);
+    if (!validateForm()) {
+      return;
+    }
     try {
       // set initialMpoaState before submitting so if there is an error
       // the form won't reset to blank values if it has never been saved
@@ -156,7 +183,9 @@ const MedicalPoaForm = (props) => {
       <Row>
         <Col>
           {' '}
-          {updateError && <FormAlert type="error" message={updateError} />}
+          {formErrors && Object.keys(formErrors).length > 0 && formTouched && (
+            <FormAlert type="error" message={listErrors()} />
+          )}
         </Col>
       </Row>
 

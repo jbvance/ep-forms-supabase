@@ -23,7 +23,6 @@ const hipaaSlice = createSlice({
       }
     },
     updateAgent(state, action) {
-      console.log('ACTION', action);
       state.agents = state.agents.map((agent) => {
         if (agent.id === action.payload.id) {
           return action.payload;

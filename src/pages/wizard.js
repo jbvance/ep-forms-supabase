@@ -23,6 +23,14 @@ const steps = [
   'finalize',
 ];
 
+const completedSteps = {
+  ['select-products']: false,
+  ['client-info']: false,
+  dpoa: false,
+  mpoa: false,
+  hipaa: false,
+};
+
 const WizardPage = (props) => {
   const auth = useAuth();
   const [activeStepIndex, setActiveStepIndex] = useState(0);

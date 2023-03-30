@@ -17,6 +17,7 @@ import FormAlert from 'components/FormAlert';
 import { updateAllAgentsForContactChange } from 'store/util';
 import { dpoaActions } from 'store/dpoaSlice';
 import { mpoaActions } from 'store/mpoaSlice';
+import useFormErrors from 'hooks/useFormErrors';
 
 const HipaaForm = (props) => {
   const dispatch = useDispatch();
@@ -30,11 +31,33 @@ const HipaaForm = (props) => {
   const [addAgentMode, setAddAgentMode] = useState(false);
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [contactIdToEdit, setContactIdToEdit] = useState(null);
+  const {
+    formErrors,
+    setFormErrors,
+    formTouched,
+    setFormTouched,
+    validateForm,
+    listErrors,
+  } = useFormErrors();
 
   //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    // If no agents selected yet, set error
+    if (!agents || agents.length === 0) {
+      setFormErrors({
+        ...formErrors,
+        agents: 'Please add at least one agent',
+      });
+    } else if ('agents' in formErrors) {
+      const newFormErrors = { ...formErrors };
+      delete newFormErrors.agents;
+      setFormErrors({ ...newFormErrors });
+    }
+  }, [agents]);
 
   const {
     data: ucData,
@@ -45,6 +68,10 @@ const HipaaForm = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    setFormTouched(true);
+    if (!validateForm()) {
+      return;
+    }
     try {
       // set initial state before submitting so if there is an error
       // the form won't reset to blank values if it has never been saved
@@ -160,11 +187,20 @@ const HipaaForm = (props) => {
         </Col>
       </Row>
 
+      <Row>
+        <Col>
+          {' '}
+          {formErrors && Object.keys(formErrors).length > 0 && formTouched && (
+            <FormAlert type="error" message={listErrors()} />
+          )}
+        </Col>
+      </Row>
+
       {contactIdToEdit && (
         <EditContactModal
           id={contactIdToEdit}
           onDone={(contact) => {
-            console.log('CONTACT', contact);
+            //console.log('CONTACT', contact);
             if (contact) {
               //updateAllAgentsForContactChange(dispatch(contact));
               dispatch(poaActions.updateAgent(contact));

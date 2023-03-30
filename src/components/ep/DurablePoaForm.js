@@ -17,11 +17,11 @@ import FormAlert from 'components/FormAlert';
 import { updateAllAgentsForContactChange } from 'store/util';
 import { hipaaActions } from 'store/hipaaSlice';
 import { mpoaActions } from 'store/mpoaSlice';
+import useFormErrors from '../../hooks/useFormErrors';
 
 const DurablePoaForm = (props) => {
   const dispatch = useDispatch();
   const [updateError, setUpdateError] = useState(null);
-  const [formErrors, setFormErrors] = useState({});
   const state = useSelector((state) => state['dpoa']);
   const agents = state['agents'];
   const noAgents = !state.agents || state.agents.length === 0;
@@ -31,11 +31,37 @@ const DurablePoaForm = (props) => {
   const [addAgentMode, setAddAgentMode] = useState(false);
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [contactIdToEdit, setContactIdToEdit] = useState(null);
+  const {
+    formErrors,
+    setFormErrors,
+    formTouched,
+    setFormTouched,
+    validateForm,
+    listErrors,
+  } = useFormErrors();
 
   //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    // If no agents selected yet, set error
+    if (!agents || agents.length === 0) {
+      setFormErrors({
+        ...formErrors,
+        agents: 'Please add at least one agent',
+      });
+    } else if ('agents' in formErrors) {
+      const newFormErrors = { ...formErrors };
+      delete newFormErrors.agents;
+      setFormErrors({ ...newFormErrors });
+    }
+  }, [agents]);
+
+  useEffect(() => {
+    console.log('FORM ERRORS', formErrors);
+  });
 
   const {
     data: ucData,
@@ -46,12 +72,8 @@ const DurablePoaForm = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    setUpdateError(null);
-    if (!state.agents || state.agents.length < 1) {
-      setFormErrors({
-        ...formErrors,
-        agents: 'Please select at least one agent to continue',
-      });
+    setFormTouched(true);
+    if (!validateForm()) {
       return;
     }
     try {
@@ -172,8 +194,8 @@ const DurablePoaForm = (props) => {
       <Row>
         <Col>
           {' '}
-          {formErrors.agents && (
-            <FormAlert type="error" message={formErrors.agents} />
+          {formErrors && Object.keys(formErrors).length > 0 && formTouched && (
+            <FormAlert type="error" message={listErrors()} />
           )}
         </Col>
       </Row>

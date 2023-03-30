@@ -4,7 +4,6 @@ import { FormContext } from 'context/formContext';
 import Footer from './FooterMulti';
 import SelectProducts from './ep/selectProducts';
 import ClientContactInfo from './ep/ClientContactInfo';
-//import DpoaForm from './ep/DurablePoaForm';
 import DpoaForm from './ep/DurablePoaForm';
 import MpoaForm from './ep/MedicalPoaForm';
 import HipaaForm from './ep/HipaaForm';
