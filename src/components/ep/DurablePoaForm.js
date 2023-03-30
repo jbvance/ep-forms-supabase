@@ -59,10 +59,6 @@ const DurablePoaForm = (props) => {
     }
   }, [agents]);
 
-  useEffect(() => {
-    console.log('FORM ERRORS', formErrors);
-  });
-
   const {
     data: ucData,
     error: ucError,

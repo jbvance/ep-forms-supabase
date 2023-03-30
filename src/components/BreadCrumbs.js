@@ -12,7 +12,7 @@ const CrumbMap = {
   hipaa: 'HIPAA Authorization',
   directive: 'Directive to Physicians',
   summary: 'Summary',
-  finalize: 'Review and Finalize',
+  finalize: 'Create Documents',
 };
 
 const BreadCrumbs = (props) => {
@@ -36,7 +36,6 @@ const BreadCrumbs = (props) => {
       }
     })
     .filter((step) => !!step);
-  console.log('SHOW CRUMBS', showCrumbs);
 
   const buildCrumbs = () => {
     let crumbsArr = [];

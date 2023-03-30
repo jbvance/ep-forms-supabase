@@ -18,7 +18,11 @@ const useFormErrors = () => {
 
   const listErrors = () => {
     return Object.keys(formErrors).map((key) => {
-      return <li key={key}>{formErrors[key]}</li>;
+      return (
+        <ul style={{ listStyle: 'none' }}>
+          <li key={key}>{formErrors[key]}</li>
+        </ul>
+      );
     });
   };
 
