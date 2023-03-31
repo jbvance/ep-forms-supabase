@@ -9,7 +9,7 @@ const AgentCard = ({ agent, onAgentChanged, onRemoveAgent, onEditAgent }) => {
       <Row
         style={{ borderBottom: '2px solid var(--gray)', paddingBottom: '20px' }}
       >
-        <Col md={9}>
+        <Col md={12}>
           <Card style={{ marginBottom: '10px' }}>
             <Card.Body>
               <Card.Title>{agent.fullName}</Card.Title>
