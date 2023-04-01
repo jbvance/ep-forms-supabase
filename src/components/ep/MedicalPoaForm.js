@@ -1,36 +1,20 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import supabase from 'util/supabase';
-import { useAuth } from 'util/auth';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import PoaHeader from './PoaHeader';
-import { mpoaActions as poaActions } from '../../store/mpoaSlice';
-import AgentCard from './AgentCard';
-import AddAgentForm from './AddAgentForm';
+import { mpoaActions as poaActions } from 'store/mpoaSlice';
 import { FormContext } from 'context/formContext';
-import { useContactsByUser } from 'util/db';
-import EditContactModal from './EditContactModal';
+import PoaAgents from './PoaAgents';
+import useFormErrors from 'hooks/useFormErrors';
+import PoaHeader from './PoaHeader';
 import FormAlert from 'components/FormAlert';
-import { updateAllAgentsForContactChange } from 'store/util';
-import { dpoaActions } from 'store/dpoaSlice';
-import { hipaaActions } from 'store/hipaaSlice';
-import useFormErrors from '../../hooks/useFormErrors';
+import supabase from 'util/supabase';
 
 const MedicalPoaForm = (props) => {
-  const dispatch = useDispatch();
   const [updateError, setUpdateError] = useState(null);
-  const state = useSelector((state) => state.mpoa);
-  const agents = state['agents'];
-  const noAgents = !state.agents || state.agents.length === 0;
-  const auth = useAuth();
-  const userId = auth.user.id;
-  //const { userContacts } = useUserContacts();
-  const [addAgentMode, setAddAgentMode] = useState(false);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state['mpoa']);
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
-  const [contactIdToEdit, setContactIdToEdit] = useState(null);
+
   const {
     formErrors,
     setFormErrors,
@@ -40,32 +24,6 @@ const MedicalPoaForm = (props) => {
     listErrors,
   } = useFormErrors();
 
-  //Scroll to top of screen
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
-    // If no agents selected yet, set error
-    if (!agents || agents.length === 0) {
-      setFormErrors({
-        ...formErrors,
-        agents: 'Please add at least one agent',
-      });
-    } else if ('agents' in formErrors) {
-      const newFormErrors = { ...formErrors };
-      delete newFormErrors.agents;
-      setFormErrors({ ...newFormErrors });
-    }
-  }, [agents]);
-
-  const {
-    data: ucData,
-    error: ucError,
-    status: ucStatus,
-    isLoading: ucIsLoading,
-  } = useContactsByUser(userId);
-
   const submitForm = async (e) => {
     e.preventDefault();
     setFormTouched(true);
@@ -73,9 +31,9 @@ const MedicalPoaForm = (props) => {
       return;
     }
     try {
-      // set initialMpoaState before submitting so if there is an error
+      // set initial state before submitting so if there is an error
       // the form won't reset to blank values if it has never been saved
-      dispatch(poaActions.setMpoaStatus('loading'));
+      dispatch(poaActions['setStatus']('loading'));
       setUpdateError(null);
       let userId = null;
       const { data: userData, error: userError } =
@@ -84,10 +42,11 @@ const MedicalPoaForm = (props) => {
         userId = userData.user.id;
       }
       if (userError) {
-        console.log('USER ERROR IN MPOA', userError);
+        console.log(`USER ERROR IN MPOA`, userError);
       }
+
       // Perform "upsert" to update if already exists or update otherwise
-      // ***Row level security is in place for mpoa Table on supabase
+      // ***Row level security is in place for table on supabase
       const { error } = await supabase
         .from('mpoa')
         .upsert(
@@ -95,10 +54,11 @@ const MedicalPoaForm = (props) => {
           { onConflict: 'user_id' }
         )
         .select();
+      console.log('GOT HERE$>>>>>>>>>>');
       if (error) {
         console.log(error);
         setUpdateError('Unable to update data. Please try again.');
-        throw new Error('Unable to update MPOA Data');
+        throw new Error(`Unable to update MPOA data`);
       }
       // Change wizard step
       setStepIndex(activeStepIndex + 1);
@@ -108,77 +68,32 @@ const MedicalPoaForm = (props) => {
         'Unable to update data at the current time. Please try again.'
       );
     } finally {
-      dispatch(poaActions.setMpoaStatus('idle'));
+      dispatch(poaActions['setStatus']('idle'));
     }
   };
 
   return (
     <Container>
       <PoaHeader
-        headerText="Medical Durable Power of Attorney"
-        paragraphText="Enter the information below to complete your Statutory Medical Power of Attorney"
+        headerText="Medical Power of Attorney"
+        paragraphText="Enter the information below to complete your Statutory Durable Power of Attorney"
       />
       <Row>
         <Col>
           <p className="PoaLabelText">
             Who will serve as your Agent? Add one or more Agents below (to serve
-            in the order listed). Your agent will make legal and financial
-            decisions on your behalf.
+            in the order listed). Your agent will make decisions regarding your
+            medical care if you are incapacitated.
           </p>
         </Col>
       </Row>
-      {noAgents && (
-        <div>
-          You have not selected any agents. Click "Add Agent" to get started.
-        </div>
-      )}
-      {agents.map((a, index) => {
-        return (
-          <React.Fragment key={a.id}>
-            <Row className="AgentHeader">
-              <Col md={6}>Agent No. {index + 1}</Col>
-            </Row>
-            <AgentCard
-              agent={a}
-              onAgentChanged={() => console.log('INDEX', index)}
-              onRemoveAgent={() => {
-                dispatch(poaActions.removeAgent(a));
-              }}
-              onEditAgent={() => {
-                setContactIdToEdit(a.id);
-              }}
-            />
-          </React.Fragment>
-        );
-      })}
-      {addAgentMode && (
-        <AddAgentForm
-          onCancelAdd={() => setAddAgentMode(false)}
-          onAddAgent={(contact) => {
-            dispatch(poaActions.addAgent(contact));
-            setAddAgentMode(false);
-          }}
-          onAgentSelected={(e) => {
-            const contactToAdd = ucData.find((uc) => uc.id == e.target.value);
-            dispatch(
-              poaActions.addAgent({
-                ...contactToAdd,
-                fullName: contactToAdd['full_name'],
-              })
-            );
-            setAddAgentMode(false);
-          }}
-        />
-      )}
-      {!addAgentMode && (
-        <Row style={{ margin: '20px 0' }}>
-          <Col md={3}>
-            <Button variant="success" onClick={() => setAddAgentMode(true)}>
-              Add Agent
-            </Button>
-          </Col>
-        </Row>
-      )}
+      <PoaAgents poaType="mpoa" />
+      <Row>
+        <Col>
+          {' '}
+          {updateError && <FormAlert type="error" message={updateError} />}
+        </Col>
+      </Row>
 
       <Row>
         <Col>
@@ -188,22 +103,6 @@ const MedicalPoaForm = (props) => {
           )}
         </Col>
       </Row>
-
-      {contactIdToEdit && (
-        <EditContactModal
-          id={contactIdToEdit}
-          onDone={(contact) => {
-            console.log(contact);
-            if (contact) {
-              dispatch(poaActions.updateAgent(contact));
-              dispatch(dpoaActions.updateAgent(contact));
-              dispatch(hipaaActions.updateAgent(contact));
-            }
-            setContactIdToEdit(null);
-          }}
-        />
-      )}
-
       <form onSubmit={submitForm} id={props.id}></form>
     </Container>
   );

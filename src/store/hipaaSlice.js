@@ -31,20 +31,20 @@ const hipaaSlice = createSlice({
         }
       });
     },
-    setHipaaValues(state, action) {
+    setValues(state, action) {
       Object.assign(state, action.payload);
     },
-    setHipaaStatus(state, action) {
+    setStatus(state, action) {
       state.status = action.payload;
     },
   },
 });
 
-export const setHipaaValues = (values) => {
+export const setValues = (values) => {
   return async (dispatch) => {
     // TODO: call database to update values - Currently done in component
 
-    dispatch(hipaaActions.setHipaaValues(values));
+    dispatch(hipaaActions.setValues(values));
   };
 };
 

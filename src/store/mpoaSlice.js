@@ -31,10 +31,10 @@ const mpoaSlice = createSlice({
         }
       });
     },
-    setMpoaValues(state, action) {
+    setValues(state, action) {
       Object.assign(state, action.payload);
     },
-    setMpoaStatus(state, action) {
+    setStatus(state, action) {
       state.status = action.payload;
     },
   },
@@ -44,13 +44,13 @@ export const setMpoaValues = (values) => {
   return async (dispatch) => {
     // TODO: call database to update values - Currently done in component
 
-    dispatch(mpoaActions.setMpoaValues(values));
+    dispatch(mpoaActions.setValues(values));
   };
 };
 
 export const fetchMpoaValues = (values) => {
   return async (dispatch) => {
-    dispatch(mpoaActions.setMpoaValues(values));
+    dispatch(mpoaActions.setValues(values));
   };
 };
 

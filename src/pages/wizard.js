@@ -50,7 +50,7 @@ const WizardPage = (props) => {
         dpoaResponse &&
           dpoaResponse.length > 0 &&
           dispatch(
-            dpoaActions.setDpoaValues(JSON.parse(dpoaResponse[0].json_value))
+            dpoaActions.setValues(JSON.parse(dpoaResponse[0].json_value))
           );
 
         // Medical POA
@@ -58,7 +58,7 @@ const WizardPage = (props) => {
         mpoaResponse &&
           mpoaResponse.length > 0 &&
           dispatch(
-            mpoaActions.setMpoaValues(JSON.parse(mpoaResponse[0].json_value))
+            mpoaActions.setValues(JSON.parse(mpoaResponse[0].json_value))
           );
 
         // Hipaa
@@ -66,7 +66,7 @@ const WizardPage = (props) => {
         hipaaResponse &&
           hipaaResponse.length > 0 &&
           dispatch(
-            hipaaActions.setHipaaValues(JSON.parse(hipaaResponse[0].json_value))
+            hipaaActions.setValues(JSON.parse(hipaaResponse[0].json_value))
           );
       } catch (err) {
         console.log(err);
