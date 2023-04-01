@@ -69,6 +69,7 @@ const DurablePoaForm = (props) => {
   const submitForm = async (e) => {
     e.preventDefault();
     setFormTouched(true);
+    ``;
     if (!validateForm()) {
       return;
     }

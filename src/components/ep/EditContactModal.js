@@ -57,7 +57,7 @@ function EditContactModal(props) {
 
   return (
     <Modal show={true} centered={true} animation={false} onHide={props.onDone}>
-      <Modal.Header closeButton={true}>
+      <Modal.Header closeButton={true} className="ModalHeader">
         {props.id && <>Update</>}
         {!props.id && <>Create</>}
         {` `}Contact
@@ -70,6 +70,7 @@ function EditContactModal(props) {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group controlId="formName">
             <FormField
+              className="ModalInput"
               size="lg"
               name="full_name"
               type="text"
@@ -82,6 +83,7 @@ function EditContactModal(props) {
               })}
             />
             <FormField
+              className="ModalInput"
               size="lg"
               name="address"
               type="text"
@@ -91,6 +93,7 @@ function EditContactModal(props) {
               inputRef={register()}
             />
             <FormField
+              className="ModalInput"
               size="lg"
               name="phone"
               type="text"
