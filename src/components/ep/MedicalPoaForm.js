@@ -54,7 +54,6 @@ const MedicalPoaForm = (props) => {
           { onConflict: 'user_id' }
         )
         .select();
-      console.log('GOT HERE$>>>>>>>>>>');
       if (error) {
         console.log(error);
         setUpdateError('Unable to update data. Please try again.');
