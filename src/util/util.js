@@ -75,3 +75,14 @@ export function usePrevious(state) {
   });
   return ref.current;
 }
+
+export function arrMove(arr, oldIndex, newIndex) {
+  if (newIndex >= arr.length) {
+    let i = newIndex - arr.length + 1;
+    while (i--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+  return arr;
+}

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { arrMove } from 'util/util';
 
 // const initialState_TEST = {
 //   allowGifts: true,
@@ -50,6 +51,13 @@ const dpoaSlice = createSlice({
     },
     setStatus(state, action) {
       state.status = action.payload;
+    },
+    moveAgent(state, action) {
+      state.agents = arrMove(
+        [...state.agents],
+        action.payload.oldIndex,
+        action.payload.newIndex
+      );
     },
   },
 });

@@ -67,6 +67,15 @@ const PoaAgents = ({ poaType, agents }) => {
     isLoading: ucIsLoading,
   } = useContactsByUser(userId);
 
+  const moveAgent = (oldIndex, newIndex) => {
+    dispatch(
+      poaActions.moveAgent({
+        oldIndex,
+        newIndex,
+      })
+    );
+  };
+
   return (
     <Container>
       {noAgents && (
@@ -82,7 +91,11 @@ const PoaAgents = ({ poaType, agents }) => {
                 <Col md={6}>Agent No. {index + 1}</Col>
               </Row>
               <AgentCard
+                showDownArrow={index < agents.length - 1}
+                showUpArrow={index > 0}
                 agent={a}
+                onMoveAgentUp={() => moveAgent(index, index - 1)}
+                onMoveAgentDown={() => moveAgent(index, index + 1)}
                 onAgentChanged={() => console.log('INDEX', index)}
                 onRemoveAgent={() => {
                   dispatch(poaActions.removeAgent(a));

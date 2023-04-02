@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { arrMove } from 'util/util';
 
 export const initialState = {
   agents: [],
@@ -30,6 +31,13 @@ const mpoaSlice = createSlice({
           return agent;
         }
       });
+    },
+    moveAgent(state, action) {
+      state.agents = arrMove(
+        [...state.agents],
+        action.payload.oldIndex,
+        action.payload.newIndex
+      );
     },
     setValues(state, action) {
       Object.assign(state, action.payload);
