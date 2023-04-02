@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { mpoaActions as poaActions } from 'store/mpoaSlice';
@@ -13,6 +13,7 @@ const MedicalPoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['mpoa']);
+  const agents = state['agents'];
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
   const {
@@ -23,6 +24,20 @@ const MedicalPoaForm = (props) => {
     validateForm,
     listErrors,
   } = useFormErrors();
+
+  useEffect(() => {
+    // If no agents selected yet, set error
+    if (!agents || agents.length === 0) {
+      setFormErrors({
+        ...formErrors,
+        agents: 'Please add at least one agent',
+      });
+    } else if ('agents' in formErrors) {
+      const newFormErrors = { ...formErrors };
+      delete newFormErrors.agents;
+      setFormErrors({ ...newFormErrors });
+    }
+  }, [agents]);
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -86,7 +101,7 @@ const MedicalPoaForm = (props) => {
           </p>
         </Col>
       </Row>
-      <PoaAgents poaType="mpoa" />
+      <PoaAgents poaType="mpoa" agents={agents} />
       <Row>
         <Col>
           {' '}

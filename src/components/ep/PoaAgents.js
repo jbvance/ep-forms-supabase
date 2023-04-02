@@ -15,11 +15,11 @@ import { hipaaActions } from 'store/hipaaSlice';
 import { mpoaActions } from 'store/mpoaSlice';
 import useFormErrors from '../../hooks/useFormErrors';
 
-const PoaAgents = ({ poaType }) => {
+const PoaAgents = ({ poaType, agents }) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state[poaType]);
-  const agents = state['agents'];
-  const noAgents = !state.agents || state.agents.length === 0;
+  // const state = useSelector((state) => state[poaType]);
+  // const agents = state['agents'];
+  const noAgents = !agents || agents.length === 0;
   const auth = useAuth();
   const userId = auth.user.id;
   const [addAgentMode, setAddAgentMode] = useState(false);
@@ -46,19 +46,19 @@ const PoaAgents = ({ poaType }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    // If no agents selected yet, set error
-    if (!agents || agents.length === 0) {
-      setFormErrors({
-        ...formErrors,
-        agents: 'Please add at least one agent',
-      });
-    } else if ('agents' in formErrors) {
-      const newFormErrors = { ...formErrors };
-      delete newFormErrors.agents;
-      setFormErrors({ ...newFormErrors });
-    }
-  }, [agents]);
+  // useEffect(() => {
+  //   // If no agents selected yet, set error
+  //   if (!agents || agents.length === 0) {
+  //     setFormErrors({
+  //       ...formErrors,
+  //       agents: 'Please add at least one agent',
+  //     });
+  //   } else if ('agents' in formErrors) {
+  //     const newFormErrors = { ...formErrors };
+  //     delete newFormErrors.agents;
+  //     setFormErrors({ ...newFormErrors });
+  //   }
+  // }, [agents]);
 
   const {
     data: ucData,
@@ -74,25 +74,26 @@ const PoaAgents = ({ poaType }) => {
           You have not selected any agents. Click "Add Agent" to get started.
         </div>
       )}
-      {agents.map((a, index) => {
-        return (
-          <React.Fragment key={a.id}>
-            <Row className="AgentHeader">
-              <Col md={6}>Agent No. {index + 1}</Col>
-            </Row>
-            <AgentCard
-              agent={a}
-              onAgentChanged={() => console.log('INDEX', index)}
-              onRemoveAgent={() => {
-                dispatch(poaActions.removeAgent(a));
-              }}
-              onEditAgent={() => {
-                setContactIdToEdit(a.id);
-              }}
-            />
-          </React.Fragment>
-        );
-      })}
+      {agents &&
+        agents.map((a, index) => {
+          return (
+            <React.Fragment key={a.id}>
+              <Row className="AgentHeader">
+                <Col md={6}>Agent No. {index + 1}</Col>
+              </Row>
+              <AgentCard
+                agent={a}
+                onAgentChanged={() => console.log('INDEX', index)}
+                onRemoveAgent={() => {
+                  dispatch(poaActions.removeAgent(a));
+                }}
+                onEditAgent={() => {
+                  setContactIdToEdit(a.id);
+                }}
+              />
+            </React.Fragment>
+          );
+        })}
       {addAgentMode && (
         <AddAgentForm
           onCancelAdd={() => setAddAgentMode(false)}
