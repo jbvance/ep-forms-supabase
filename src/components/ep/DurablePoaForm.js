@@ -104,14 +104,12 @@ const DurablePoaForm = (props) => {
       <PoaAgents agents={agents} poaType="dpoa" />
       <Row>
         <Col>
-          {' '}
           {updateError && <FormAlert type="error" message={updateError} />}
         </Col>
       </Row>
 
       <Row>
         <Col>
-          {' '}
           {formErrors && Object.keys(formErrors).length > 0 && formTouched && (
             <FormAlert type="error" message={listErrors()} />
           )}
