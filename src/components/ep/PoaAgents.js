@@ -14,6 +14,7 @@ import { dpoaActions } from '../../store/dpoaSlice';
 import { hipaaActions } from 'store/hipaaSlice';
 import { mpoaActions } from 'store/mpoaSlice';
 import useFormErrors from '../../hooks/useFormErrors';
+import { Spinner } from 'react-bootstrap';
 
 const PoaAgents = ({ poaType, agents }) => {
   const dispatch = useDispatch();
@@ -76,6 +77,14 @@ const PoaAgents = ({ poaType, agents }) => {
     );
   };
 
+  if (ucIsLoading) {
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
+
   return (
     <Container>
       {noAgents && (
@@ -93,7 +102,7 @@ const PoaAgents = ({ poaType, agents }) => {
               <AgentCard
                 showDownArrow={index < agents.length - 1}
                 showUpArrow={index > 0}
-                agent={a}
+                agent={ucData.find((uc) => uc.id == a.id)}
                 onMoveAgentUp={() => moveAgent(index, index - 1)}
                 onMoveAgentDown={() => moveAgent(index, index + 1)}
                 onAgentChanged={() => console.log('INDEX', index)}
@@ -111,15 +120,16 @@ const PoaAgents = ({ poaType, agents }) => {
         <AddAgentForm
           onCancelAdd={() => setAddAgentMode(false)}
           onAddAgent={(contact) => {
-            dispatch(poaActions.addAgent(contact));
+            dispatch(poaActions.addAgent({ id: contact.id }));
             setAddAgentMode(false);
           }}
           onAgentSelected={(e) => {
             const contactToAdd = ucData.find((uc) => uc.id == e.target.value);
             dispatch(
               poaActions.addAgent({
-                ...contactToAdd,
-                fullName: contactToAdd['full_name'],
+                id: contactToAdd.id,
+                //...contactToAdd,
+                //fullName: contactToAdd['full_name'],
               })
             );
             setAddAgentMode(false);
@@ -141,10 +151,11 @@ const PoaAgents = ({ poaType, agents }) => {
           id={contactIdToEdit}
           onDone={(contact) => {
             if (contact) {
+              dispatch(poaActions.addAgent({ id: contact.id }));
               // Update state in other docs to reflect change to contact
-              dispatch(dpoaActions.updateAgent(contact));
-              dispatch(mpoaActions.updateAgent(contact));
-              dispatch(hipaaActions.updateAgent(contact));
+              //dispatch(dpoaActions.updateAgent(contact));
+              //dispatch(mpoaActions.updateAgent(contact));
+              //dispatch(hipaaActions.updateAgent(contact));
             }
             setContactIdToEdit(null);
           }}

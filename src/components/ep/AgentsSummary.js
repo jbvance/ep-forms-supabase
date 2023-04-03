@@ -4,9 +4,29 @@ import SummaryHeader from 'components/summary/SummaryHeader';
 import SummaryField from 'components/summary/SummaryField';
 import { getSelectedProductTitle } from './WizardSummary';
 import { FormContext } from 'context/formContext';
+import { useContactsByUser } from 'util/db';
+import { useAuth } from 'util/auth';
 
 const AgentsSummary = ({ agents, docType, returnToStep, selectedProducts }) => {
+  const userId = useAuth().user.id;
+  const {
+    data: ucData,
+    error: ucError,
+    status: ucStatus,
+    isLoading: ucIsLoading,
+  } = useContactsByUser(userId);
+
+  // console.log('AGENTS', agents);
   const { gotoStep } = useContext(FormContext);
+
+  if (ucIsLoading) {
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
+
   return (
     <Container className="SummarySection">
       <Row>
@@ -17,7 +37,9 @@ const AgentsSummary = ({ agents, docType, returnToStep, selectedProducts }) => {
       <Row>
         <h4 className="SummarySubheader">Agents</h4>
       </Row>
-      {agents.map((agent, index) => {
+      {agents.map((a, index) => {
+        const agent = ucData.find((uc) => uc.id === a.id);
+        agent.fullName = agent.full_name;
         return (
           <Row
             key={agent.fullName}

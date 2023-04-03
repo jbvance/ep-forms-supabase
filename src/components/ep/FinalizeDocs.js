@@ -25,6 +25,7 @@ const FinalizeDocs = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const auth = useAuth();
+  const userId = auth.user.id;
   //console.log('CREATING', docsToCreate);
 
   useEffect(() => {
@@ -47,14 +48,43 @@ const FinalizeDocs = (props) => {
   }, []);
 
   const callApi = async (values, type) => {
-    console.log('TYPE', type);
-    console.log('VALUES', values);
     const typeWithoutState = type.includes('-') ? type.split('-')[1] : type;
+    // console.log(
+    //   'TYPE WITHOUT STATE',
+    //   typeWithoutState,
+    //   values[typeWithoutState]['agents']
+    // );
+
     try {
+      //const docAgents = [];
+      // take array of agent Id's and build agent info array to pass to API
+      const docAgents = await Promise.all(
+        values[typeWithoutState]['agents'].map(async (agent) => {
+          const { data, error } = await supabase
+            .from('user_contacts')
+            .select('*')
+            .single()
+            .eq('id', agent.id);
+          if (error) {
+            throw new Error(
+              "ERROR CREATING DOCUMENTS. CAN'T GET AGENTS" + ' ' + err.message
+            );
+          }
+          if (data) {
+            return { ...data, fullName: data.full_name };
+          }
+        })
+      );
+
+      //await Promise.all(createAgentPromises);
+      //console.log('DOC AGENTS', docAgents);
+      //console.log('docAgents', docAgents);
+
       let response;
       response = await apiRequestFile(`/docx/${type}`, 'POST', {
         ...values.clientInfo,
         ...values[typeWithoutState],
+        agents: docAgents,
       });
       //}
       console.log('CREATE DOC RESPONSE', response);

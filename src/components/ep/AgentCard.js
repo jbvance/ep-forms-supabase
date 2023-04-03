@@ -18,6 +18,7 @@ const AgentCard = ({
   onMoveAgentUp,
   onMoveAgentDown,
 }) => {
+  //console.log('AGENT', agent);
   return (
     <React.Fragment>
       <Row
@@ -26,7 +27,7 @@ const AgentCard = ({
         <Col md={12}>
           <Card style={{ marginBottom: '10px' }}>
             <Card.Body>
-              <Card.Title>{agent.fullName}</Card.Title>
+              <Card.Title>{agent.full_name}</Card.Title>
               <Card.Text>{agent.address}</Card.Text>
               <Card.Text>{agent.phone}</Card.Text>
               <Card.Text>

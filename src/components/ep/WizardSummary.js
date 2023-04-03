@@ -1,10 +1,19 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Jumbotron, Container, Row, Col, Button } from 'react-bootstrap';
+import {
+  Jumbotron,
+  Container,
+  Row,
+  Col,
+  Button,
+  Spinner,
+} from 'react-bootstrap';
+import { useAuth } from 'util/auth';
 import { FormContext } from 'context/formContext';
 import SummaryField from 'components/summary/SummaryField';
 import SummaryHeader from 'components/summary/SummaryHeader';
 import AgentsSummary from './AgentsSummary';
+import { useContactsByUser } from 'util/db';
 
 export const getSelectedProductTitle = (type, productsToSearch) => {
   //console.log('TYPE', type);
@@ -18,12 +27,21 @@ export const getSelectedProductTitle = (type, productsToSearch) => {
 };
 
 const WizardSummary = (props) => {
+  const auth = useAuth();
+  const userId = auth.user.id;
   const { activeStepIndex, setStepIndex, steps, gotoStep } =
     useContext(FormContext);
   const dispatch = useDispatch();
   const wizState = useSelector((state) => state);
   //console.log('WIZ STATE IN SUMMARY', wizState);
   //console.log('STEPS IN WIZ', steps);
+
+  const {
+    data: ucData,
+    error: ucError,
+    status: ucStatus,
+    isLoading: ucIsLoading,
+  } = useContactsByUser(userId);
 
   //Scroll to top of screen
   useEffect(() => {
@@ -46,6 +64,14 @@ const WizardSummary = (props) => {
   const isProductTypeSelected = (type) => {
     return selectedProducts.find((p) => p.type === type);
   };
+
+  if (ucIsLoading) {
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
 
   return (
     <Fragment>

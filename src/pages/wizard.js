@@ -47,6 +47,7 @@ const WizardPage = (props) => {
         setIsLoading(true);
         // Durable POA
         const dpoaResponse = await fetchState(auth.user.id, 'dpoa');
+        console.log('GOT HERE');
         dpoaResponse &&
           dpoaResponse.length > 0 &&
           dispatch(
