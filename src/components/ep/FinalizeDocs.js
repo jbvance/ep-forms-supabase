@@ -56,7 +56,6 @@ const FinalizeDocs = (props) => {
     // );
 
     try {
-      //const docAgents = [];
       // take array of agent Id's and build agent info array to pass to API
       const docAgents = await Promise.all(
         values[typeWithoutState]['agents'].map(async (agent) => {
@@ -76,10 +75,6 @@ const FinalizeDocs = (props) => {
         })
       );
 
-      //await Promise.all(createAgentPromises);
-      //console.log('DOC AGENTS', docAgents);
-      //console.log('docAgents', docAgents);
-
       let response;
       response = await apiRequestFile(`/docx/${type}`, 'POST', {
         ...values.clientInfo,
@@ -91,12 +86,6 @@ const FinalizeDocs = (props) => {
       if (response.status !== 'success') {
         throw new Error(`Unable to create ${type}`);
       }
-
-      // const docTypeId = await handleAddOrUpdateUserDoc(
-      //   type,
-      //   auth.user.id,
-      //   productsInfo.find((prod) => prod.type === type).id
-      // );
     } catch (err) {
       console.log('ERROR CREATING DOCMENTS', err);
       throw new Error(err.message);
