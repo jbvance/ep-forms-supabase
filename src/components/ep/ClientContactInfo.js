@@ -78,6 +78,7 @@ function ClientContactInfo(props) {
   const [initialUserState, setInitialUserState] = useState(initialClientInfo);
   const [showFormErrors, setShowFormErrors] = useState(false);
   const dispatch = useDispatch();
+  const userId = useAuth().user.id;
 
   // Form context info
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
@@ -89,20 +90,10 @@ function ClientContactInfo(props) {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      //console.log('SESSION', data);
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userError) {
-        console.log(userError);
-        setUserError('Error getting user');
-      }
-      //console.log('USER', userData.user);
-      // Set initial state if user found in database
       const { data: contactData, error: contactError } = await supabase
         .from('client_contact')
         .select('json_value')
-        .eq('user_id', userData.user.id);
+        .eq('user_id', userId);
       if (contactError) console.log('CONTACT ERROR', contactError);
       if (contactData && contactData.length > 0) {
         setInitialUserState(JSON.parse(contactData[0].json_value));
