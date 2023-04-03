@@ -52,24 +52,28 @@ const FinalizeDocs = (props) => {
     // );
 
     try {
-      // take array of agent Id's and build agent info array to pass to API
-      const docAgents = await Promise.all(
-        values[typeWithoutState]['agents'].map(async (agent) => {
-          const { data, error } = await supabase
-            .from('user_contacts')
-            .select('*')
-            .single()
-            .eq('id', agent.id);
-          if (error) {
-            throw new Error(
-              "ERROR CREATING DOCUMENTS. CAN'T GET AGENTS" + ' ' + err.message
-            );
-          }
-          if (data) {
-            return { ...data, fullName: data.full_name };
-          }
-        })
-      );
+      let docAgents = [];
+      // If this document type has agents, build a list of them here to pass to API
+      if (values[typeWithoutState] && values[typeWithoutState]['agents']) {
+        // take array of agent Id's and build agent info array to pass to API
+        docAgents = await Promise.all(
+          values[typeWithoutState]['agents'].map(async (agent) => {
+            const { data, error } = await supabase
+              .from('user_contacts')
+              .select('*')
+              .single()
+              .eq('id', agent.id);
+            if (error) {
+              throw new Error(
+                "ERROR CREATING DOCUMENTS. CAN'T GET AGENTS" + ' ' + err.message
+              );
+            }
+            if (data) {
+              return { ...data, fullName: data.full_name };
+            }
+          })
+        );
+      }
 
       let response;
       response = await apiRequestFile(`/docx/${type}`, 'POST', {

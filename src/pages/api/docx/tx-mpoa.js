@@ -76,6 +76,9 @@ const createMpoaFromTemplate = async (req, res) => {
         ? req.body['notaryCounty'].toUpperCase()
         : '___________________';
 
+    // Add user's name to fileNameForSaving
+    const fileNameForSavingWithUserName = `${fileNameForSaving}_${firstName}_${lastName}`;
+
     const stringFields = [
       'firstName',
       'lastName',
@@ -179,13 +182,13 @@ const createMpoaFromTemplate = async (req, res) => {
     // save to S3 Bucket rather than save to local file system (as commented out above)
     await uploadFromBuffer(
       buf,
-      `user-docs/${userId}/${fileNameForSaving}.docx`
+      `user-docs/${userId}/${fileNameForSavingWithUserName}.docx`
     );
 
     //Get the signed url to create PDF file
     const signedUrl = await getSignedUrlForFile(
       process.env.S3_BUCKET,
-      `user-docs/${userId}/${fileNameForSaving}.docx`,
+      `user-docs/${userId}/${fileNameForSavingWithUserName}.docx`,
       90
     );
     //console.log('SIGNED URL', signedUrl);
@@ -197,7 +200,7 @@ const createMpoaFromTemplate = async (req, res) => {
     const pdfUploadResult = await createAndUploadPdf(
       signedUrl,
       'Medical Power of Attorney',
-      fileNameForSaving,
+      fileNameForSavingWithUserName,
       userId
     );
     if (
