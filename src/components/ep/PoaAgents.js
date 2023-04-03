@@ -150,8 +150,9 @@ const PoaAgents = ({ poaType, agents }) => {
         <EditContactModal
           id={contactIdToEdit}
           onDone={(contact) => {
+            console.log('CONTACT', contact);
             if (contact) {
-              dispatch(poaActions.addAgent({ id: contact.id }));
+              dispatch(poaActions.updateAgent({ id: contact.id }));
               // Update state in other docs to reflect change to contact
               //dispatch(dpoaActions.updateAgent(contact));
               //dispatch(mpoaActions.updateAgent(contact));
