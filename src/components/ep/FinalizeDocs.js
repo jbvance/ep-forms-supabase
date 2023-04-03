@@ -10,11 +10,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import FormAlert from 'components/FormAlert';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import supabase from 'util/supabase';
 import { apiRequestFile } from 'util/util';
 import { selectedProductsActions } from 'store/productsSlice';
-import { useAuth } from 'util/auth';
 
 const FinalizeDocs = (props) => {
   const [responseError, setResponseError] = useState(null);
@@ -22,10 +21,7 @@ const FinalizeDocs = (props) => {
   const [createStatus, setCreateStatus] = useState(null);
   const [productsInfo, setProductsInfo] = useState([]);
   const docsToCreate = useSelector((state) => state.selectedProducts.products);
-  const dispatch = useDispatch();
   const router = useRouter();
-  const auth = useAuth();
-  const userId = auth.user.id;
   //console.log('CREATING', docsToCreate);
 
   useEffect(() => {
@@ -94,20 +90,6 @@ const FinalizeDocs = (props) => {
   const wizardState = useSelector((state) => state);
   //console.log(wizardState);
 
-  // const handleAddOrUpdateUserDoc = async (docType, userId, docTypeId) => {
-  //   const userDocData = await addOrUpdateUserDoc(
-  //     auth.user.id,
-  //     productsInfo.find((prod) => prod.type === docType)
-  //   )
-  //     .then((data) => {
-  //       //console.log('USER DOC DATA', data);
-  //     })
-  //     .catch((err) => {
-  //       console.log('ERROR IN HAOUUD');
-  //       throw err;
-  //     });
-  // };
-
   const submitForm = async (e) => {
     e.preventDefault();
     //console.log(wizardState);
@@ -120,10 +102,6 @@ const FinalizeDocs = (props) => {
       });
 
       await Promise.all(createDocPromises);
-      // Remove all products from selected so if user goes to start wizard again, nothing is selected
-      // docsToCreate.forEach((doc) =>
-      //   dispatch(selectedProductsActions.removeProduct(doc))
-      // );
       setCreateStatus('success');
       router.push('/checkout?status=success');
     } catch (err) {
