@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Container,
   Card,
@@ -10,7 +10,6 @@ import {
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
-import ProductCard from './ProductCard';
 import SectionHeader from 'components/SectionHeader';
 import { selectedProductsActions } from 'store/productsSlice';
 import FormAlert from 'components/FormAlert';
@@ -22,15 +21,16 @@ import {
   initialState as hipaaInitialState,
 } from 'store/hipaaSlice';
 import { fetchState } from 'util/db';
-import { useUserId } from 'hooks/useUserId';
 
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
   const selectedProducts = useSelector((state) => state.selectedProducts);
+  const userIdForUpdate = useSelector(
+    (state) => state.clientInfo.userIdForUpdate
+  );
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [products, setProducts] = useState([]);
   const [formError, setFormError] = useState(null);
-  const { userIdForUpdate, getUpdateUserId } = useUserId();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +45,6 @@ const SelectProducts = (props) => {
     };
 
     getProducts();
-    getUpdateUserId();
     window.scrollTo(0, 0);
   }, []);
 
@@ -53,11 +52,6 @@ const SelectProducts = (props) => {
     // Initialize the state for each form
     const initializeState = async () => {
       try {
-        console.log('UPDATE USER ID', userIdForUpdate);
-        if (!userIdForUpdate) {
-          return;
-        }
-
         setError(null);
         setIsLoading(true);
         // Durable POA
@@ -101,7 +95,7 @@ const SelectProducts = (props) => {
       }
     };
     initializeState();
-  }, [userIdForUpdate]);
+  }, []);
 
   const prodSelected = (prod) => {
     const found = selectedProducts.products.find((p) => p.type === prod.type);

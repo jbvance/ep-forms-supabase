@@ -15,7 +15,6 @@ import SelectField from 'components/forms/SelectField';
 import FormAlert from 'components/FormAlert';
 import { useAuth } from 'util/auth';
 import { getSpouseInfo } from 'util/db';
-import { useUserId } from 'hooks/useUserId';
 
 import { updateClientInfo } from '../../store/clientInfoSlice';
 
@@ -75,13 +74,14 @@ const schema = yup.object().shape({
 
 function ClientContactInfo(props) {
   const initialState = useSelector((state) => state.clientInfo);
+  const userIdForUpdate = initialState.userIdForUpdate;
+  const isSpouse = initialState.isSpouse;
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
   const [initialUserState, setInitialUserState] = useState(initialClientInfo);
   const [showFormErrors, setShowFormErrors] = useState(false);
   const dispatch = useDispatch();
   let primaryUserId = useAuth().user.id;
-  const { userIdForUpdate } = useUserId();
   //console.log('ID FOR UPDATE', userIdForUpdate);
 
   // Form context info

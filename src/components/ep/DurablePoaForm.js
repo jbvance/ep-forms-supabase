@@ -8,15 +8,16 @@ import useFormErrors from 'hooks/useFormErrors';
 import PoaHeader from './PoaHeader';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
-import { useUserId } from 'hooks/useUserId';
 
 const DurablePoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['dpoa']);
+  const userIdForUpdate = useSelector(
+    (state) => state.clientInfo.userIdForUpdate
+  );
   const agents = state['agents'];
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
-  const { userIdForUpdate } = useUserId();
 
   const {
     formErrors,

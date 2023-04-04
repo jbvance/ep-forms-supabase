@@ -258,11 +258,21 @@ export async function getProductsByState(state) {
 
 /************* SPOUSE INFO ****************** */
 export async function getSpouseInfo(uid) {
+  console.log('UID', uid);
   const response = await supabase
     .from('users')
-    .select('spouse_id')
-    .single()
+    .select(
+      `     
+      spouses (
+        id,
+        user_id,
+        name,
+        email
+      )
+    `
+    )
     .eq('id', uid)
+    .single()
     .then(handle);
   return response;
 }

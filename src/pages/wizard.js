@@ -3,6 +3,7 @@ import { useAuth } from 'util/auth';
 import { FormContext } from 'context/formContext';
 import MultiStepForm from '../components/MultiStepForm';
 import { requireAuth } from 'util/auth';
+import { useUserId } from 'hooks/useUserId';
 
 import FormAlert from 'components/FormAlert';
 // products is a list of the documents that require user information to be filled out.
@@ -31,6 +32,7 @@ const WizardPage = (props) => {
   const auth = useAuth();
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [returnToStep, setReturnToStep] = useState('');
+  const { userIdForUpdate } = useUserId();
 
   const setStepIndex = (index) => {
     if (returnToStep !== '') {

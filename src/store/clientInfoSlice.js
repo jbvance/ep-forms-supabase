@@ -42,6 +42,7 @@ export const initialClientInfo = {
   spouseEmail: '',
   spouseDob: '',
   isSpouse: false,
+  userIdForUpdate: null,
 };
 
 const initialState = { ...initialClientInfo };
@@ -66,30 +67,10 @@ const clientInfoSlice = createSlice({
     updateIsSpouse(state, action) {
       state.isSpouse = action.payload;
     },
-    // addFavorite(state, action) {
-    //   const newRecipe = action.payload;
-    //   const existingFavorite = state.recipes.find(
-    //     (recipe: any) => recipe.id === newRecipe.shareAs
-    //   );
-    //   const favoriteToAdd = {
-    //     _id: newRecipe._id,
-    //     id: newRecipe.shareAs,
-    //     ...newRecipe,
-    //   };
-    //   if (!existingFavorite) {
-    //     state.recipes.push(favoriteToAdd);
-    //   }
-    // },
-    // deleteFavorite(state, action) {
-    //   const id: string = action.payload;
-    //   const index = state.recipes.findIndex((rec) => rec.id);
-    //   if (index > -1) {
-    //     state.recipes = state.recipes.filter((rec) => rec.id !== id);
-    //   }
-    // },
-    // setFavorites(state, action) {
-    //   state.recipes = action.payload;
-    // },
+    updateUserIdForUpdate(state, action) {
+      console.log('UPDATING', action.payload);
+      state.userIdForUpdate = action.payload;
+    },
   },
 });
 
