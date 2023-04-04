@@ -256,6 +256,17 @@ export async function getProductsByState(state) {
   return response;
 }
 
+/************* SPOUSE INFO ****************** */
+export async function getSpouseInfo(uid) {
+  const response = await supabase
+    .from('users')
+    .select('spouse_id')
+    .single()
+    .eq('id', uid)
+    .then(handle);
+  return response;
+}
+
 /************* STATE FETCHING *******************/
 export async function fetchState(uid, type) {
   const response = await supabase

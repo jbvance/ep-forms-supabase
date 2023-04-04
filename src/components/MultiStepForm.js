@@ -9,6 +9,7 @@ import MpoaForm from './ep/MedicalPoaForm';
 import HipaaForm from './ep/HipaaForm';
 import WizardSummary from './ep/WizardSummary';
 import FinalizeDocs from './ep/FinalizeDocs';
+import SelectUser from './ep/SelectUser';
 
 import { products } from 'pages/wizard';
 import BreadCrumbs from './BreadCrumbs';
@@ -48,13 +49,14 @@ const MultiStepForm = () => {
   };
 
   const stepComponents = [
-    <SelectProducts id={steps[0]} />,
-    <ClientContactInfo {...props} id={steps[1]} />,
-    <DpoaForm {...props} id={steps[2]} />,
-    <MpoaForm {...props} id={steps[3]} />,
-    <HipaaForm {...props} id={steps[4]} />,
-    <WizardSummary {...props} id={steps[5]} />,
-    <FinalizeDocs {...props} id={steps[6]} />,
+    <SelectUser id={steps[0]} />,
+    <SelectProducts id={steps[1]} />,
+    <ClientContactInfo {...props} id={steps[2]} />,
+    <DpoaForm {...props} id={steps[3]} />,
+    <MpoaForm {...props} id={steps[4]} />,
+    <HipaaForm {...props} id={steps[5]} />,
+    <WizardSummary {...props} id={steps[6]} />,
+    <FinalizeDocs {...props} id={steps[7]} />,
   ];
 
   return (

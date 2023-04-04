@@ -5,6 +5,7 @@ import { FormContext } from 'context/formContext';
 import { products } from 'pages/wizard';
 
 const CrumbMap = {
+  ['select-user']: 'Select User',
   ['select-products']: 'Select Products',
   ['client-info']: 'Your Information',
   dpoa: 'Durable Power of Attorney',

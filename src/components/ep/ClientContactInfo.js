@@ -14,6 +14,8 @@ import TextInput from 'components/forms/TextInput';
 import SelectField from 'components/forms/SelectField';
 import FormAlert from 'components/FormAlert';
 import { useAuth } from 'util/auth';
+import { getSpouseInfo } from 'util/db';
+import { useUserId } from 'hooks/useUserId';
 
 import { updateClientInfo } from '../../store/clientInfoSlice';
 
@@ -78,7 +80,9 @@ function ClientContactInfo(props) {
   const [initialUserState, setInitialUserState] = useState(initialClientInfo);
   const [showFormErrors, setShowFormErrors] = useState(false);
   const dispatch = useDispatch();
-  const userId = useAuth().user.id;
+  let primaryUserId = useAuth().user.id;
+  const { userIdForUpdate } = useUserId();
+  //console.log('ID FOR UPDATE', userIdForUpdate);
 
   // Form context info
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
@@ -90,13 +94,24 @@ function ClientContactInfo(props) {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const { data: contactData, error: contactError } = await supabase
-        .from('client_contact')
-        .select('json_value')
-        .eq('user_id', userId);
-      if (contactError) console.log('CONTACT ERROR', contactError);
-      if (contactData && contactData.length > 0) {
-        setInitialUserState(JSON.parse(contactData[0].json_value));
+      let uid;
+      if (initialState.isSpouse) {
+        const spouseIdObject = await getSpouseInfo(primaryUserId);
+        uid = spouseIdObject.spouse_id;
+      } else {
+        uid = primaryUserId;
+      }
+      if (uid) {
+        const { data: contactData, error: contactError } = await supabase
+          .from('client_contact')
+          .select('json_value')
+          .eq('user_id', uid);
+        if (contactError) console.log('CONTACT ERROR', contactError);
+        if (contactData && contactData.length > 0) {
+          setInitialUserState(JSON.parse(contactData[0].json_value));
+        } else {
+          setInitialUserState(initialState);
+        }
       } else {
         setInitialUserState(initialState);
       }
@@ -123,21 +138,13 @@ function ClientContactInfo(props) {
         formValues = { ...values };
       }
       setUpdateError(null);
-      let userId = null;
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userData) {
-        userId = userData.user.id;
-      }
-      if (userError) {
-        console.log('USER ERROR', userError);
-      }
+
       // Perform "upsert" to update if already exists or update otherwise
       // ***Row level security is in place for ClientContact Table on supabase
       const { error } = await supabase
         .from('client_contact')
         .upsert(
-          { user_id: userId, json_value: JSON.stringify(formValues) },
+          { user_id: userIdForUpdate, json_value: JSON.stringify(formValues) },
           { onConflict: 'user_id' }
         )
         .select();
@@ -209,7 +216,9 @@ function ClientContactInfo(props) {
             }}
             id={props.id}
           >
-            <h2 className="Header">Your Information</h2>
+            <h2 className="Header">
+              {initialState.isSpouse ? 'Spouse' : 'Your'} Information
+            </h2>
             <Row className="mb-3">
               <Form.Group as={Col} md="3">
                 <TextInput label="First Name" name="firstName" id="firstName" />

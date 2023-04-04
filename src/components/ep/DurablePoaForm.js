@@ -8,6 +8,7 @@ import useFormErrors from 'hooks/useFormErrors';
 import PoaHeader from './PoaHeader';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
+import { useUserId } from 'hooks/useUserId';
 
 const DurablePoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
@@ -15,6 +16,7 @@ const DurablePoaForm = (props) => {
   const state = useSelector((state) => state['dpoa']);
   const agents = state['agents'];
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { userIdForUpdate } = useUserId();
 
   const {
     formErrors,
@@ -50,22 +52,13 @@ const DurablePoaForm = (props) => {
       // the form won't reset to blank values if it has never been saved
       dispatch(poaActions['setStatus']('loading'));
       setUpdateError(null);
-      let userId = null;
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userData) {
-        userId = userData.user.id;
-      }
-      if (userError) {
-        console.log(`USER ERROR IN DPOA`, userError);
-      }
 
       // Perform "upsert" to update if already exists or update otherwise
       // ***Row level security is in place for table on supabase
       const { error } = await supabase
         .from('dpoa')
         .upsert(
-          { user_id: userId, json_value: JSON.stringify(state) },
+          { user_id: userIdForUpdate, json_value: JSON.stringify(state) },
           { onConflict: 'user_id' }
         )
         .select();

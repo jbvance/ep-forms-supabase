@@ -15,7 +15,14 @@ import SectionHeader from 'components/SectionHeader';
 import { selectedProductsActions } from 'store/productsSlice';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
-import AspectRatio from 'components/AspectRatio';
+import { mpoaActions, initialState as mpoaInitialState } from 'store/mpoaSlice';
+import { dpoaActions, initialState as dpoaInitialState } from 'store/dpoaSlice';
+import {
+  hipaaActions,
+  initialState as hipaaInitialState,
+} from 'store/hipaaSlice';
+import { fetchState } from 'util/db';
+import { useUserId } from 'hooks/useUserId';
 
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
@@ -23,6 +30,9 @@ const SelectProducts = (props) => {
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const [products, setProducts] = useState([]);
   const [formError, setFormError] = useState(null);
+  const { userIdForUpdate, getUpdateUserId } = useUserId();
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -35,8 +45,63 @@ const SelectProducts = (props) => {
     };
 
     getProducts();
+    getUpdateUserId();
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    // Initialize the state for each form
+    const initializeState = async () => {
+      try {
+        console.log('UPDATE USER ID', userIdForUpdate);
+        if (!userIdForUpdate) {
+          return;
+        }
+
+        setError(null);
+        setIsLoading(true);
+        // Durable POA
+        const dpoaResponse = await fetchState(userIdForUpdate, 'dpoa');
+        console.log('HELLO', userIdForUpdate, dpoaResponse);
+        if (dpoaResponse && dpoaResponse.length > 0) {
+          dispatch(
+            dpoaActions.setValues(JSON.parse(dpoaResponse[0].json_value))
+          );
+        } else {
+          dispatch(dpoaActions.setValues(dpoaInitialState));
+        }
+
+        // Medical POA
+        const mpoaResponse = await fetchState(userIdForUpdate, 'mpoa');
+        if (mpoaResponse && mpoaResponse.length > 0) {
+          dispatch(
+            mpoaActions.setValues(JSON.parse(mpoaResponse[0].json_value))
+          );
+        } else {
+          dispatch(mpoaActions.setValues(mpoaInitialState));
+        }
+
+        // Hipaa
+        const hipaaResponse = await fetchState(userIdForUpdate, 'hipaa');
+        console.log('HIPAA RESPONSE', hipaaResponse);
+        if (hipaaResponse && hipaaResponse.length > 0) {
+          console.log('YEP');
+          dispatch(
+            hipaaActions.setValues(JSON.parse(hipaaResponse[0].json_value))
+          );
+        } else {
+          console.log('NOPE', hipaaInitialState);
+          dispatch(hipaaActions.setValues(hipaaInitialState));
+        }
+      } catch (err) {
+        console.log(err);
+        setError('Unable to load data. Please try again in a moment');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initializeState();
+  }, [userIdForUpdate]);
 
   const prodSelected = (prod) => {
     const found = selectedProducts.products.find((p) => p.type === prod.type);
@@ -64,6 +129,17 @@ const SelectProducts = (props) => {
 
   if (!products) {
     return <Spinner />;
+  }
+
+  if (isLoading) {
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
+  if (error) {
+    return <FormAlert type="error" message={error} />;
   }
 
   return (
