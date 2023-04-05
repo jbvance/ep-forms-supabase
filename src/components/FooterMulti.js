@@ -20,7 +20,7 @@ const Footer = (props) => {
   //console.log(steps[activeStepIndex]);
 
   const goBack = () => {
-    console.log('GOING BACK', activeStepIndex);
+    //console.log('GOING BACK', activeStepIndex);
     // keep going back until we find a non-product form or
     // a product that was selected
     for (let i = activeStepIndex - 1; i > -1; i--) {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from 'util/supabase';
-import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+import Spinner from 'react-bootstrap/Spinner';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-//import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -74,6 +73,7 @@ const schema = yup.object().shape({
 
 function ClientContactInfo(props) {
   const initialState = useSelector((state) => state.clientInfo);
+  const [isLoading, setIsLoading] = useState(false);
   const userIdForUpdate = initialState.userIdForUpdate;
   const isSpouse = initialState.isSpouse;
   const [userError, setUserError] = useState(null);
@@ -94,28 +94,41 @@ function ClientContactInfo(props) {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      let uid;
-      if (initialState.isSpouse) {
-        const spouseRec = await getSpouseInfo(primaryUserId);
-        if (spouseRec.spouses && spouseRec.spouses.length > 0) {
-          uid = spouseRec.spouses[0].id;
+      try {
+        setIsLoading(true);
+        let uid;
+        if (initialState.isSpouse) {
+          const spouseRec = await getSpouseInfo(primaryUserId);
+          if (spouseRec.spouses && spouseRec.spouses.length > 0) {
+            uid = spouseRec.spouses[0].id;
+          }
+        } else {
+          uid = primaryUserId;
         }
-      } else {
-        uid = primaryUserId;
-      }
-      if (uid) {
-        const { data: contactData, error: contactError } = await supabase
-          .from('client_contact')
-          .select('json_value')
-          .eq('user_id', uid);
-        if (contactError) console.log('CONTACT ERROR', contactError);
-        if (contactData && contactData.length > 0) {
-          setInitialUserState(JSON.parse(contactData[0].json_value));
+        if (uid) {
+          const { data: clientInfoData, error: clientInfoError } =
+            await supabase
+              .from('client_contact')
+              .select('json_value')
+              .eq('user_id', uid);
+          if (clientInfoError) {
+            console.log('ERROR GETTING USER DATA', clientInfoError);
+            throw new Error(
+              'Unable to load your information. Please refresh the page to try again'
+            );
+          }
+          if (clientInfoData && clientInfoData.length > 0) {
+            setInitialUserState(JSON.parse(clientInfoData[0].json_value));
+          } else {
+            setInitialUserState(initialState);
+          }
         } else {
           setInitialUserState(initialState);
         }
-      } else {
-        setInitialUserState(initialState);
+      } catch (err) {
+        setUserError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
     getUserInfo();
@@ -169,6 +182,14 @@ function ClientContactInfo(props) {
   };
 
   //console.log('INIT STATE', initialState);
+
+  if (isLoading) {
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
 
   if (userError) {
     return <FormAlert type="error" message={userError} />;

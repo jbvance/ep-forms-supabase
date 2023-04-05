@@ -52,6 +52,7 @@ const SelectProducts = (props) => {
     // Initialize the state for each form
     const initializeState = async () => {
       try {
+        console.log('INITIALIZING STATE FOR ALL');
         setError(null);
         setIsLoading(true);
         // Durable POA

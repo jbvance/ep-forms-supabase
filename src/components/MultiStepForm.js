@@ -20,6 +20,8 @@ const MultiStepForm = () => {
     (state) => state.selectedProducts.products
   );
 
+  const isSpouse = useSelector((state) => state.clientInfo.isSpouse);
+
   //Scroll to top of screen
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,6 +64,9 @@ const MultiStepForm = () => {
   return (
     <div className="container">
       <BreadCrumbs />
+      {isSpouse && (
+        <div className="SpouseBanner">Preparing Documents for Spouse</div>
+      )}
       {stepComponents[activeStepIndex]}
       <Footer id={steps[activeStepIndex]} {...props} />
     </div>
