@@ -36,7 +36,7 @@ const handler = async (req, res) => {
     }
 
     // store values passed in variables
-    const { firstName, middleName, lastName, city, county } = req.body;
+    const { firstName, middleName, lastName, suffix, city, county } = req.body;
     const notaryCounty =
       req.body['notaryCounty'] && req.body['notaryCounty'].trim().length > 0
         ? req.body['notaryCounty'].toUpperCase()
@@ -84,7 +84,7 @@ const handler = async (req, res) => {
 
     const clientName = `${firstName.trim()}${
       middleName ? ' ' + middleName.trim() : ''
-    } ${lastName.trim()}`;
+    } ${lastName.trim()}${suffix ? ' ' + suffix : ''}`;
 
     const docVars = {
       clientName,

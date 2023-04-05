@@ -110,7 +110,7 @@ const createHipaaFromTemplate = async (req, res) => {
 
     const clientName = `${firstName.trim()}${
       middleName ? ' ' + middleName.trim() : ''
-    } ${lastName.trim()}`;
+    } ${lastName.trim()}${suffix ? ' ' + suffix : ''}`;
     const clientNameUppercase = clientName.toUpperCase();
 
     const blankLine = '______________________________________';
@@ -135,8 +135,8 @@ const createHipaaFromTemplate = async (req, res) => {
     });
 
     const docVars = {
-      clientNameUppercase,
       clientName,
+      clientNameUppercase,
       notaryCounty,
       hipaaPrimaryAgentName,
       hipaaPrimaryAgentAddress,

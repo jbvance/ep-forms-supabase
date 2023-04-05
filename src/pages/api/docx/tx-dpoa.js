@@ -110,7 +110,7 @@ const createDpoaFromTemplate = async (req, res) => {
 
     const clientName = `${firstName.trim()}${
       middleName ? ' ' + middleName.trim() : ''
-    } ${lastName.trim()}`;
+    } ${lastName.trim()}${suffix ? ' ' + suffix : ''}`;
 
     const clientAddress = `${address}, ${city}, ${state} ${zipCode}`;
     const primaryAgent = agents[0];

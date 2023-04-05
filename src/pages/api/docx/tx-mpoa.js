@@ -127,7 +127,7 @@ const createMpoaFromTemplate = async (req, res) => {
 
     const clientName = `${firstName.trim()}${
       middleName ? ' ' + middleName.trim() : ''
-    } ${lastName.trim()}`;
+    } ${lastName.trim()}${suffix ? ' ' + suffix : ''}`;
 
     const blankLine = '______________________________________';
     const clientAddress = `${address}, ${city}, ${state} ${zipCode}`;
