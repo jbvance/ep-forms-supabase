@@ -56,7 +56,6 @@ const SelectProducts = (props) => {
         setIsLoading(true);
         // Durable POA
         const dpoaResponse = await fetchState(userIdForUpdate, 'dpoa');
-        console.log('HELLO', userIdForUpdate, dpoaResponse);
         if (dpoaResponse && dpoaResponse.length > 0) {
           dispatch(
             dpoaActions.setValues(JSON.parse(dpoaResponse[0].json_value))
@@ -77,14 +76,11 @@ const SelectProducts = (props) => {
 
         // Hipaa
         const hipaaResponse = await fetchState(userIdForUpdate, 'hipaa');
-        console.log('HIPAA RESPONSE', hipaaResponse);
         if (hipaaResponse && hipaaResponse.length > 0) {
-          console.log('YEP');
           dispatch(
             hipaaActions.setValues(JSON.parse(hipaaResponse[0].json_value))
           );
         } else {
-          console.log('NOPE', hipaaInitialState);
           dispatch(hipaaActions.setValues(hipaaInitialState));
         }
       } catch (err) {

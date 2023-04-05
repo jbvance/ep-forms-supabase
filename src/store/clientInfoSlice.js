@@ -68,7 +68,6 @@ const clientInfoSlice = createSlice({
       state.isSpouse = action.payload;
     },
     updateUserIdForUpdate(state, action) {
-      console.log('UPDATING', action.payload);
       state.userIdForUpdate = action.payload;
     },
   },

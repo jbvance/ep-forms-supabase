@@ -97,7 +97,6 @@ function ClientContactInfo(props) {
       let uid;
       if (initialState.isSpouse) {
         const spouseRec = await getSpouseInfo(primaryUserId);
-        console.log('JUNK', spouseRec);
         if (spouseRec.spouses && spouseRec.spouses.length > 0) {
           uid = spouseRec.spouses[0].id;
         }

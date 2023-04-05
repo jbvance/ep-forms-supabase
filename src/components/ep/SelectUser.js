@@ -42,7 +42,6 @@ const SelectUser = (props) => {
         id={props.id}
         onSubmit={(e) => {
           e.preventDefault();
-          console.log('CHECKED');
           setStepIndex(activeStepIndex + 1);
         }}
       ></form>

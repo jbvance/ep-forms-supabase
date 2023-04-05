@@ -23,9 +23,8 @@ export const useUserId = () => {
         return;
       } else {
         const { spouses } = await getSpouseInfo(primaryUserId);
-        console.log('SPOUSES', spouses.length, spouses);
+        //console.log('SPOUSES', spouses.length, spouses);
         if (spouses && spouses.length > 0) {
-          console.log('GREATER THAN 0');
           dispatch(actions.updateUserIdForUpdate(spouses[0].id));
         } else {
           const { error, data: newSpouse } = await supabase
