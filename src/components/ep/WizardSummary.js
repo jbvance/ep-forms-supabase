@@ -79,8 +79,8 @@ const WizardSummary = (props) => {
         <h2>Review your Information</h2>
         <p>
           You are almost ready to prepare your documents. First, take a moment
-          to review the infomrmation below to make sure everything is correct.
-          Be sure to make any necessary changes before continuing.
+          to review the information below to make sure everything is correct. Be
+          sure to make any necessary changes before continuing.
         </p>
       </Jumbotron>
       <Container className="SummarySection">
@@ -166,14 +166,14 @@ const WizardSummary = (props) => {
             </Row>
           </React.Fragment>
         )}
-        <Row>
+        <Row className="EditSummaryRow">
           <Col xs={12}>
             <Button
               variant="warning"
               className="EditButton"
               onClick={() => gotoStep('client-info', 'summary')}
             >
-              Click here to edit information
+              Click here to edit contact information
             </Button>
           </Col>
         </Row>

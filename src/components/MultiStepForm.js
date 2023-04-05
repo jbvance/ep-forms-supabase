@@ -62,14 +62,16 @@ const MultiStepForm = () => {
   ];
 
   return (
-    <div className="container">
-      <BreadCrumbs />
+    <React.Fragment>
+      <div className="container">
+        <BreadCrumbs />
+        {stepComponents[activeStepIndex]}
+        <Footer id={steps[activeStepIndex]} {...props} />
+      </div>
       {isSpouse && (
         <div className="SpouseBanner">Preparing Documents for Spouse</div>
       )}
-      {stepComponents[activeStepIndex]}
-      <Footer id={steps[activeStepIndex]} {...props} />
-    </div>
+    </React.Fragment>
   );
 };
 

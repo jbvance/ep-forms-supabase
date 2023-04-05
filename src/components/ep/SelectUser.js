@@ -12,7 +12,14 @@ const SelectUser = (props) => {
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
   return (
     <Container>
-      <Row>
+      <Row
+        style={{
+          fontWeight: 600,
+          padding: '5px 10px',
+          marginBottom: '20px',
+          backgroundColor: 'var(--yellow',
+        }}
+      >
         <Col>
           <h3>Who do you want to create documents for?</h3>
         </Col>
