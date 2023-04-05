@@ -96,8 +96,11 @@ function ClientContactInfo(props) {
     const getUserInfo = async () => {
       let uid;
       if (initialState.isSpouse) {
-        const spouseIdObject = await getSpouseInfo(primaryUserId);
-        uid = spouseIdObject.spouse_id;
+        const spouseRec = await getSpouseInfo(primaryUserId);
+        console.log('JUNK', spouseRec);
+        if (spouseRec.spouses && spouseRec.spouses.length > 0) {
+          uid = spouseRec.spouses[0].id;
+        }
       } else {
         uid = primaryUserId;
       }

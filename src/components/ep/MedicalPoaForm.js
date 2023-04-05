@@ -13,6 +13,9 @@ const MedicalPoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['mpoa']);
+  const userIdForUpdate = useSelector(
+    (state) => state.clientInfo.userIdForUpdate
+  );
   const agents = state['agents'];
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
@@ -50,22 +53,13 @@ const MedicalPoaForm = (props) => {
       // the form won't reset to blank values if it has never been saved
       dispatch(poaActions['setStatus']('loading'));
       setUpdateError(null);
-      let userId = null;
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userData) {
-        userId = userData.user.id;
-      }
-      if (userError) {
-        console.log(`USER ERROR IN MPOA`, userError);
-      }
 
       // Perform "upsert" to update if already exists or update otherwise
       // ***Row level security is in place for table on supabase
       const { error } = await supabase
         .from('mpoa')
         .upsert(
-          { user_id: userId, json_value: JSON.stringify(state) },
+          { user_id: userIdForUpdate, json_value: JSON.stringify(state) },
           { onConflict: 'user_id' }
         )
         .select();
