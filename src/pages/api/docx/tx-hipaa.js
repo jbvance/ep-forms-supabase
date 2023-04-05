@@ -60,7 +60,7 @@ const createHipaaFromTemplate = async (req, res) => {
         : '___________________';
 
     // Add user's name to fileNameForSaving
-    const fileNameForSavingWithUserName = `${fileNameForSaving}_${firstName}_${lastName}`;
+    const fileNameForSavingWithUserName = `${fileNameForSaving}--${firstName}_${lastName}`;
 
     const stringFields = [
       'firstName',

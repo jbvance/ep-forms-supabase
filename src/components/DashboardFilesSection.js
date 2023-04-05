@@ -37,10 +37,21 @@ function DashboardSection(props) {
           </Col>
         </Row>
         <Row style={{ marginTop: '20px' }}>
-          <Col>
-            <Button onClick={() => router.push('/wizard')}>
+          <Col md={12}>
+            <Button
+              style={{ width: '100%' }}
+              onClick={() => router.push('/wizard')}
+            >
               Click here to create new documents
             </Button>
+          </Col>
+        </Row>
+        <Row className="WarningMessage" style={{ marginTop: '15px' }}>
+          <Col>
+            Please note that if you create a new version of a document you have
+            previously created, the previous version will be overwritten and
+            will no longer be available to download. So, before creating a new
+            version of the same document type, you may want to download it.
           </Col>
         </Row>
       </Container>

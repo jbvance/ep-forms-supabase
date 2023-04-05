@@ -20,7 +20,8 @@ const UserFilesList = (props) => {
   //Only show files that have been paid for
   const isFilePaidFor = (fileName) => {
     // first, strip out everything but the file name from the S3 Signed URL
-    const fileNameToSearch = fileName.replace('.pdf', '').replace('.docx', '');
+    //const fileNameToSearch = fileName.replace('.pdf', '').replace('.docx', '');
+    const fileNameToSearch = fileName.split('--')[0];
     const foundFile = userDocs.find(
       (ud) =>
         ud.paid === true && ud.document_types.file_name === fileNameToSearch
@@ -116,7 +117,7 @@ const UserFilesList = (props) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {file.fileName.replace(/_/g, ' ')}
+                        {file.fileName.replace(/_/g, ' ').replace(/--/g, ' - ')}
                       </a>
                       (created {fileDate.toDateString()} at{' '}
                       {fileDate.getHours() + ':' + fileDate.getMinutes()})
