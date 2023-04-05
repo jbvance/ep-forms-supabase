@@ -7,7 +7,7 @@ import { products } from 'pages/wizard';
 const CrumbMap = {
   ['select-user']: 'Select User',
   ['select-products']: 'Select Products',
-  ['client-info']: 'Your Information',
+  ['client-info']: 'Contact Information',
   dpoa: 'Durable Power of Attorney',
   mpoa: 'Medical Power of Attorney',
   hipaa: 'HIPAA Authorization',

@@ -1,3 +1,12 @@
+.IntakeJumbotron {
+  background-color: beige;
+}
+
+.InputLabel {
+  font-weight: 500;
+  color: var(--blue);
+}
+
 .Header {
   background-color: var(--blue);
   color: white;
@@ -66,8 +75,15 @@
   font-weight: 600;
 }
 
-.ActiveButton {
-  background-color: var(--green);
+.DocSelector {
+  &.active {
+    background-color: var(--blue);
+    color: var(--white);
+  }
+  padding: 10px;
+  text-align: center;
+  border: 1px solid var(--blue);
+  cursor: pointer;
 }
 
 .SpouseBanner {
@@ -77,4 +93,8 @@
   text-align: center;
   font-weight: 700;
   font-size: 1.5rem;
+  position: fixed;
+  bottom: 0;
+  width: 80%;
+  z-index: 100;
 }

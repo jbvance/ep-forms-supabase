@@ -269,8 +269,7 @@ function ClientContactInfo(props) {
 
   return (
     <React.Fragment>
-      <Jumbotron>
-        <h2>Estate Planning Questionnaire</h2>
+      <Jumbotron className="IntakeJumbotron">
         <h4>
           NOTE: For ALL names on this questionnaire, please use either the full
           legal name or the name as you would prefer it to appear in your
