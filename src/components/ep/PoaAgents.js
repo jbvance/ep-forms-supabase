@@ -128,8 +128,6 @@ const PoaAgents = ({ poaType, agents }) => {
             dispatch(
               poaActions.addAgent({
                 id: contactToAdd.id,
-                //...contactToAdd,
-                //fullName: contactToAdd['full_name'],
               })
             );
             setAddAgentMode(false);

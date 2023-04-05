@@ -6,6 +6,7 @@ import {
   Pencil,
   ArrowDownCircleFill,
   ArrowUpCircleFill,
+  XCircleFill,
 } from 'react-bootstrap-icons';
 
 const AgentCard = ({
@@ -31,7 +32,8 @@ const AgentCard = ({
               <Card.Text>{agent.address}</Card.Text>
               <Card.Text>{agent.phone}</Card.Text>
               <Card.Text>
-                <Trash
+                <XCircleFill
+                  title="Remove agent from list"
                   width="24"
                   height="24"
                   onClick={onRemoveAgent}
@@ -40,6 +42,7 @@ const AgentCard = ({
                 <Pencil
                   width="24"
                   height="24"
+                  title="Edit contact information for agent"
                   onClick={onEditAgent}
                   className="EditIcon"
                 />
@@ -48,8 +51,8 @@ const AgentCard = ({
                 <div style={{ position: 'absolute', top: '35%', right: 15 }}>
                   <ArrowUpCircleFill
                     onClick={onMoveAgentUp}
-                    size={20}
-                    title={'Move up'}
+                    size={24}
+                    title={'Move agent up one posistion'}
                     cursor="pointer"
                     color={'var(--blue)'}
                   />
@@ -59,8 +62,8 @@ const AgentCard = ({
                 <div style={{ position: 'absolute', bottom: '35%', right: 15 }}>
                   <ArrowDownCircleFill
                     onClick={onMoveAgentDown}
-                    size={20}
-                    title={'Move down'}
+                    size={24}
+                    title={'Move agent down one position'}
                     cursor="pointer"
                     color={'var(--blue)'}
                   />

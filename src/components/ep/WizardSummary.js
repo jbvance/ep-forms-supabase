@@ -75,7 +75,7 @@ const WizardSummary = (props) => {
 
   return (
     <Fragment>
-      <Jumbotron>
+      <Jumbotron className="IntakeJumbotron">
         <h2>Review your Information</h2>
         <p>
           You are almost ready to prepare your documents. First, take a moment
