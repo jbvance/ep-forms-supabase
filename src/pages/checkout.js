@@ -25,14 +25,13 @@ const CheckoutPage = (props) => {
     (state) => state.selectedProducts.products
   );
   const docStatus = router.query.status;
-  console.log('SELECTED PRODUCTS', selectedProducts);
+  //console.log('SELECTED PRODUCTS', selectedProducts);
   let totalPriceInCents = 0;
   selectedProducts.forEach((p) => (totalPriceInCents += p.price));
   //console.log('TOTAL PRICE', totalPriceInCents);
 
   const addUserDocs = async (paymentIntentId) => {
     const userDocsPromises = selectedProducts.map(async (p) => {
-      console.log('PRODUCT ID', p.id);
       return await addUserDocPaymentIntent(auth.user.id, p.id, paymentIntentId);
     });
     return await Promise.all(userDocsPromises);

@@ -39,6 +39,7 @@ export const initialClientInfo = {
   spouseFirstName: '',
   spouseMiddleName: '',
   spouseLastName: '',
+  spouseSuffix: '',
   spouseEmail: '',
   spouseDob: '',
   isSpouse: false,

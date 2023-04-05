@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { Formik } from 'formik';
+import { Formik, setIn } from 'formik';
 import * as yup from 'yup';
 import { FormContext } from '../../context/formContext';
 import TextInput from 'components/forms/TextInput';
@@ -36,6 +36,7 @@ export const initialClientInfo = {
   spouseFirstName: '',
   spouseMiddleName: '',
   spouseLastName: '',
+  spouseSuffix: '',
   spouseEmail: '',
   spouseDob: '',
 };
@@ -87,9 +88,10 @@ function ClientContactInfo(props) {
   // Form context info
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
-  //Scroll to top of screen
+  //Scroll to top of screen and set initial State to Blank
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(updateClientInfo(initialClientInfo));
   }, []);
 
   useEffect(() => {
@@ -117,10 +119,21 @@ function ClientContactInfo(props) {
               'Unable to load your information. Please refresh the page to try again'
             );
           }
+          console.log('CLIENT INFO', clientInfoData);
           if (clientInfoData && clientInfoData.length > 0) {
             setInitialUserState(JSON.parse(clientInfoData[0].json_value));
           } else {
-            setInitialUserState(initialState);
+            const defaultSpouseInfo = await getDefaultSpouseInfo();
+            console.log('DEFAULT SPOUSE INFO', defaultSpouseInfo);
+            console.log('INITIAL STATE*********', initialState);
+            // setInitialUserState(
+            //   defaultSpouseInfo ? { ...initialState } : initialState
+            // );
+            if (defaultSpouseInfo) {
+              setInitialUserState({ ...initialState, ...defaultSpouseInfo });
+            } else {
+              setInitialUserState(initialState);
+            }
           }
         } else {
           setInitialUserState(initialState);
@@ -131,6 +144,65 @@ function ClientContactInfo(props) {
         setIsLoading(false);
       }
     };
+
+    // Get name of spouse if user has selected to create documents
+    // for spouse AND no spouse exists yet (i.e, is not filled in clientContactInfo for the user already)
+    const getDefaultSpouseInfo = async () => {
+      try {
+        // Only get spouse info default if docs are prepared for pouse
+        if (!initialState.isSpouse) {
+          return null;
+        }
+        // Check if spouse is already in spouses table. If so, do NOT get default
+        const { error, data } = await supabase
+          .from('spouses')
+          .select()
+          .single()
+          .eq('user_id', primaryUserId);
+        console.log('ERROR', error);
+        console.log('DATA', data);
+        if (data) {
+          // Found a spouse in spouses table, now see if client_contact already exists for spouse
+          // If client_contact exists, don't return anything because you don't want to overwrite
+          // what client has already put in.
+          const spouseId = data.id;
+          const { error: ccError, data: ccData } = await supabase
+            .from('client_contact')
+            .select()
+            .single()
+            .eq('user_id', spouseId);
+          console.log('CC DATA', ccData);
+          if (ccData) {
+            return null;
+          } else {
+            // Get default infor for primary user to fill in as default
+            const { error: puError, data: puData } = await supabase
+              .from('client_contact')
+              .select('json_value')
+              .single()
+              .eq('user_id', primaryUserId);
+            console.log('PU ERROR', puError);
+            if (puData) {
+              const { firstName, middleName, lastName, suffix, dob, email } =
+                JSON.parse(puData['json_value']);
+              return {
+                spouseFirstName: firstName,
+                spouseMiddleName: middleName,
+                spouseLastName: lastName,
+                spouseSuffix: suffix,
+                spouseDob: dob,
+                spouseEmail: email,
+                maritalStatus: 'married',
+              };
+            }
+          }
+        }
+      } catch (error) {
+        console.error('ERROR GETTING DEFAULT SPOUSE INFO', error.message);
+        return null;
+      }
+    };
+
     getUserInfo();
   }, [initialState]);
 
@@ -239,9 +311,7 @@ function ClientContactInfo(props) {
             }}
             id={props.id}
           >
-            <h2 className="Header">
-              {initialState.isSpouse ? 'Spouse' : 'Your'} Information
-            </h2>
+            <h2 className="Header">Contact Information</h2>
             <Row className="mb-3">
               <Form.Group as={Col} md="3">
                 <TextInput label="First Name" name="firstName" id="firstName" />
