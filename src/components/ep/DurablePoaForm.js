@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { dpoaActions as poaActions } from 'store/dpoaSlice';
+import { dpoaActions as poaActions, dpoaInitialState } from 'store/dpoaSlice';
 import { FormContext } from 'context/formContext';
 import PoaAgents from './PoaAgents';
 import useFormErrors from 'hooks/useFormErrors';
 import PoaHeader from './PoaHeader';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
+import useInitialState from 'hooks/useInitialState';
 
 const DurablePoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
@@ -18,6 +19,12 @@ const DurablePoaForm = (props) => {
   );
   const agents = state['agents'];
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { getInitialState, stateLoading, stateError } = useInitialState(
+    'dpoa',
+    poaActions,
+    userIdForUpdate,
+    dpoaInitialState
+  );
 
   const {
     formErrors,
@@ -27,6 +34,11 @@ const DurablePoaForm = (props) => {
     validateForm,
     listErrors,
   } = useFormErrors();
+
+  // Load state when component mounts
+  useEffect(() => {
+    getInitialState();
+  }, []);
 
   useEffect(() => {
     // If no agents selected yet, set error
@@ -79,6 +91,18 @@ const DurablePoaForm = (props) => {
       dispatch(poaActions['setStatus']('idle'));
     }
   };
+
+  if (stateLoading) {
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
+
+  if (stateError) {
+    return <FormAlert type="error" message={stateError} />;
+  }
 
   return (
     <Container>

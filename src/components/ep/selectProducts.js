@@ -48,52 +48,6 @@ const SelectProducts = (props) => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    // Initialize the state for each form
-    const initializeState = async () => {
-      try {
-        console.log('INITIALIZING STATE FOR ALL');
-        setError(null);
-        setIsLoading(true);
-        // Durable POA
-        const dpoaResponse = await fetchState(userIdForUpdate, 'dpoa');
-        if (dpoaResponse && dpoaResponse.length > 0) {
-          dispatch(
-            dpoaActions.setValues(JSON.parse(dpoaResponse[0].json_value))
-          );
-        } else {
-          dispatch(dpoaActions.setValues(dpoaInitialState));
-        }
-
-        // Medical POA
-        const mpoaResponse = await fetchState(userIdForUpdate, 'mpoa');
-        if (mpoaResponse && mpoaResponse.length > 0) {
-          dispatch(
-            mpoaActions.setValues(JSON.parse(mpoaResponse[0].json_value))
-          );
-        } else {
-          dispatch(mpoaActions.setValues(mpoaInitialState));
-        }
-
-        // Hipaa
-        const hipaaResponse = await fetchState(userIdForUpdate, 'hipaa');
-        if (hipaaResponse && hipaaResponse.length > 0) {
-          dispatch(
-            hipaaActions.setValues(JSON.parse(hipaaResponse[0].json_value))
-          );
-        } else {
-          dispatch(hipaaActions.setValues(hipaaInitialState));
-        }
-      } catch (err) {
-        console.log(err);
-        setError('Unable to load data. Please try again in a moment');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    initializeState();
-  }, []);
-
   const prodSelected = (prod) => {
     const found = selectedProducts.products.find((p) => p.type === prod.type);
     return found ? true : false;
@@ -119,7 +73,11 @@ const SelectProducts = (props) => {
   };
 
   if (!products) {
-    return <Spinner />;
+    return (
+      <Spinner animation="border" variant="primary">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
   }
 
   if (isLoading) {
