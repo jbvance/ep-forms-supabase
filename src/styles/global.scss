@@ -2,21 +2,23 @@
 
 // COLORS
 $theme-colors: (
-  "primary": #0074d9,
-  "secondary": #6c757d,
-  "success": #28a745,
-  "danger": #ff4136,
-  "warning": #ffc107,
-  "info": #17a2b8,
-  "light": #f8f9fa,
-  "dark": #343a40,
-  "white": #ffffff,
-  "transparent": transparent,
+  'primary': #0074d9,
+  'secondary': #6c757d,
+  'tertiary': #4c70b8,
+  'success': #28a745,
+  'danger': #ff4136,
+  'danger-secondary': #f57169,
+  'warning': #ffc107,
+  'info': #17a2b8,
+  'light': #f8f9fa,
+  'dark': #343a40,
+  'white': #ffffff,
+  'transparent': transparent,
 );
 
 // TEXT
-$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-family-serif: Georgia, "Times New Roman", Times, serif;
+$font-family-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-serif: Georgia, 'Times New Roman', Times, serif;
 $font-family-base: $font-family-sans-serif;
 $font-size-base: 1rem;
 
@@ -33,10 +35,10 @@ $grid-breakpoints: (
 // https://bit.ly/2sgFMdb
 
 // IMPORT BOOTSTRAP
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 
 // IMPORT FONT AWESOME
-@import url("https://use.fontawesome.com/releases/v5.10.1/css/all.css");
+@import url('https://use.fontawesome.com/releases/v5.10.1/css/all.css');
 
 #__next {
   // Full height of screen and flex so that we can push footer

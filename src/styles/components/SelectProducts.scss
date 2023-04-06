@@ -1,0 +1,13 @@
+.SelectProductsSection {
+  &__item {
+    background-color: #edf0f8;
+    border: 0.5px solid gray;
+    padding: 56px;
+  }
+
+  &__image-container {
+    margin: 0 auto;
+    max-width: 200px;
+    margin-bottom: 30px;
+  }
+}

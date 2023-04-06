@@ -137,7 +137,7 @@ const PoaAgents = ({ poaType, agents }) => {
       {!addAgentMode && (
         <Row style={{ margin: '20px 0' }}>
           <Col md={3}>
-            <Button variant="success" onClick={() => setAddAgentMode(true)}>
+            <Button variant="tertiary" onClick={() => setAddAgentMode(true)}>
               Add Agent
             </Button>
           </Col>

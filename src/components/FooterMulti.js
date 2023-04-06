@@ -39,8 +39,8 @@ const Footer = (props) => {
         {/* <div tabIndex={0} className={styles['footer-item']}> */}
         {!isFirst && (
           <Button
-            variant="outline-success"
             className="WizardNavigateButton"
+            variant="tertiary"
             type="button"
             onClick={goBack}
           >
@@ -51,8 +51,8 @@ const Footer = (props) => {
         {/* <div tabIndex={0} className={styles['footer-item']}> */}
 
         <Button
-          variant="outline-success"
           className="WizardNavigateButton"
+          variant="tertiary"
           type="formik-submit"
           form={props.id}
         >

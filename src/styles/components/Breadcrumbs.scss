@@ -1,0 +1,17 @@
+.breadcrumb-item {
+  color: #4c70b8;
+  a {
+    color: #4c70b8;
+    text-decoration: none;
+  }
+}
+
+/* Custom style for changing separator  */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '/';
+}
+
+.breadcrumb-item.active {
+  color: #4c70b8;
+  font-weight: 600;
+}

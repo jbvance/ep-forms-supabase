@@ -17,7 +17,7 @@ const SelectUser = (props) => {
           fontWeight: 600,
           padding: '5px 10px',
           marginBottom: '20px',
-          backgroundColor: 'var(--yellow',
+          backgroundColor: '#edf0f8',
         }}
       >
         <Col>

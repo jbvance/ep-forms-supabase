@@ -155,14 +155,14 @@ const SelectProducts = (props) => {
               }}
               key={index}
             >
-              <div className="FeaturesSection__item has-text-centered">
+              <div className="SelectProductsSection__item">
                 {/* <div className="FeaturesSection__image-container">
                   <AspectRatio ratio={4 / 3}></AspectRatio>
             </div>*/}
                 <h4>{product.title}</h4>
                 <p>{product.text}</p>
                 <Button
-                  variant={prodSelected(product) ? 'danger' : 'primary'}
+                  variant={prodSelected(product) ? 'danger' : 'tertiary'}
                   onClick={() => toggleProduct(product)}
                 >
                   {prodSelected(product) ? 'Remove' : 'Select'}

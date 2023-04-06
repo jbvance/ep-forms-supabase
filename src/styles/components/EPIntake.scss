@@ -1,16 +1,22 @@
 .IntakeJumbotron {
-  background-color: beige;
+  background-color: #edf0f8;
+}
+
+.StepContainer {
+  padding: 0 20px;
 }
 
 .InputLabel {
   font-weight: 500;
-  color: var(--blue);
+  color: var(--gray);
 }
 
 .Header {
-  background-color: var(--blue);
+  background-color: #4c70b8;
+  text-align: center;
+  border-radius: 5px;
   color: white;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .formError {
@@ -35,15 +41,16 @@
 }
 
 .AgentHeader {
-  background-color: var(--blue);
+  background-color: #6986c2;
   color: var(--white);
   font-weight: 600;
   padding: 10px;
   margin: 15px 0;
+  border-radius: 5px;
 }
 
 .AddAgentForm {
-  background-color: beige;
+  background-color: #edf0f8;
   padding: 20px;
 }
 
@@ -65,24 +72,14 @@
   font-size: 0.8rem;
 }
 
-/* Custom style for changing separator  */
-.breadcrumb-item + .breadcrumb-item::before {
-  content: '>';
-}
-
-.breadcrumb-item.active {
-  color: var(--blue);
-  font-weight: 600;
-}
-
 .DocSelector {
   &.active {
-    background-color: var(--blue);
+    background-color: #4c70b8;
     color: var(--white);
   }
   padding: 10px;
   text-align: center;
-  border: 1px solid var(--blue);
+  border: 1px solid #4c70b8;
   cursor: pointer;
 }
 

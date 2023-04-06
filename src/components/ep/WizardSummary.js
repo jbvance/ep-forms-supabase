@@ -169,7 +169,7 @@ const WizardSummary = (props) => {
         <Row className="EditSummaryRow">
           <Col xs={12}>
             <Button
-              variant="warning"
+              variant="tertiary"
               className="EditButton"
               onClick={() => gotoStep('client-info', 'summary')}
             >

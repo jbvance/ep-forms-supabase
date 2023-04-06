@@ -277,173 +277,179 @@ function ClientContactInfo(props) {
           initials
         </h4>
       </Jumbotron>
-      <Formik
-        validationSchema={schema}
-        onSubmit={(values, { setSubmitting }) => {
-          submitForm(values);
-          dispatch(updateClientInfo({ ...values }));
-        }}
-        initialValues={initialUserState}
-        enableReinitialize
-      >
-        {({
-          handleSubmit,
-          handleChange,
-          handleBlur,
-          validateForm,
-          values,
-          touched,
-          isValid,
-          errors,
-        }) => (
-          <Form
-            noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              setShowFormErrors(false);
-              validateForm().then((value) => {
-                if (Object.keys(value).length > 0) {
-                  setShowFormErrors(true);
-                }
-              });
-              handleSubmit();
-            }}
-            id={props.id}
-          >
-            <h2 className="Header">Contact Information</h2>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="3">
-                <TextInput label="First Name" name="firstName" id="firstName" />
-              </Form.Group>
-              <Form.Group as={Col} md="3">
-                <TextInput
-                  label="Middle Name"
-                  name="middleName"
-                  id="middleName"
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="3">
-                <TextInput label="Last Name" name="lastName" id="lastName" />
-              </Form.Group>
-              <Form.Group as={Col} md="3">
-                <TextInput
-                  label="Jr., Sr., III, etc?"
-                  name="suffix"
-                  id="suffix"
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12">
-                <TextInput label="Address" name="address" id="address" />
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6">
-                <TextInput label="City" name="city" id="city" />
-              </Form.Group>
-              <Form.Group as={Col} md="3">
-                <TextInput label="State" name="state" id="state" />
-              </Form.Group>
-              <Form.Group as={Col} md="3">
-                <TextInput label="Zip" name="zip" id="zip" />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col} md="4">
-                <TextInput label="Email" name="email" id="email" />
-              </Form.Group>
-              <Form.Group as={Col} md="4">
-                <TextInput
-                  label="County of Residence"
-                  name="county"
-                  id="county"
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="4">
-                <TextInput label="Date of Birth" name="dob" id="dob" />
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="4">
-                <SelectField
-                  label="Marital Status"
-                  name="maritalStatus"
-                  id="maritalStatus"
-                >
-                  <option value="">Select a Value</option>
-                  <option value="married">Married</option>
-                  <option value="single">Single</option>
-                  <option value="divorced">Divorced</option>
-                  <option value="widow">Widow</option>
-                </SelectField>
-              </Form.Group>
-            </Row>
-            {values.maritalStatus === 'married' && (
-              <React.Fragment>
-                <h2 className="Header">Spouse Information</h2>
-                <h4>Enter your spouse's information below</h4>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="3">
-                    <TextInput
-                      label="Spouse First Name"
-                      name="spouseFirstName"
-                      id="spouseFirstName"
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} md="3">
-                    <TextInput
-                      label="Spouse Middle Name"
-                      name="spouseMiddleName"
-                      id="spouseMiddleName"
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} md="3">
-                    <TextInput
-                      label="Spouse Last Name"
-                      name="spouseLastName"
-                      id="spouseLastName"
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} md="3">
-                    <TextInput
-                      label="Jr., Sr., III, etc?"
-                      name="spouseSuffix"
-                      id="spouseSuffix"
-                    />
-                  </Form.Group>
-                </Row>
+      <div style={{ backgroundColor: '#edf0f8', padding: '10px' }}>
+        <Formik
+          validationSchema={schema}
+          onSubmit={(values, { setSubmitting }) => {
+            submitForm(values);
+            dispatch(updateClientInfo({ ...values }));
+          }}
+          initialValues={initialUserState}
+          enableReinitialize
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            validateForm,
+            values,
+            touched,
+            isValid,
+            errors,
+          }) => (
+            <Form
+              noValidate
+              onSubmit={(e) => {
+                e.preventDefault();
+                setShowFormErrors(false);
+                validateForm().then((value) => {
+                  if (Object.keys(value).length > 0) {
+                    setShowFormErrors(true);
+                  }
+                });
+                handleSubmit();
+              }}
+              id={props.id}
+            >
+              <h2 className="Header">Contact Information</h2>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="3">
+                  <TextInput
+                    label="First Name"
+                    name="firstName"
+                    id="firstName"
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="3">
+                  <TextInput
+                    label="Middle Name"
+                    name="middleName"
+                    id="middleName"
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="3">
+                  <TextInput label="Last Name" name="lastName" id="lastName" />
+                </Form.Group>
+                <Form.Group as={Col} md="3">
+                  <TextInput
+                    label="Jr., Sr., III, etc?"
+                    name="suffix"
+                    id="suffix"
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="12">
+                  <TextInput label="Address" name="address" id="address" />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="6">
+                  <TextInput label="City" name="city" id="city" />
+                </Form.Group>
+                <Form.Group as={Col} md="3">
+                  <TextInput label="State" name="state" id="state" />
+                </Form.Group>
+                <Form.Group as={Col} md="3">
+                  <TextInput label="Zip" name="zip" id="zip" />
+                </Form.Group>
+              </Row>
+              <Row className="mb-4">
+                <Form.Group as={Col} md="4">
+                  <TextInput label="Email" name="email" id="email" />
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <TextInput
+                    label="County of Residence"
+                    name="county"
+                    id="county"
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <TextInput label="Date of Birth" name="dob" id="dob" />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="4">
+                  <SelectField
+                    label="Marital Status"
+                    name="maritalStatus"
+                    id="maritalStatus"
+                  >
+                    <option value="">Select a Value</option>
+                    <option value="married">Married</option>
+                    <option value="single">Single</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="widow">Widow</option>
+                  </SelectField>
+                </Form.Group>
+              </Row>
+              {values.maritalStatus === 'married' && (
+                <React.Fragment>
+                  <h2 className="Header">Spouse Information</h2>
+                  <h4>Enter your spouse's information below</h4>
+                  <Row className="mb-3">
+                    <Form.Group as={Col} md="3">
+                      <TextInput
+                        label="Spouse First Name"
+                        name="spouseFirstName"
+                        id="spouseFirstName"
+                      />
+                    </Form.Group>
+                    <Form.Group as={Col} md="3">
+                      <TextInput
+                        label="Spouse Middle Name"
+                        name="spouseMiddleName"
+                        id="spouseMiddleName"
+                      />
+                    </Form.Group>
+                    <Form.Group as={Col} md="3">
+                      <TextInput
+                        label="Spouse Last Name"
+                        name="spouseLastName"
+                        id="spouseLastName"
+                      />
+                    </Form.Group>
+                    <Form.Group as={Col} md="3">
+                      <TextInput
+                        label="Jr., Sr., III, etc?"
+                        name="spouseSuffix"
+                        id="spouseSuffix"
+                      />
+                    </Form.Group>
+                  </Row>
 
-                <Row className="mb-4">
-                  <Form.Group as={Col} md="4">
-                    <TextInput
-                      label="Spouse Email"
-                      name="spouseEmail"
-                      id="spouseEmail"
-                    />
-                  </Form.Group>
+                  <Row className="mb-4">
+                    <Form.Group as={Col} md="4">
+                      <TextInput
+                        label="Spouse Email"
+                        name="spouseEmail"
+                        id="spouseEmail"
+                      />
+                    </Form.Group>
 
-                  <Form.Group as={Col} md="4">
-                    <TextInput
-                      label="Spouse Date of Birth"
-                      name="spouseDob"
-                      id="spouseDob"
-                    />
-                  </Form.Group>
-                </Row>
-              </React.Fragment>
-            )}
-            {updateError && <FormAlert type="error" message={updateError} />}
-            {showFormErrors && !isValid && (
-              <FormAlert
-                type="error"
-                message="Please review the form above and correct any omissions or errors"
-              />
-            )}
-            {/* <Button type="submit">Submit form</Button> */}
-          </Form>
-        )}
-      </Formik>
+                    <Form.Group as={Col} md="4">
+                      <TextInput
+                        label="Spouse Date of Birth"
+                        name="spouseDob"
+                        id="spouseDob"
+                      />
+                    </Form.Group>
+                  </Row>
+                </React.Fragment>
+              )}
+              {updateError && <FormAlert type="error" message={updateError} />}
+              {showFormErrors && !isValid && (
+                <FormAlert
+                  type="error"
+                  message="Please review the form above and correct any omissions or errors"
+                />
+              )}
+              {/* <Button type="submit">Submit form</Button> */}
+            </Form>
+          )}
+        </Formik>
+      </div>
     </React.Fragment>
   );
 }

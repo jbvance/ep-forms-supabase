@@ -60,7 +60,7 @@ const AgentsSummary = ({ agents, docType, returnToStep, selectedProducts }) => {
       <Row className="EditSummaryRow">
         <Col xs={12}>
           <Button
-            variant="warning"
+            variant="tertiary"
             className="EditButton"
             onClick={() => gotoStep(docType, returnToStep)}
           >
