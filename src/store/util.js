@@ -1,6 +1,6 @@
-import { dpoaActions } from './dpoaSlice';
-import { mpoaActions } from './mpoaSlice';
-import { hipaaActions } from './hipaaSlice';
+import { dpoaActions, initialState as dpoaInitialState } from './dpoaSlice';
+import { mpoaActions, initialState as mpoaInitialState } from './mpoaSlice';
+import { hipaaActions, initialState as hipaaInitialState } from './hipaaSlice';
 
 // If a contact changes in one form, change it in any
 // other forms where that contact is listed as an agent

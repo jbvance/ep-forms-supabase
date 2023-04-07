@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// export const initialClientInfo = {
+// export const initialClientState = {
 //   firstName: '',
 //   middleName: '',
 //   lastName: '',
@@ -22,7 +22,7 @@ import { createSlice } from '@reduxjs/toolkit';
 //   spouseEmployer: '',
 // };
 
-export const initialClientInfo = {
+export const initialClientState = {
   firstName: '',
   middleName: '',
   lastName: '',
@@ -46,7 +46,7 @@ export const initialClientInfo = {
   userIdForUpdate: null,
 };
 
-const initialState = { ...initialClientInfo };
+const initialState = { ...initialClientState };
 
 const clientInfoSlice = createSlice({
   name: 'clientInfo',

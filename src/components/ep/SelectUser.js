@@ -1,15 +1,43 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { clientInfoActions } from 'store/clientInfoSlice';
+import { clientInfoActions, initialClientState } from 'store/clientInfoSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { CheckCircle } from 'react-bootstrap-icons';
 import { FormContext } from 'context/formContext';
+import {
+  dpoaActions,
+  initialState as dpoaInitialState,
+} from '../../store/dpoaSlice';
+import {
+  mpoaActions,
+  initialState as mpoaInitialState,
+} from '../../store/mpoaSlice';
+import {
+  hipaaActions,
+  initialState as hipaaInitialState,
+} from '../../store/hipaaSlice';
 
 const SelectUser = (props) => {
   const state = useSelector((state) => state.clientInfo);
   const dispatch = useDispatch();
   const isSpouse = state.isSpouse;
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
+
+  useEffect(() => {
+    console.log('SPOUSE CHANGED', state.isSpouse);
+    //reset state for all slices when isSpouse changes so
+    // saved state doesn't stay in place when switching
+    // from spouse to not spouse or vice versa
+    dispatch(
+      clientInfoActions.updateClientInfo({
+        ...initialClientState,
+        isSpouse: state.isSpouse,
+      })
+    );
+    dispatch(dpoaActions.setValues(dpoaInitialState));
+    dispatch(mpoaActions.setValues(mpoaInitialState));
+    dispatch(hipaaActions.setValues(hipaaInitialState));
+  }, [state.isSpouse]);
   return (
     <Container>
       <Row
