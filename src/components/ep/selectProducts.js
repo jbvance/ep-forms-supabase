@@ -14,13 +14,6 @@ import SectionHeader from 'components/SectionHeader';
 import { selectedProductsActions } from 'store/productsSlice';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
-import { mpoaActions, initialState as mpoaInitialState } from 'store/mpoaSlice';
-import { dpoaActions, initialState as dpoaInitialState } from 'store/dpoaSlice';
-import {
-  hipaaActions,
-  initialState as hipaaInitialState,
-} from 'store/hipaaSlice';
-import { fetchState } from 'util/db';
 
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
