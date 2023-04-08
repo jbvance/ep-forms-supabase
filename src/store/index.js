@@ -5,6 +5,7 @@ import dpoaSlice from './dpoaSlice';
 import mpoaSlice from './mpoaSlice';
 import selectedProductsSlice from './productsSlice';
 import hipaaSlice from './hipaaSlice';
+import errorsSlice from './errorsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     mpoa: mpoaSlice.reducer,
     hipaa: hipaaSlice.reducer,
     selectedProducts: selectedProductsSlice.reducer,
+    wizardErrors: errorsSlice.reducer,
   },
 });
 

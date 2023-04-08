@@ -9,17 +9,18 @@ import PoaHeader from './PoaHeader';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
 import useInitialState from 'hooks/useInitialState';
+import { errorsActions } from 'store/errorsSlice';
 
 const DurablePoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['dpoa']);
+  const wizardErrors = useSelector((state) => state['wizardErrors']);
   const userIdForUpdate = useSelector(
     (state) => state.clientInfo.userIdForUpdate
   );
   const agents = state['agents'];
-  const { activeStepIndex, setStepIndex, wizardErrors, setWizardErrors } =
-    useContext(FormContext);
+  const { activeStepIndex, setStepIndex } = useContext(FormContext);
   const { getInitialState, stateLoading, stateError } = useInitialState(
     'dpoa',
     poaActions,
@@ -36,9 +37,6 @@ const DurablePoaForm = (props) => {
     listErrors,
   } = useFormErrors();
 
-  useEffect(() => {
-    console.log('WIZARD ERRORS', wizardErrors);
-  });
   // Load state when component mounts
   useEffect(() => {
     getInitialState();
@@ -47,30 +45,34 @@ const DurablePoaForm = (props) => {
   useEffect(() => {
     // If no agents selected yet, set error
     if (!agents || agents.length === 0) {
-      setFormErrors({
-        ...formErrors,
-        agents: 'Please add at least one agent',
-      });
-      setWizardErrors({
-        ...wizardErrors,
-        dpoa: {
-          agents: 'Please add at least one agent',
-        },
-      });
-    } else if ('agents' in formErrors) {
-      const newFormErrors = { ...formErrors };
-      delete newFormErrors.agents;
-      setFormErrors({ ...newFormErrors });
-      if (wizardErrors['dpoa'] && wizardErrors['dpoa']['agents']) {
-        setWizardErrors({ ...wizardErrors });
-      }
+      // setFormErrors({
+      //   ...formErrors,
+      //   agents: 'Please add at least one agent',
+      // });
+      dispatch(
+        errorsActions.updateErrors({
+          type: 'dpoa',
+          key: 'agents',
+          value: 'Please select at least one agent',
+        })
+      );
+    } else if ('agents' in wizardErrors['dpoa']) {
+      // const newFormErrors = { ...formErrors };
+      // delete newFormErrors.agents;
+      // setFormErrors({ ...newFormErrors });
+      dispatch(
+        errorsActions.removeError({
+          type: 'dpoa',
+          key: 'agents',
+        })
+      );
     }
   }, [agents]);
 
   const submitForm = async (e) => {
     e.preventDefault();
     setFormTouched(true);
-    if (!validateForm()) {
+    if (!validateForm(wizardErrors['dpoa'])) {
       return;
     }
     try {
@@ -141,9 +143,10 @@ const DurablePoaForm = (props) => {
 
       <Row>
         <Col>
-          {formErrors && Object.keys(formErrors).length > 0 && formTouched && (
-            <FormAlert type="error" message={listErrors()} />
-          )}
+          {wizardErrors['dpoa'] &&
+            Object.keys(wizardErrors['dpoa']).length > 0 &&
+            formTouched &&
+            listErrors(wizardErrors['dpoa'])}
         </Col>
       </Row>
       <form onSubmit={submitForm} id={props.id}></form>
