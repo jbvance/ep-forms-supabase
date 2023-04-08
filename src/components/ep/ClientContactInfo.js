@@ -107,7 +107,7 @@ function ClientContactInfo(props) {
         } else {
           uid = primaryUserId;
         }
-        console.log('UID', uid);
+        //console.log('UID', uid);
         if (uid) {
           const { data: clientInfoData, error: clientInfoError } =
             await supabase
@@ -120,7 +120,7 @@ function ClientContactInfo(props) {
               'Unable to load your information. Please refresh the page to try again'
             );
           }
-          console.log('CLIENT INFO', clientInfoData);
+          //console.log('CLIENT INFO', clientInfoData);
           if (clientInfoData && clientInfoData.length > 0) {
             setInitialUserState(JSON.parse(clientInfoData[0].json_value));
           } else {
@@ -227,8 +227,6 @@ function ClientContactInfo(props) {
       }
       setUpdateError(null);
 
-      console.log('USER ID FOR UPDATE', userIdForUpdate);
-
       // Perform "upsert" to update if already exists or update otherwise
       // ***Row level security is in place for ClientContact Table on supabase
       const { error } = await supabase
@@ -255,8 +253,6 @@ function ClientContactInfo(props) {
       );
     }
   };
-
-  //console.log('INIT STATE', initialState);
 
   if (isLoading) {
     return (

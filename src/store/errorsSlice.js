@@ -4,8 +4,12 @@ export const initialState = {
   dpoa: {
     agents: 'Please add at least one agent to continue',
   },
-  mpoa: {},
-  hipaa: {},
+  mpoa: {
+    agents: 'Please add at least one agent to continue',
+  },
+  hipaa: {
+    agents: 'Please add at least one agent to continue',
+  },
 };
 
 const errorsSlice = createSlice({
@@ -14,9 +18,6 @@ const errorsSlice = createSlice({
   reducers: {
     updateErrors(state, action) {
       const { type, key, value } = action.payload;
-      console.log('ACTION', action);
-      // console.log('UPDATING ERRORS', action.payload);
-      // state[action.payload.type] = action.payload.payload;
       state[type][key] = value;
     },
 

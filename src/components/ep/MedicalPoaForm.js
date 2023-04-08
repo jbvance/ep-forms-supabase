@@ -9,11 +9,21 @@ import PoaHeader from './PoaHeader';
 import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
 import useInitialState from 'hooks/useInitialState';
+import { errorsActions } from 'store/errorsSlice';
+import { isProductSelected } from 'util/util';
 
 const MedicalPoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['mpoa']);
+  const wizardErrors = useSelector((state) => state['wizardErrors']);
+  const selectedProducts = useSelector(
+    (state) => state.selectedProducts.products
+  );
+  // If this product is not in the list of selected ones, set a flag here so
+  // it does not mount
+  const productIsSelected = isProductSelected(selectedProducts, 'mpoa');
+
   const userIdForUpdate = useSelector(
     (state) => state.clientInfo.userIdForUpdate
   );
@@ -37,27 +47,40 @@ const MedicalPoaForm = (props) => {
 
   // Load state when component mounts
   useEffect(() => {
+    if (!productIsSelected) {
+      return;
+    }
+
     getInitialState();
   }, []);
 
   useEffect(() => {
+    if (!productIsSelected) {
+      return;
+    }
     // If no agents selected yet, set error
     if (!agents || agents.length === 0) {
-      setFormErrors({
-        ...formErrors,
-        agents: 'Please add at least one agent',
-      });
-    } else if ('agents' in formErrors) {
-      const newFormErrors = { ...formErrors };
-      delete newFormErrors.agents;
-      setFormErrors({ ...newFormErrors });
+      dispatch(
+        errorsActions.updateErrors({
+          type: 'mpoa',
+          key: 'agents',
+          value: 'Please select at least one agent',
+        })
+      );
+    } else if ('agents' in wizardErrors['mpoa']) {
+      dispatch(
+        errorsActions.removeError({
+          type: 'mpoa',
+          key: 'agents',
+        })
+      );
     }
   }, [agents]);
 
   const submitForm = async (e) => {
     e.preventDefault();
     setFormTouched(true);
-    if (!validateForm()) {
+    if (!validateForm(wizardErrors['mpoa'])) {
       return;
     }
     try {
@@ -129,12 +152,13 @@ const MedicalPoaForm = (props) => {
 
       <Row>
         <Col>
-          {' '}
-          {formErrors && Object.keys(formErrors).length > 0 && formTouched && (
-            <FormAlert type="error" message={listErrors()} />
-          )}
+          {wizardErrors['mpoa'] &&
+            Object.keys(wizardErrors['mpoa']).length > 0 &&
+            formTouched &&
+            listErrors(wizardErrors['mpoa'])}
         </Col>
       </Row>
+
       <form onSubmit={submitForm} id={props.id}></form>
     </Container>
   );

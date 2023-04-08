@@ -86,3 +86,11 @@ export function arrMove(arr, oldIndex, newIndex) {
   arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
   return arr;
 }
+
+export const isProductSelected = (selectedProducts, productTypeToSearch) => {
+  return selectedProducts.find((p) => {
+    const productType =
+      p.type.split('-').length > 1 ? p.type.split('-')[1] : p.type;
+    return productType === productTypeToSearch;
+  });
+};

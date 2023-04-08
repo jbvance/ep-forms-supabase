@@ -10,12 +10,20 @@ import FormAlert from 'components/FormAlert';
 import supabase from 'util/supabase';
 import useInitialState from 'hooks/useInitialState';
 import { errorsActions } from 'store/errorsSlice';
+import { isProductSelected } from 'util/util';
 
 const DurablePoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['dpoa']);
   const wizardErrors = useSelector((state) => state['wizardErrors']);
+  const selectedProducts = useSelector(
+    (state) => state.selectedProducts.products
+  );
+  // If this product is not in the list of selected ones, set a flag here so
+  // it does not mount
+  const productIsSelected = isProductSelected(selectedProducts, 'dpoa');
+
   const userIdForUpdate = useSelector(
     (state) => state.clientInfo.userIdForUpdate
   );
@@ -39,16 +47,19 @@ const DurablePoaForm = (props) => {
 
   // Load state when component mounts
   useEffect(() => {
+    if (!productIsSelected) {
+      console.log('DPOA NOT SELECTED');
+      return;
+    }
     getInitialState();
   }, []);
 
   useEffect(() => {
+    if (!productIsSelected) {
+      return;
+    }
     // If no agents selected yet, set error
     if (!agents || agents.length === 0) {
-      // setFormErrors({
-      //   ...formErrors,
-      //   agents: 'Please add at least one agent',
-      // });
       dispatch(
         errorsActions.updateErrors({
           type: 'dpoa',
@@ -57,9 +68,6 @@ const DurablePoaForm = (props) => {
         })
       );
     } else if ('agents' in wizardErrors['dpoa']) {
-      // const newFormErrors = { ...formErrors };
-      // delete newFormErrors.agents;
-      // setFormErrors({ ...newFormErrors });
       dispatch(
         errorsActions.removeError({
           type: 'dpoa',
