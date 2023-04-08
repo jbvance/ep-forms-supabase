@@ -62,7 +62,6 @@ const clientInfoSlice = createSlice({
         newState.spouseEmail = '';
         newState.spouseDob = '';
       }
-      //console.log(newState);
       Object.assign(state, newState);
     },
     updateIsSpouse(state, action) {

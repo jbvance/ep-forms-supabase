@@ -23,21 +23,43 @@ const SelectUser = (props) => {
   const isSpouse = state.isSpouse;
   const { activeStepIndex, setStepIndex } = useContext(FormContext);
 
-  useEffect(() => {
-    console.log('SPOUSE CHANGED', state.isSpouse);
+  const handleIsSpouseChanged = (value) => {
+    //console.log(isSpouse, value);
+    dispatch(clientInfoActions.updateIsSpouse(value));
+    if (value === isSpouse) {
+      // Do nothing and return because user didn't change the value
+      return;
+    }
     //reset state for all slices when isSpouse changes so
     // saved state doesn't stay in place when switching
     // from spouse to not spouse or vice versa
     dispatch(
       clientInfoActions.updateClientInfo({
         ...initialClientState,
-        isSpouse: state.isSpouse,
+        isSpouse: value,
       })
     );
     dispatch(dpoaActions.setValues(dpoaInitialState));
     dispatch(mpoaActions.setValues(mpoaInitialState));
     dispatch(hipaaActions.setValues(hipaaInitialState));
-  }, [state.isSpouse]);
+  };
+
+  // useEffect(() => {
+  //   console.log('SPOUSE CHANGED', state.isSpouse);
+  //   //reset state for all slices when isSpouse changes so
+  //   // saved state doesn't stay in place when switching
+  //   // from spouse to not spouse or vice versa
+  //   dispatch(
+  //     clientInfoActions.updateClientInfo({
+  //       ...initialClientState,
+  //       isSpouse: state.isSpouse,
+  //     })
+  //   );
+  //   dispatch(dpoaActions.setValues(dpoaInitialState));
+  //   dispatch(mpoaActions.setValues(mpoaInitialState));
+  //   dispatch(hipaaActions.setValues(hipaaInitialState));
+  // }, [state.isSpouse]);
+
   return (
     <Container>
       <Row
@@ -55,7 +77,7 @@ const SelectUser = (props) => {
       <Row>
         <Col
           className={`DocSelector ${!isSpouse ? 'active' : ''}`}
-          onClick={() => dispatch(clientInfoActions.updateIsSpouse(false))}
+          onClick={() => handleIsSpouseChanged(false)}
         >
           {!isSpouse && <CheckCircle size={20} />} I want to create documents
           for myself
@@ -64,7 +86,7 @@ const SelectUser = (props) => {
       <Row style={{ marginTop: '20px' }}>
         <Col
           className={`DocSelector ${isSpouse ? 'active' : ''}`}
-          onClick={() => dispatch(clientInfoActions.updateIsSpouse(true))}
+          onClick={() => handleIsSpouseChanged(true)}
         >
           {isSpouse && <CheckCircle size={20} />} I want to create documents for
           my spouse
