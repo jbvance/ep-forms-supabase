@@ -107,6 +107,7 @@ function ClientContactInfo(props) {
         } else {
           uid = primaryUserId;
         }
+        console.log('UID', uid);
         if (uid) {
           const { data: clientInfoData, error: clientInfoError } =
             await supabase
@@ -225,6 +226,8 @@ function ClientContactInfo(props) {
         formValues = { ...values };
       }
       setUpdateError(null);
+
+      console.log('USER ID FOR UPDATE', userIdForUpdate);
 
       // Perform "upsert" to update if already exists or update otherwise
       // ***Row level security is in place for ClientContact Table on supabase

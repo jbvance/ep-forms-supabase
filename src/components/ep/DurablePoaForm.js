@@ -18,7 +18,8 @@ const DurablePoaForm = (props) => {
     (state) => state.clientInfo.userIdForUpdate
   );
   const agents = state['agents'];
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, wizardErrors, setWizardErrors } =
+    useContext(FormContext);
   const { getInitialState, stateLoading, stateError } = useInitialState(
     'dpoa',
     poaActions,
@@ -35,6 +36,9 @@ const DurablePoaForm = (props) => {
     listErrors,
   } = useFormErrors();
 
+  useEffect(() => {
+    console.log('WIZARD ERRORS', wizardErrors);
+  });
   // Load state when component mounts
   useEffect(() => {
     getInitialState();
@@ -47,10 +51,19 @@ const DurablePoaForm = (props) => {
         ...formErrors,
         agents: 'Please add at least one agent',
       });
+      setWizardErrors({
+        ...wizardErrors,
+        dpoa: {
+          agents: 'Please add at least one agent',
+        },
+      });
     } else if ('agents' in formErrors) {
       const newFormErrors = { ...formErrors };
       delete newFormErrors.agents;
       setFormErrors({ ...newFormErrors });
+      if (wizardErrors['dpoa'] && wizardErrors['dpoa']['agents']) {
+        setWizardErrors({ ...wizardErrors });
+      }
     }
   }, [agents]);
 

@@ -6,4 +6,5 @@ export const FormContext = createContext({
   returnToStep: '',
   steps: [],
   completedSteps: {},
+  wizardErrors: {},
 });

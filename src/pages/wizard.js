@@ -31,8 +31,10 @@ const completedSteps = {
 const WizardPage = (props) => {
   const auth = useAuth();
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [wizardErrors, setWizardErrors] = useState(null);
   const [returnToStep, setReturnToStep] = useState('');
-  const { userIdForUpdate } = useUserId();
+
+  useUserId();
 
   const setStepIndex = (index) => {
     if (returnToStep !== '') {
@@ -63,6 +65,8 @@ const WizardPage = (props) => {
         steps,
         gotoStep,
         setStepIndex,
+        wizardErrors,
+        setWizardErrors,
       }}
     >
       <MultiStepForm />
