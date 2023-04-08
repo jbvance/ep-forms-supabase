@@ -22,10 +22,11 @@ const useFormErrors = () => {
       return errors[key].length > 0 ? (
         <li
           style={{
-            padding: '5px',
-            backgroundColor: 'var(--red)',
-            color: 'white',
+            padding: '10px',
+            backgroundColor: '#f8d7da',
+            color: '#721c24',
             listStyleType: 'none',
+            borderRadius: '0.25em',
           }}
           key={key}
         >

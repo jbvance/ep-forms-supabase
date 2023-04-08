@@ -19,14 +19,14 @@ const steps = [
   'finalize',
 ];
 
-const completedSteps = {
-  ['select-user']: false,
-  ['select-products']: false,
-  ['client-info']: false,
-  dpoa: false,
-  mpoa: false,
-  hipaa: false,
-};
+// const completedSteps = {
+//   ['select-user']: false,
+//   ['select-products']: false,
+//   ['client-info']: false,
+//   dpoa: false,
+//   mpoa: false,
+//   hipaa: false,
+// };
 
 const WizardPage = (props) => {
   const auth = useAuth();
