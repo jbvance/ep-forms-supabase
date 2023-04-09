@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useAuth } from 'util/auth';
 import { FormContext } from 'context/formContext';
 import MultiStepForm from '../components/MultiStepForm';
 import { requireAuth } from 'util/auth';
-import { useUserId } from 'hooks/useUserId';
+import { clientInfoActions as actions } from 'store/clientInfoSlice';
+import { getSpouseInfo } from 'util/db';
 
 import FormAlert from 'components/FormAlert';
 // products is a list of the documents that require user information to be filled out.
@@ -24,8 +26,42 @@ const WizardPage = (props) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [returnToStep, setReturnToStep] = useState('');
   const [crumbSteps, setCrumbSteps] = useState([]);
+  const dispatch = useDispatch();
 
-  useUserId();
+  const [userIdForUpdate, setUserIdForUpdate] = useState(null);
+
+  const isSpouse = useSelector((state) => state.clientInfo.isSpouse);
+  const primaryUserId = auth.user.id;
+
+  useEffect(() => {
+    console.log('SETTING USER ID FOR UPDATE');
+    const getUpdateUserId = async () => {
+      // Only update user id to spouse's if isSpouse === true
+      if (isSpouse === false) {
+        //dispatch(actions.updateUserIdForUpdate(primaryUserId));
+        setUserIdForUpdate(primaryUserId);
+        return;
+      } else {
+        const { spouses } = await getSpouseInfo(primaryUserId);
+        //console.log('SPOUSES', spouses.length, spouses);
+        if (spouses && spouses.length > 0) {
+          //dispatch(actions.updateUserIdForUpdate(spouses[0].id));
+          setUserIdForUpdate(spouses[0].id);
+        } else {
+          const { error, data: newSpouse } = await supabase
+            .from('spouses')
+            .insert({ user_id: primaryUserId })
+            .select()
+            .single();
+          console.log('ERROR', error);
+          //dispatch(actions.updateUserIdForUpdate(newSpouse.id));
+          setUserIdForUpdate(newSpouse.id);
+        }
+      }
+    };
+
+    getUpdateUserId();
+  }, [isSpouse]);
 
   const setStepIndex = (index) => {
     if (returnToStep !== '') {
@@ -79,6 +115,8 @@ const WizardPage = (props) => {
         crumbSteps,
         addStepToCrumbs,
         removeStepFromCrumbs,
+        userIdForUpdate,
+        setUserIdForUpdate,
       }}
     >
       <MultiStepForm />

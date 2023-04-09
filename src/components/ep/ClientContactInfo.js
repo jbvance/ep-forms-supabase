@@ -75,7 +75,6 @@ const schema = yup.object().shape({
 function ClientContactInfo(props) {
   const initialState = useSelector((state) => state.clientInfo);
   const [isLoading, setIsLoading] = useState(false);
-  const userIdForUpdate = initialState.userIdForUpdate;
   const isSpouse = initialState.isSpouse;
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
@@ -86,7 +85,7 @@ function ClientContactInfo(props) {
   //console.log('ID FOR UPDATE', userIdForUpdate);
 
   // Form context info
-  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+  const { activeStepIndex, setStepIndex, addStepToCrumbs, userIdForUpdate } =
     useContext(FormContext);
 
   //Scroll to top of screen and set initial State to Blank

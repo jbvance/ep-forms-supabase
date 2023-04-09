@@ -43,7 +43,6 @@ export const initialClientState = {
   spouseEmail: '',
   spouseDob: '',
   isSpouse: false,
-  userIdForUpdate: null,
 };
 
 const initialState = { ...initialClientState };
@@ -66,9 +65,6 @@ const clientInfoSlice = createSlice({
     },
     updateIsSpouse(state, action) {
       state.isSpouse = action.payload;
-    },
-    updateUserIdForUpdate(state, action) {
-      state.userIdForUpdate = action.payload;
     },
   },
 });

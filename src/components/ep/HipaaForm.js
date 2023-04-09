@@ -18,10 +18,7 @@ const HipaaForm = (props) => {
   const state = useSelector((state) => state['hipaa']);
   const wizardErrors = useSelector((state) => state['wizardErrors']);
   const agents = state['agents'];
-  const userIdForUpdate = useSelector(
-    (state) => state.clientInfo.userIdForUpdate
-  );
-  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+  const { activeStepIndex, setStepIndex, addStepToCrumbs, userIdForUpdate } =
     useContext(FormContext);
 
   const selectedProducts = useSelector(

@@ -24,11 +24,8 @@ const MedicalPoaForm = (props) => {
   // it does not mount
   const productIsSelected = isProductSelected(selectedProducts, 'mpoa');
 
-  const userIdForUpdate = useSelector(
-    (state) => state.clientInfo.userIdForUpdate
-  );
   const agents = state['agents'];
-  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+  const { activeStepIndex, setStepIndex, addStepToCrumbs, userIdForUpdate } =
     useContext(FormContext);
   const { getInitialState, stateLoading, stateError } = useInitialState(
     'mpoa',

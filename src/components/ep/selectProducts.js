@@ -18,9 +18,6 @@ import supabase from 'util/supabase';
 const SelectProducts = (props) => {
   const dispatch = useDispatch();
   const selectedProducts = useSelector((state) => state.selectedProducts);
-  const userIdForUpdate = useSelector(
-    (state) => state.clientInfo.userIdForUpdate
-  );
   const { steps, activeStepIndex, setStepIndex, removeStepFromCrumbs } =
     useContext(FormContext);
   const [products, setProducts] = useState([]);
