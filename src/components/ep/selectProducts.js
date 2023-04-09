@@ -21,7 +21,8 @@ const SelectProducts = (props) => {
   const userIdForUpdate = useSelector(
     (state) => state.clientInfo.userIdForUpdate
   );
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { steps, activeStepIndex, setStepIndex, removeStepFromCrumbs } =
+    useContext(FormContext);
   const [products, setProducts] = useState([]);
   const [formError, setFormError] = useState(null);
   const [error, setError] = useState(null);
@@ -47,11 +48,15 @@ const SelectProducts = (props) => {
   };
 
   const toggleProduct = (prod) => {
+    const prodType = prod.type.includes('-')
+      ? prod.type.split('-')[1]
+      : prod.type;
     const found = selectedProducts.products.find((p) => p.type === prod.type);
     if (!found) {
       dispatch(selectedProductsActions.addProduct(prod));
     } else {
       dispatch(selectedProductsActions.removeProduct(prod));
+      removeStepFromCrumbs(prodType);
     }
   };
 

@@ -17,7 +17,7 @@ const CrumbMap = {
 };
 
 const BreadCrumbs = (props) => {
-  const { activeStepIndex, steps, returnToStep, setStepIndex } =
+  const { activeStepIndex, steps, returnToStep, setStepIndex, crumbSteps } =
     useContext(FormContext);
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
@@ -40,11 +40,14 @@ const BreadCrumbs = (props) => {
 
   const buildCrumbs = () => {
     let crumbsArr = [];
-    for (let i = 0; i <= activeStepIndex; i++) {
+    for (let i = 0; i <= steps.length; i++) {
       const item = steps[i];
       if (
-        selectedProductsWithoutState.includes(item) ||
-        !products.includes(item)
+        (selectedProductsWithoutState.includes(item) &&
+          crumbSteps.includes(item)) ||
+        activeStepIndex === i ||
+        (!products.includes(item) && activeStepIndex >= i) ||
+        crumbSteps.includes(item)
       ) {
         crumbsArr.push(
           <Breadcrumb.Item

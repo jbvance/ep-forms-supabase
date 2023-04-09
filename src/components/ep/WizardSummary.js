@@ -29,7 +29,7 @@ export const getSelectedProductTitle = (type, productsToSearch) => {
 const WizardSummary = (props) => {
   const auth = useAuth();
   const userId = auth.user.id;
-  const { activeStepIndex, setStepIndex, steps, gotoStep } =
+  const { activeStepIndex, setStepIndex, steps, gotoStep, addStepToCrumbs } =
     useContext(FormContext);
   const dispatch = useDispatch();
   const wizState = useSelector((state) => state);
@@ -45,6 +45,7 @@ const WizardSummary = (props) => {
 
   //Scroll to top of screen
   useEffect(() => {
+    addStepToCrumbs(activeStepIndex);
     window.scrollTo(0, 0);
   }, []);
 

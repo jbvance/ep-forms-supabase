@@ -28,7 +28,8 @@ const DurablePoaForm = (props) => {
     (state) => state.clientInfo.userIdForUpdate
   );
   const agents = state['agents'];
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+    useContext(FormContext);
   const { getInitialState, stateLoading, stateError } = useInitialState(
     'dpoa',
     poaActions,
@@ -51,6 +52,7 @@ const DurablePoaForm = (props) => {
       console.log('DPOA NOT SELECTED');
       return;
     }
+    addStepToCrumbs(activeStepIndex);
     getInitialState();
   }, []);
 

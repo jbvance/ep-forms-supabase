@@ -86,11 +86,13 @@ function ClientContactInfo(props) {
   //console.log('ID FOR UPDATE', userIdForUpdate);
 
   // Form context info
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+    useContext(FormContext);
 
   //Scroll to top of screen and set initial State to Blank
   useEffect(() => {
     window.scrollTo(0, 0);
+    addStepToCrumbs(activeStepIndex);
     dispatch(updateClientInfo(initialClientInfo));
   }, []);
 
@@ -245,6 +247,7 @@ function ClientContactInfo(props) {
       }
 
       // Change wizard step
+      console.log('ACTIVE STEP INDEX', activeStepIndex);
       setStepIndex(activeStepIndex + 1);
     } catch (err) {
       console.log(err);

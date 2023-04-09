@@ -23,6 +23,7 @@ const WizardPage = (props) => {
   const auth = useAuth();
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [returnToStep, setReturnToStep] = useState('');
+  const [crumbSteps, setCrumbSteps] = useState([]);
 
   useUserId();
 
@@ -47,6 +48,26 @@ const WizardPage = (props) => {
     }
   };
 
+  const addStepToCrumbs = (index) => {
+    const stepToMark = steps[index];
+    if (stepToMark && !crumbSteps.includes(stepToMark)) {
+      setCrumbSteps([...crumbSteps, stepToMark]);
+    }
+  };
+
+  const removeStepFromCrumbs = (stepNameToRemove) => {
+    const stepsCopy = [...crumbSteps];
+    if (stepNameToRemove && crumbSteps.includes(stepNameToRemove)) {
+      const indexToRemove = stepsCopy.findIndex(
+        (step) => step === stepNameToRemove
+      );
+      if (indexToRemove > -1) {
+        stepsCopy.splice(indexToRemove, 1);
+        setCrumbSteps([...stepsCopy]);
+      }
+    }
+  };
+
   return (
     <FormContext.Provider
       value={{
@@ -55,6 +76,9 @@ const WizardPage = (props) => {
         steps,
         gotoStep,
         setStepIndex,
+        crumbSteps,
+        addStepToCrumbs,
+        removeStepFromCrumbs,
       }}
     >
       <MultiStepForm />

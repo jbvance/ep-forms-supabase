@@ -5,5 +5,7 @@ export const FormContext = createContext({
   setStepIndex: (index) => {},
   returnToStep: '',
   steps: [],
-  //completedSteps: {},
+  crumbSteps: [],
+  addStepToCrumbs: (index) => {},
+  removeStepFromCrumbs: (index) => {},
 });

@@ -12,7 +12,7 @@ import useInitialState from 'hooks/useInitialState';
 import { errorsActions } from 'store/errorsSlice';
 import { isProductSelected } from 'util/util';
 
-const DurablePoaForm = (props) => {
+const HipaaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['hipaa']);
@@ -21,7 +21,8 @@ const DurablePoaForm = (props) => {
   const userIdForUpdate = useSelector(
     (state) => state.clientInfo.userIdForUpdate
   );
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+    useContext(FormContext);
 
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
@@ -51,6 +52,7 @@ const DurablePoaForm = (props) => {
     if (!productIsSelected) {
       return;
     }
+    addStepToCrumbs(activeStepIndex);
     getInitialState();
   }, []);
 
@@ -131,7 +133,7 @@ const DurablePoaForm = (props) => {
     <Container>
       <PoaHeader
         headerText="HIPAA Release and Authorization"
-        paragraphText="Enter the information below to complete your Statutory Durable Power of Attorney"
+        paragraphText="Enter the information below to complete your HIPAA Release and Authorization form"
       />
       <Row>
         <Col>
@@ -163,4 +165,4 @@ const DurablePoaForm = (props) => {
   );
 };
 
-export default DurablePoaForm;
+export default HipaaForm;

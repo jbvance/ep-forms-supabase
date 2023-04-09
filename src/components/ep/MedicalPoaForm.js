@@ -28,7 +28,8 @@ const MedicalPoaForm = (props) => {
     (state) => state.clientInfo.userIdForUpdate
   );
   const agents = state['agents'];
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, addStepToCrumbs } =
+    useContext(FormContext);
   const { getInitialState, stateLoading, stateError } = useInitialState(
     'mpoa',
     poaActions,
@@ -50,7 +51,7 @@ const MedicalPoaForm = (props) => {
     if (!productIsSelected) {
       return;
     }
-
+    addStepToCrumbs(activeStepIndex);
     getInitialState();
   }, []);
 
