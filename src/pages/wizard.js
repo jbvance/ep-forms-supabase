@@ -110,6 +110,7 @@ const WizardPage = (props) => {
         crumbSteps,
         addStepToCrumbs,
         removeStepFromCrumbs,
+        setCrumbSteps,
         userIdForUpdate,
         setUserIdForUpdate,
         isSpouse,

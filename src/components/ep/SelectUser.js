@@ -20,8 +20,13 @@ import {
 const SelectUser = (props) => {
   const state = useSelector((state) => state.clientInfo);
   const dispatch = useDispatch();
-  const { activeStepIndex, setStepIndex, isSpouse, setIsSpouse } =
-    useContext(FormContext);
+  const {
+    activeStepIndex,
+    setStepIndex,
+    isSpouse,
+    setIsSpouse,
+    setCrumbSteps,
+  } = useContext(FormContext);
 
   const handleIsSpouseChanged = (value) => {
     //console.log(isSpouse, value);
@@ -30,6 +35,9 @@ const SelectUser = (props) => {
       // Do nothing and return because user didn't change the value
       return;
     }
+    // remove crumb steps to start over when switching from sopuse
+    // to not spouse or vice versa
+    setCrumbSteps([]);
     //reset state for all slices when isSpouse changes so
     // saved state doesn't stay in place when switching
     // from spouse to not spouse or vice versa
