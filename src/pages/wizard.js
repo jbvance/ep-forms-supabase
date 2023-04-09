@@ -38,14 +38,12 @@ const WizardPage = (props) => {
     const getUpdateUserId = async () => {
       // Only update user id to spouse's if isSpouse === true
       if (isSpouse === false) {
-        //dispatch(actions.updateUserIdForUpdate(primaryUserId));
         setUserIdForUpdate(primaryUserId);
         return;
       } else {
         const { spouses } = await getSpouseInfo(primaryUserId);
         //console.log('SPOUSES', spouses.length, spouses);
         if (spouses && spouses.length > 0) {
-          //dispatch(actions.updateUserIdForUpdate(spouses[0].id));
           setUserIdForUpdate(spouses[0].id);
         } else {
           const { error, data: newSpouse } = await supabase
@@ -54,7 +52,6 @@ const WizardPage = (props) => {
             .select()
             .single();
           console.log('ERROR', error);
-          //dispatch(actions.updateUserIdForUpdate(newSpouse.id));
           setUserIdForUpdate(newSpouse.id);
         }
       }
