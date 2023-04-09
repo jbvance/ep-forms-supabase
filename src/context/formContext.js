@@ -8,4 +8,6 @@ export const FormContext = createContext({
   crumbSteps: [],
   addStepToCrumbs: (index) => {},
   removeStepFromCrumbs: (index) => {},
+  userIdForUpdate: null,
+  setUserIdForUpdate: (id) => {},
 });

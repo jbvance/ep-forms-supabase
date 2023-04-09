@@ -15,12 +15,11 @@ import { products } from 'pages/wizard';
 import BreadCrumbs from './BreadCrumbs';
 
 const MultiStepForm = () => {
-  const { activeStepIndex, steps, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, steps, setStepIndex, isSpouse } =
+    useContext(FormContext);
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
   );
-
-  const isSpouse = useSelector((state) => state.clientInfo.isSpouse);
 
   //Scroll to top of screen
   useEffect(() => {

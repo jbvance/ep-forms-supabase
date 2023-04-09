@@ -20,12 +20,12 @@ import {
 const SelectUser = (props) => {
   const state = useSelector((state) => state.clientInfo);
   const dispatch = useDispatch();
-  const isSpouse = state.isSpouse;
-  const { activeStepIndex, setStepIndex } = useContext(FormContext);
+  const { activeStepIndex, setStepIndex, isSpouse, setIsSpouse } =
+    useContext(FormContext);
 
   const handleIsSpouseChanged = (value) => {
     //console.log(isSpouse, value);
-    dispatch(clientInfoActions.updateIsSpouse(value));
+    setIsSpouse(value);
     if (value === isSpouse) {
       // Do nothing and return because user didn't change the value
       return;
@@ -36,29 +36,12 @@ const SelectUser = (props) => {
     dispatch(
       clientInfoActions.updateClientInfo({
         ...initialClientState,
-        isSpouse: value,
       })
     );
     dispatch(dpoaActions.setValues(dpoaInitialState));
     dispatch(mpoaActions.setValues(mpoaInitialState));
     dispatch(hipaaActions.setValues(hipaaInitialState));
   };
-
-  // useEffect(() => {
-  //   console.log('SPOUSE CHANGED', state.isSpouse);
-  //   //reset state for all slices when isSpouse changes so
-  //   // saved state doesn't stay in place when switching
-  //   // from spouse to not spouse or vice versa
-  //   dispatch(
-  //     clientInfoActions.updateClientInfo({
-  //       ...initialClientState,
-  //       isSpouse: state.isSpouse,
-  //     })
-  //   );
-  //   dispatch(dpoaActions.setValues(dpoaInitialState));
-  //   dispatch(mpoaActions.setValues(mpoaInitialState));
-  //   dispatch(hipaaActions.setValues(hipaaInitialState));
-  // }, [state.isSpouse]);
 
   return (
     <Container>

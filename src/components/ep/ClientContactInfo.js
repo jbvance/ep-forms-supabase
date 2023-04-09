@@ -75,7 +75,6 @@ const schema = yup.object().shape({
 function ClientContactInfo(props) {
   const initialState = useSelector((state) => state.clientInfo);
   const [isLoading, setIsLoading] = useState(false);
-  const isSpouse = initialState.isSpouse;
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
   const [initialUserState, setInitialUserState] = useState(initialClientInfo);
@@ -85,8 +84,13 @@ function ClientContactInfo(props) {
   //console.log('ID FOR UPDATE', userIdForUpdate);
 
   // Form context info
-  const { activeStepIndex, setStepIndex, addStepToCrumbs, userIdForUpdate } =
-    useContext(FormContext);
+  const {
+    activeStepIndex,
+    setStepIndex,
+    addStepToCrumbs,
+    userIdForUpdate,
+    isSpouse,
+  } = useContext(FormContext);
 
   //Scroll to top of screen and set initial State to Blank
   useEffect(() => {
@@ -100,7 +104,7 @@ function ClientContactInfo(props) {
       try {
         setIsLoading(true);
         let uid;
-        if (initialState.isSpouse) {
+        if (isSpouse) {
           const spouseRec = await getSpouseInfo(primaryUserId);
           if (spouseRec.spouses && spouseRec.spouses.length > 0) {
             uid = spouseRec.spouses[0].id;
@@ -152,7 +156,7 @@ function ClientContactInfo(props) {
     const getDefaultSpouseInfo = async () => {
       try {
         // Only get spouse info default if docs are prepared for pouse
-        if (!initialState.isSpouse) {
+        if (!isSpouse) {
           return null;
         }
         // Check if spouse is already in spouses table. If so, do NOT get default

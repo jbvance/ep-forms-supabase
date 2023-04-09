@@ -27,10 +27,8 @@ const WizardPage = (props) => {
   const [returnToStep, setReturnToStep] = useState('');
   const [crumbSteps, setCrumbSteps] = useState([]);
   const dispatch = useDispatch();
-
   const [userIdForUpdate, setUserIdForUpdate] = useState(null);
-
-  const isSpouse = useSelector((state) => state.clientInfo.isSpouse);
+  const [isSpouse, setIsSpouse] = useState(false);
   const primaryUserId = auth.user.id;
 
   useEffect(() => {
@@ -114,6 +112,8 @@ const WizardPage = (props) => {
         removeStepFromCrumbs,
         userIdForUpdate,
         setUserIdForUpdate,
+        isSpouse,
+        setIsSpouse,
       }}
     >
       <MultiStepForm />
