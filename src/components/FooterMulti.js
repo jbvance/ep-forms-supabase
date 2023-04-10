@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { FormContext } from 'context/formContext';
 import Button from 'react-bootstrap/Button';
+import { ArrowRightCircle, ArrowLeftCircle } from 'react-bootstrap-icons';
 import { products } from 'pages/wizard';
 
 const Footer = (props) => {
@@ -44,7 +45,10 @@ const Footer = (props) => {
             type="button"
             onClick={goBack}
           >
-            {`<< Back`}
+            <span>
+              <ArrowLeftCircle style={{ marginRight: '10px' }} size={20} />
+              Back
+            </span>
           </Button>
         )}
         {/* </div> */}
@@ -56,7 +60,19 @@ const Footer = (props) => {
           type="formik-submit"
           form={props.id}
         >
-          {isFirst ? 'Next >>' : isLast ? 'Submit' : 'Next >>'}
+          {isFirst ? (
+            <span>
+              Save and Continue
+              <ArrowRightCircle style={{ marginLeft: '10px' }} size={20} />
+            </span>
+          ) : isLast ? (
+            'Submit'
+          ) : (
+            <span>
+              Save and Continue
+              <ArrowRightCircle style={{ marginLeft: '10px' }} size={20} />
+            </span>
+          )}
         </Button>
         {/* </div> */}
       </div>
