@@ -20,6 +20,11 @@
   background-color: #8ca6db;
   color: white;
   padding: 10px;
+
+  &.error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
 }
 
 .SummaryField {

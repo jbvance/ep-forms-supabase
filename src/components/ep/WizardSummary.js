@@ -214,21 +214,43 @@ const WizardSummary = (props) => {
       )}
 
       {isProductTypeSelected('mpoa') && (
-        <AgentsSummary
-          agents={wizState.mpoa.agents}
-          docType="mpoa"
-          returnToStep="summary"
-          selectedProducts={selectedProducts}
-        />
+        <React.Fragment>
+          {validateForm(wizardErrors['mpoa']) ? (
+            <AgentsSummary
+              agents={wizState.mpoa.agents}
+              docType="mpoa"
+              returnToStep="summary"
+              selectedProducts={selectedProducts}
+            />
+          ) : (
+            <ErrorSummary
+              docType="mpoa"
+              returnToStep="summary"
+              selectedProducts={selectedProducts}
+              errors={wizardErrors['mpoa']}
+            />
+          )}
+        </React.Fragment>
       )}
 
       {isProductTypeSelected('hipaa') && (
-        <AgentsSummary
-          agents={wizState.hipaa.agents}
-          docType="hipaa"
-          returnToStep="summary"
-          selectedProducts={selectedProducts}
-        />
+        <React.Fragment>
+          {validateForm(wizardErrors['hipaa']) ? (
+            <AgentsSummary
+              agents={wizState.mpoa.agents}
+              docType="hipaa"
+              returnToStep="summary"
+              selectedProducts={selectedProducts}
+            />
+          ) : (
+            <ErrorSummary
+              docType="hipaa"
+              returnToStep="summary"
+              selectedProducts={selectedProducts}
+              errors={wizardErrors['hipaa']}
+            />
+          )}
+        </React.Fragment>
       )}
 
       {isValid && <form onSubmit={submitForm} id={props.id}></form>}

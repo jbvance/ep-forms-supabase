@@ -18,7 +18,9 @@ const ErrorSummary = ({ docType, returnToStep, selectedProducts, errors }) => {
         />
       </Row>
       <Row>
-        <h4 className="SummarySubheader">Please fix the following errors</h4>
+        <h4 className="SummarySubheader error">
+          Please fix the following errors:
+        </h4>
       </Row>
       {listErrors(errors)}
       <Row className="EditSummaryRow">
