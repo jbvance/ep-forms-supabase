@@ -237,7 +237,7 @@ const WizardSummary = (props) => {
         <React.Fragment>
           {validateForm(wizardErrors['hipaa']) ? (
             <AgentsSummary
-              agents={wizState.mpoa.agents}
+              agents={wizState.hipaa.agents}
               docType="hipaa"
               returnToStep="summary"
               selectedProducts={selectedProducts}
