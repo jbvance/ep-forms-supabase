@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Jumbotron,
@@ -13,7 +13,9 @@ import { FormContext } from 'context/formContext';
 import SummaryField from 'components/summary/SummaryField';
 import SummaryHeader from 'components/summary/SummaryHeader';
 import AgentsSummary from './AgentsSummary';
+import ErrorSummary from './ErrorSummary';
 import { useContactsByUser } from 'util/db';
+import useFormErrors from 'hooks/useFormErrors';
 
 export const getSelectedProductTitle = (type, productsToSearch) => {
   //console.log('TYPE', type);
@@ -33,8 +35,9 @@ const WizardSummary = (props) => {
     useContext(FormContext);
   const dispatch = useDispatch();
   const wizState = useSelector((state) => state);
-  //console.log('WIZ STATE IN SUMMARY', wizState);
-  //console.log('STEPS IN WIZ', steps);
+  const wizardErrors = useSelector((state) => state['wizardErrors']);
+  const { validateForm } = useFormErrors();
+  //const [isValid, setIsValid] = useState(true);
 
   const {
     data: ucData,
@@ -49,10 +52,6 @@ const WizardSummary = (props) => {
     window.scrollTo(0, 0);
   }, []);
 
-  const submitForm = (e) => {
-    e.preventDefault();
-    setStepIndex(activeStepIndex + 1);
-  };
   const clientInfo = { ...wizState.clientInfo };
   const selectedProducts = wizState.selectedProducts.products.map((p) => {
     return {
@@ -60,7 +59,21 @@ const WizardSummary = (props) => {
       title: p.title,
     };
   });
-  //console.log('SELECTED PRODUCTS', selectedProducts);
+  console.log('SELECTED PRODUCTS', selectedProducts.length);
+
+  let isValid = true;
+  for (let i = 0; i < selectedProducts.length; i++) {
+    if (!validateForm(wizardErrors[selectedProducts[i].type])) {
+      isValid = false;
+      break;
+    }
+  }
+  console.log('isValid', isValid);
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    setStepIndex(activeStepIndex + 1);
+  };
 
   const isProductTypeSelected = (type) => {
     return selectedProducts.find((p) => p.type === type);
@@ -181,12 +194,23 @@ const WizardSummary = (props) => {
       </Container>
 
       {isProductTypeSelected('dpoa') && (
-        <AgentsSummary
-          agents={wizState.dpoa.agents}
-          docType="dpoa"
-          returnToStep="summary"
-          selectedProducts={selectedProducts}
-        />
+        <React.Fragment>
+          {validateForm(wizardErrors['dpoa']) ? (
+            <AgentsSummary
+              agents={wizState.dpoa.agents}
+              docType="dpoa"
+              returnToStep="summary"
+              selectedProducts={selectedProducts}
+            />
+          ) : (
+            <ErrorSummary
+              docType="dpoa"
+              returnToStep="summary"
+              selectedProducts={selectedProducts}
+              errors={wizardErrors['dpoa']}
+            />
+          )}
+        </React.Fragment>
       )}
 
       {isProductTypeSelected('mpoa') && (
@@ -207,7 +231,7 @@ const WizardSummary = (props) => {
         />
       )}
 
-      <form onSubmit={submitForm} id={props.id}></form>
+      {isValid && <form onSubmit={submitForm} id={props.id}></form>}
     </Fragment>
   );
 };

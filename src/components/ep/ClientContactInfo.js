@@ -77,7 +77,6 @@ const schema = yup.object().shape({
 
 function ClientContactInfo(props) {
   const initialState = useSelector((state) => state.clientInfo);
-  console.log('LOADING', initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
@@ -129,7 +128,6 @@ function ClientContactInfo(props) {
               'Unable to load your information. Please refresh the page to try again'
             );
           }
-          //console.log('CLIENT INFO', clientInfoData);
           if (clientInfoData && clientInfoData.length > 0) {
             dispatch(
               clientInfoActions.updateClientInfo(
@@ -264,7 +262,6 @@ function ClientContactInfo(props) {
       }
 
       // Change wizard step
-      console.log('ACTIVE STEP INDEX', activeStepIndex);
       setStepIndex(activeStepIndex + 1);
     } catch (err) {
       console.log(err);

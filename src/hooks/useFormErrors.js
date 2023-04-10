@@ -8,7 +8,7 @@ const useFormErrors = () => {
   const validateForm = (wizardErrorsForType) => {
     let isValid = true;
     for (const [key, value] of Object.entries(wizardErrorsForType)) {
-      //console.log(`${key}: ${value}`);
+      console.log(`${key}: ${value}`);
       if (value) {
         isValid = false;
         break;

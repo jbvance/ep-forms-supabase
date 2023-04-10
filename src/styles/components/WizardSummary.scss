@@ -2,6 +2,10 @@
   border: 1px solid grey;
   margin-bottom: 50px;
   background-color: #edf0f8;
+
+  &.error {
+    background-color: #f8d7da;
+  }
 }
 
 .SummaryHeader {
