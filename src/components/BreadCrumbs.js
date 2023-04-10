@@ -62,7 +62,11 @@ const BreadCrumbs = (props) => {
     }
     return crumbsArr;
   };
-  return <Breadcrumb>{buildCrumbs()}</Breadcrumb>;
+  return (
+    <Breadcrumb listProps={{ style: { backgroundColor: '#edf0f8' } }}>
+      {buildCrumbs()}
+    </Breadcrumb>
+  );
 };
 
 export default BreadCrumbs;
