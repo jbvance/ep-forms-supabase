@@ -15,7 +15,10 @@ import FormAlert from 'components/FormAlert';
 import { useAuth } from 'util/auth';
 import { getSpouseInfo } from 'util/db';
 
-import { updateClientInfo } from '../../store/clientInfoSlice';
+import {
+  updateClientInfo,
+  clientInfoActions,
+} from '../../store/clientInfoSlice';
 
 const reqErrorMsg = '* required';
 
@@ -74,10 +77,11 @@ const schema = yup.object().shape({
 
 function ClientContactInfo(props) {
   const initialState = useSelector((state) => state.clientInfo);
+  console.log('LOADING', initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [userError, setUserError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
-  const [initialUserState, setInitialUserState] = useState(initialClientInfo);
+  //const [initialUserState, setInitialUserState] = useState(initialClientInfo);
   const [showFormErrors, setShowFormErrors] = useState(false);
   const dispatch = useDispatch();
   let primaryUserId = useAuth().user.id;
@@ -127,22 +131,32 @@ function ClientContactInfo(props) {
           }
           //console.log('CLIENT INFO', clientInfoData);
           if (clientInfoData && clientInfoData.length > 0) {
-            setInitialUserState(JSON.parse(clientInfoData[0].json_value));
+            dispatch(
+              clientInfoActions.updateClientInfo(
+                JSON.parse(clientInfoData[0].json_value)
+              )
+            );
+            //setInitialUserState(JSON.parse(clientInfoData[0].json_value));
           } else {
             const defaultSpouseInfo = await getDefaultSpouseInfo();
             console.log('DEFAULT SPOUSE INFO', defaultSpouseInfo);
             console.log('INITIAL STATE*********', initialState);
-            // setInitialUserState(
-            //   defaultSpouseInfo ? { ...initialState } : initialState
-            // );
             if (defaultSpouseInfo) {
-              setInitialUserState({ ...initialState, ...defaultSpouseInfo });
+              dispatch(
+                clientInfoActions.updateClientInfo({
+                  ...initialState,
+                  ...defaultSpouseInfo,
+                })
+              );
+              //setInitialUserState({ ...initialState, ...defaultSpouseInfo });
             } else {
-              setInitialUserState(initialState);
+              dispatch(clientInfoActions.updateClientInfo({ ...initialState }));
+              //setInitialUserState(initialState);
             }
           }
         } else {
-          setInitialUserState(initialState);
+          dispatch(clientInfoActions.updateClientInfo({ ...initialState }));
+          //setInitialUserState(initialState);
         }
       } catch (err) {
         setUserError(err.message);
@@ -210,7 +224,7 @@ function ClientContactInfo(props) {
     };
 
     getUserInfo();
-  }, [initialState]);
+  }, []);
 
   const submitForm = async (values) => {
     try {
@@ -289,7 +303,7 @@ function ClientContactInfo(props) {
             submitForm(values);
             dispatch(updateClientInfo({ ...values }));
           }}
-          initialValues={initialUserState}
+          initialValues={initialState}
           enableReinitialize
         >
           {({

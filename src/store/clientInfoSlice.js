@@ -51,6 +51,7 @@ const clientInfoSlice = createSlice({
   initialState,
   reducers: {
     updateClientInfo(state, action) {
+      console.log('CLIENT INFO', action.payload);
       const newState = { ...action.payload };
       if (newState.maritalStatus !== 'married') {
         newState.spouseFirstName = '';
