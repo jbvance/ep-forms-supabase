@@ -10,6 +10,7 @@ export const initialState = {
   hipaa: {
     agents: 'Please add at least one agent to continue',
   },
+  directive: {},
 };
 
 const errorsSlice = createSlice({
