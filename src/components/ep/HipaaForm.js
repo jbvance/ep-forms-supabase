@@ -16,6 +16,7 @@ const HipaaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['hipaa']);
+  const clientInfo = useSelector((state) => state.clientInfo);
   const wizardErrors = useSelector((state) => state['wizardErrors']);
   const agents = state['agents'];
   const { activeStepIndex, setStepIndex, addStepToCrumbs, userIdForUpdate } =
@@ -129,7 +130,7 @@ const HipaaForm = (props) => {
   return (
     <Container>
       <PoaHeader
-        headerText="HIPAA Release and Authorization"
+        headerText={`${clientInfo.firstName} - HIPAA Release and Authorization`}
         paragraphText="Enter the information below to complete your HIPAA Release and Authorization form"
       />
       <Row>

@@ -326,7 +326,7 @@ function ClientContactInfo(props) {
               }}
               id={props.id}
             >
-              <h2 className="Header">Contact Information</h2>
+              <h2 className="Header">{`${initialState.firstName} - Contact Information`}</h2>
               <Row className="mb-3">
                 <Form.Group as={Col} md="3">
                   <TextInput
@@ -401,7 +401,7 @@ function ClientContactInfo(props) {
               </Row>
               {values.maritalStatus === 'married' && (
                 <React.Fragment>
-                  <h2 className="Header">Spouse Information</h2>
+                  <h2 className="Header">{`Information for ${initialState.firstName}'s Spouse`}</h2>
                   <h4>Enter your spouse's information below</h4>
                   <Row className="mb-3">
                     <Form.Group as={Col} md="3">

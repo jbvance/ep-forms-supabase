@@ -16,6 +16,7 @@ const MedicalPoaForm = (props) => {
   const [updateError, setUpdateError] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state['mpoa']);
+  const clientInfo = useSelector((state) => state.clientInfo);
   const wizardErrors = useSelector((state) => state['wizardErrors']);
   const selectedProducts = useSelector(
     (state) => state.selectedProducts.products
@@ -128,7 +129,7 @@ const MedicalPoaForm = (props) => {
   return (
     <Container>
       <PoaHeader
-        headerText="Medical Power of Attorney"
+        headerText={`${clientInfo.firstName} - Medical Power of Attorney`}
         paragraphText="Enter the information below to complete your Statutory Durable Power of Attorney"
       />
       <Row>
