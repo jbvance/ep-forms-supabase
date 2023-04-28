@@ -34,6 +34,7 @@ const UserFilesList = (props) => {
     const getUserFiles = async () => {
       try {
         setFetchError(null);
+        console.log('FETCHING FILSE');
         const data = await apiRequest('get-user-files');
         console.log('USER FILES', data);
         setFiles(data);
@@ -65,7 +66,7 @@ const UserFilesList = (props) => {
 
       console.log('SUPABASE DOCS', data);
     };
-    getUserSupabaseDocs();
+    //getUserSupabaseDocs();
     getUserFiles();
   }, []);
 
@@ -106,25 +107,32 @@ const UserFilesList = (props) => {
             <ListGroup variant="flush">
               {files.map((file, index) => {
                 const fileDate = new Date(file.lastModified);
-                if (isFilePaidFor(file.fileName)) {
-                  return (
-                    <ListGroup.Item
-                      key={index}
-                      className={`d-flex justify-content-between align-items-center`}
+                {
+                  /* To only show files that have been paid for via Stripe payment flow, uncomment the following if statement */
+                }
+                {
+                  /* if (isFilePaidFor(file.fileName)) { */
+                }
+                return (
+                  <ListGroup.Item
+                    key={index}
+                    className={`d-flex justify-content-between align-items-center`}
+                  >
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <a
-                        href={file.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {file.fileName.replace(/_/g, ' ').replace(/--/g, ' - ')}
-                      </a>
-                      (created {fileDate.toDateString()} at{' '}
-                      {fileDate.getHours() + ':' + fileDate.getMinutes()})
-                    </ListGroup.Item>
-                  );
-                } else {
+                      {file.fileName.replace(/_/g, ' ').replace(/--/g, ' - ')}
+                    </a>
+                    (created {fileDate.toDateString()})
+                    {/* at{' '}{fileDate.getHours() + ':' + fileDate.getMinutes()}) */}
+                  </ListGroup.Item>
+                );
+                {
+                  /*} else {
                   return null;
+                } */
                 }
               })}
             </ListGroup>

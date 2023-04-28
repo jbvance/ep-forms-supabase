@@ -1,9 +1,9 @@
-import React from "react";
-import Meta from "components/Meta";
-import HeroSection2 from "components/HeroSection2";
-import StatsSection from "components/StatsSection";
-import TeamBiosSection from "components/TeamBiosSection";
-import CtaSection from "components/CtaSection";
+import React from 'react';
+import Meta from 'components/Meta';
+import HeroSection2 from 'components/HeroSection2';
+import StatsSection from 'components/StatsSection';
+import TeamBiosSection from 'components/TeamBiosSection';
+import CtaSection from 'components/CtaSection';
 
 function AboutPage(props) {
   return (
@@ -44,7 +44,7 @@ function AboutPage(props) {
         subtitle=""
         buttonText="Get Started"
         buttonColor="light"
-        buttonPath="/pricing"
+        buttonPath="/wizard"
       />
     </>
   );

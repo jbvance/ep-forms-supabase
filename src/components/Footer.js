@@ -1,9 +1,9 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Link from "next/link";
-import Section from "components/Section";
+import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Link from 'next/link';
+import Section from 'components/Section';
 
 function Footer(props) {
   return (
@@ -52,11 +52,11 @@ function Footer(props) {
                 <Col xs={12} md={4} className="mt-3 mt-md-0">
                   <h5>Product</h5>
                   <ul className="list-unstyled">
-                    <li>
+                    {/* <li>
                       <Link href="/pricing">
                         <a>Pricing</a>
                       </Link>
-                    </li>
+            </li> */}
                     <li>
                       <Link href="/faq">
                         <a>FAQ</a>
@@ -67,16 +67,16 @@ function Footer(props) {
                 <Col xs={12} md={4} className="mt-3 mt-md-0">
                   <h5>Company</h5>
                   <ul className="list-unstyled">
-                    <li>
+                    {/* <li>
                       <Link href="/about">
                         <a>About</a>
                       </Link>
-                    </li>
-                    <li>
+          </li> */}
+                    {/* <li>
                       <Link href="/contact">
                         <a>Contact</a>
                       </Link>
-                    </li>
+        </li> */}
                     <li>
                       <a
                         target="_blank"
@@ -95,12 +95,9 @@ function Footer(props) {
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
-                        href="https://twitter.com/divjoy"
+                        href="https://twitter.com"
                       >
-                        <img
-                          src="https://uploads.divjoy.com/icon-twitter.svg"
-                          alt="Twitter"
-                        />
+                        <img src="/images/icon-twitter.svg" alt="Twitter" />
                         Twitter
                       </a>
                     </li>
@@ -108,12 +105,9 @@ function Footer(props) {
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
-                        href="https://facebook.com/DivjoyOfficial"
+                        href="https://facebook.com"
                       >
-                        <img
-                          src="https://uploads.divjoy.com/icon-facebook.svg"
-                          alt="Facebook"
-                        />
+                        <img src="/images/icon-facebook.svg" alt="Facebook" />
                         Facebook
                       </a>
                     </li>
@@ -123,10 +117,7 @@ function Footer(props) {
                         rel="noopener noreferrer"
                         href="https://instagram.com"
                       >
-                        <img
-                          src="https://uploads.divjoy.com/icon-instagram.svg"
-                          alt="Instagram"
-                        />
+                        <img src="/images/icon-instagram.svg" alt="Instagram" />
                         Instagram
                       </a>
                     </li>

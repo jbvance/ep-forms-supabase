@@ -8,9 +8,12 @@ const handler = async (req, res) => {
       Delimiter: '/',
       Prefix: `user-docs/${req.user.id}/`,
     });
+
+    //See if user has created any files yet. If not, return
+    // success status but indicate no files were found
     if (!data || !data.Contents || data.Contents.length === 0) {
-      return res.status(400).json({
-        status: 'error',
+      return res.status(200).json({
+        status: 'success',
         message: 'No files were found',
         location: 'get-user-files',
       });

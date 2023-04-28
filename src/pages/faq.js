@@ -1,7 +1,7 @@
-import React from "react";
-import Meta from "components/Meta";
-import FaqSection from "components/FaqSection";
-import CtaSection from "components/CtaSection";
+import React from 'react';
+import Meta from 'components/Meta';
+import FaqSection from 'components/FaqSection';
+import CtaSection from 'components/CtaSection';
 
 function FaqPage(props) {
   return (
@@ -26,7 +26,7 @@ function FaqPage(props) {
         subtitle=""
         buttonText="Get Started"
         buttonColor="light"
-        buttonPath="/pricing"
+        buttonPath="/wizard"
       />
     </>
   );

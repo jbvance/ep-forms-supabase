@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAuth } from 'util/auth';
 import { FormContext } from 'context/formContext';
 import MultiStepForm from '../components/MultiStepForm';
 import { requireAuth } from 'util/auth';
-import { clientInfoActions as actions } from 'store/clientInfoSlice';
 import { getSpouseInfo } from 'util/db';
 
 import FormAlert from 'components/FormAlert';

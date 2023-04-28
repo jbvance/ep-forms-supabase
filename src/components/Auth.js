@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import FormAlert from "components/FormAlert";
-import AuthForm from "components/AuthForm";
-import AuthSocial from "components/AuthSocial";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import FormAlert from 'components/FormAlert';
+import AuthForm from 'components/AuthForm';
+import AuthSocial from 'components/AuthSocial';
 
 function Auth(props) {
   const router = useRouter();
@@ -29,11 +29,12 @@ function Auth(props) {
         onFormAlert={handleFormAlert}
       />
 
-      {["signup", "signin"].includes(props.type) && (
+      {['signup', 'signin'].includes(props.type) && (
         <>
           {props.providers && props.providers.length && (
             <>
               <small className="text-center d-block my-3">OR</small>
+              {/* Disable Social auth for demo
               <AuthSocial
                 buttonAction={props.buttonAction}
                 providers={props.providers}
@@ -45,7 +46,7 @@ function Auth(props) {
                     message: message,
                   });
                 }}
-              />
+              /> */}
             </>
           )}
         </>

@@ -21,7 +21,7 @@ function IndexPage(props) {
         subtitle="The easiest way to prepare your Texas Powers of Attorney"
         buttonText="Get Started"
         buttonColor="light"
-        buttonPath="/pricing"
+        buttonPath="/wizard"
       />
       <FeaturesSection
         bg="white"
@@ -73,7 +73,7 @@ function IndexPage(props) {
         subtitle=""
         buttonText="Get Started"
         buttonColor="light"
-        buttonPath="/pricing"
+        buttonPath="/wizard"
       />
     </>
   );

@@ -115,7 +115,6 @@ function ClientContactInfo(props) {
         } else {
           uid = primaryUserId;
         }
-        //console.log('UID', uid);
         if (uid) {
           const { data: clientInfoData, error: clientInfoError } =
             await supabase

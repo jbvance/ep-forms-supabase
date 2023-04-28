@@ -29,8 +29,8 @@ function MyApp({ Component, pageProps }) {
               size="md"
               bgImage=""
               bgImageOpacity={1}
-              description="A short description of what you do here"
-              copyright={`© ${new Date().getFullYear()} Company`}
+              description=""
+              copyright={`© ${new Date().getFullYear()}`}
               logo="/images/logo-main-1.jpg"
             />
           </>

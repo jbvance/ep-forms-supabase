@@ -92,11 +92,9 @@ const FinalizeDocs = (props) => {
     }
   };
   const wizardState = useSelector((state) => state);
-  //console.log(wizardState);
 
   const submitForm = async (e) => {
     e.preventDefault();
-    //console.log(wizardState);
     try {
       setResponseError(null);
       setCreateStatus(null);
@@ -107,7 +105,10 @@ const FinalizeDocs = (props) => {
 
       await Promise.all(createDocPromises);
       setCreateStatus('success');
-      router.push('/checkout?status=success');
+
+      //***********If you want to require payment, uncomment the next line to move
+      // to the Stripe payment flow
+      //router.push('/checkout?status=success');
     } catch (err) {
       console.log('ERROR', err);
       setResponseError(

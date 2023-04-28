@@ -19,9 +19,9 @@ function NavbarCustom(props) {
           <Navbar.Brand>
             <img
               className="d-inline-block align-top"
-              src={props.logo}
+              src="/images/logo-main-1.jpg"
               alt="Logo"
-              height="30"
+              height="50"
             />
           </Navbar.Brand>
         </Link>
@@ -40,13 +40,11 @@ function NavbarCustom(props) {
                     Create New Documents
                   </NavDropdown.Item>
                 </Link>
-                <Link href="/dashboard" passHref={true}>
-                  <NavDropdown.Item active={false}>Dashboard</NavDropdown.Item>
-                </Link>
-                <Link href="/settings/general" passHref={true}>
+                {/********** Don't show settings for demo purposes */}
+                {/* <Link href="/settings/general" passHref={true}>
                   <NavDropdown.Item active={false}>Settings</NavDropdown.Item>
                 </Link>
-                <Dropdown.Divider />
+            <Dropdown.Divider /> */}
                 <Link href="/auth/signout" passHref={true}>
                   <NavDropdown.Item
                     active={false}
