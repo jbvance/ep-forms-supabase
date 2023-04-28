@@ -113,9 +113,9 @@ const SelectUser = (props) => {
         <Row style={{ marginTop: '10px' }}>
           <Col>
             <Alert variant="success">
-              If you are married,you will need to select 'married' on the
-              contact information screen before you can prepare documents for
-              your spouse
+              If you are married, you will need to select 'married' on the
+              contact information screen and save your spouse's information
+              before you can prepare documents for your spouse
             </Alert>
           </Col>
         </Row>
