@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import React, { useContext } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import { clientInfoActions, initialClientState } from 'store/clientInfoSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { CheckCircle } from 'react-bootstrap-icons';
@@ -18,7 +18,7 @@ import {
 } from '../../store/hipaaSlice';
 
 const SelectUser = (props) => {
-  const state = useSelector((state) => state.clientInfo);
+  const clientInfo = useSelector((state) => state.clientInfo);
   const dispatch = useDispatch();
   const {
     activeStepIndex,

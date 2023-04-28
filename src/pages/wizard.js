@@ -5,6 +5,7 @@ import { FormContext } from 'context/formContext';
 import MultiStepForm from '../components/MultiStepForm';
 import { requireAuth } from 'util/auth';
 import { getSpouseInfo } from 'util/db';
+import supabase from 'util/supabase';
 
 import FormAlert from 'components/FormAlert';
 // products is a list of the documents that require user information to be filled out.
