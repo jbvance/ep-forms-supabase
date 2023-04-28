@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container';
 import Link from 'next/link';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Dropdown from 'react-bootstrap/Dropdown';
 import { useAuth } from 'util/auth';
 
 function NavbarCustom(props) {
@@ -27,6 +26,9 @@ function NavbarCustom(props) {
         </Link>
         <Navbar.Toggle aria-controls="navbar-nav" className="border-0" />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
+          {auth.user && (
+            <div className="logged-in">Logged in as: {auth.user.email}</div>
+          )}
           <Nav>
             {auth.user && (
               <NavDropdown id="dropdown" title="Account" alignRight={true}>

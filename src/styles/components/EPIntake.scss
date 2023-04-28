@@ -1,3 +1,5 @@
+$blue-primary: #4c70b8;
+
 .IntakeJumbotron {
   background-color: #edf0f8;
 }
@@ -99,4 +101,10 @@
 .WarningMessage {
   background-color: var(--yellow);
   font-weight: 600;
+}
+
+.logged-in {
+  color: $blue-primary;
+  border-radius: 10px;
+  margin-right: 20px;
 }
