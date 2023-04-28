@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { clientInfoActions, initialClientState } from 'store/clientInfoSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { CheckCircle } from 'react-bootstrap-icons';
 import { FormContext } from 'context/formContext';
+import { useAuth } from 'util/auth';
+import { useClientContactInfoByUser } from 'util/db';
 import {
   dpoaActions,
   initialState as dpoaInitialState,
@@ -18,8 +20,15 @@ import {
 } from '../../store/hipaaSlice';
 
 const SelectUser = (props) => {
+  const [isMarried, setIsMarried] = useState(false);
+  const auth = useAuth();
   const clientInfo = useSelector((state) => state.clientInfo);
   const dispatch = useDispatch();
+  const {
+    data: clientContactInfo,
+    status: clientContactInfoStatus,
+    error: clientContactInfoError,
+  } = useClientContactInfoByUser(auth.user.uid);
   const {
     activeStepIndex,
     setStepIndex,
@@ -27,6 +36,22 @@ const SelectUser = (props) => {
     setIsSpouse,
     setCrumbSteps,
   } = useContext(FormContext);
+
+  useEffect(() => {
+    // See if the user is married. If not, or we don't know yet because
+    // they haven't filled out their contact information, yet, the option
+    // to select spouse documents will not be available below
+    if (clientContactInfo && clientContactInfo.length > 0) {
+      const clientJson = clientContactInfo[0].json_value;
+      console.log('JSON', clientJson);
+      if (clientJson) {
+        const clientObj = JSON.parse(clientJson);
+        if (clientObj && clientObj.maritalStatus === 'married') {
+          setIsMarried(true);
+        }
+      }
+    }
+  }, [clientContactInfo]);
 
   const handleIsSpouseChanged = (value) => {
     //console.log(isSpouse, value);
@@ -74,15 +99,27 @@ const SelectUser = (props) => {
           for myself
         </Col>
       </Row>
-      <Row style={{ marginTop: '20px' }}>
-        <Col
-          className={`DocSelector ${isSpouse ? 'active' : ''}`}
-          onClick={() => handleIsSpouseChanged(true)}
-        >
-          {isSpouse && <CheckCircle size={20} />} I want to create documents for
-          my spouse
-        </Col>
-      </Row>
+      {isMarried ? (
+        <Row style={{ marginTop: '20px' }}>
+          <Col
+            className={`DocSelector ${isSpouse ? 'active' : ''}`}
+            onClick={() => handleIsSpouseChanged(true)}
+          >
+            {isSpouse && <CheckCircle size={20} />} I want to create documents
+            for my spouse
+          </Col>
+        </Row>
+      ) : (
+        <Row style={{ marginTop: '10px' }}>
+          <Col>
+            <Alert variant="success">
+              If you are married,you will need to select 'married' on the
+              contact information screen before you can prepare documents for
+              your spouse
+            </Alert>
+          </Col>
+        </Row>
+      )}
       <form
         id={props.id}
         onSubmit={(e) => {

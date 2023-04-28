@@ -131,6 +131,21 @@ export async function updateUserDocsPaidStatus(paymentIntentId, paid) {
   return response;
 }
 
+//**************CLIENT CONTACT INFO *****/
+// Fetch conact info by user id
+export function useClientContactInfoByUser(userId) {
+  return useQuery(
+    ['client_contact_info', { userId }],
+    () =>
+      supabase
+        .from('client_contact')
+        .select()
+        .eq('user_id', userId)
+        .then(handle),
+    { enabled: !!userId }
+  );
+}
+
 /***********CONTACTS********** */
 
 // Fetch all contacts by owner
